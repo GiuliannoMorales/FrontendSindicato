@@ -1,0 +1,34 @@
+
+.contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+  }
+  
+  .titulo h1 {
+    margin-bottom: 50px;
+   
+  }
+  
+  .buscar-contenido{
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 10px; 
+  }
+  
+
+  .BuscadorNombre{
+    padding: 8px;
+    margin: 10px; 
+    width: 200px;
+  }
+
+  .BuscadorCi {
+    padding: 8px;
+    margin: 10px; 
+    width: 200px;
+  }
+  

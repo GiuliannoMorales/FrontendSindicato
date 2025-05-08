@@ -1,22 +1,25 @@
-import React from 'react'
+import React from 'react';
+import './cobrosEfectivo.css';
 
 const cobrosEfectivo = () => {
   return (
-    <div>
-        <div>
+    <div className='contenido'>
+        <div className='titulo'>
             <h1>REALIZAR COBRO</h1>
         </div>
+        <div className='buscar-contenido'>
+            <p>Buscar por nombre:  </p>
+            <input type='text' className='BuscadorNombre' id='BuscadorNombre' placeholder='Buscar... ' />
+        </div>
         <div>
-            <p>Buscar por nombre: </p> <input type='text' name='BuscadorNombre' id='BuscadorNombre' placeholder='Buscar... '>
-            </input>
-            <br></br>
             <p>o</p>
-            <br></br>
-            <p>Buscar por C.I: </p><input type='text' name='BuscadorCi' id='buscadorCi' placeholder='Buscar... '>
-            </input>
+        </div>
+        <div className='buscar-contenido'>
+            <p>Buscar por C.I:   </p>
+            <input type='text' className='BuscadorCi' id='buscadorCi' placeholder='Buscar... ' />
         </div>
     </div>
-  )
-}
+  );
+};
 
-export default cobrosEfectivo
+export default cobrosEfectivo;
