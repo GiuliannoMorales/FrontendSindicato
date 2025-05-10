@@ -8,7 +8,7 @@ interface LayoutProps {
 export default function Layout({children}: LayoutProps) {
   return (
     <div className="layout">
-      <header className="header">
+      <header>
         <div className="headerLogo">
           <img src="/Logo_umss.png" alt="Logo UMSS" height={'100%'} style={{objectFit: 'contain'}}/>
         </div>
@@ -17,7 +17,7 @@ export default function Layout({children}: LayoutProps) {
           <div className="lineaRoja"></div>
         </div>
       </header>
-      <aside className="menu"></aside>
+      <aside></aside>
       <main className="contenido">
         <div className="lineaAzul"></div>
         {children}
