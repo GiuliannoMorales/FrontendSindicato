@@ -1,9 +1,11 @@
 import React from 'react';
 import './cobrosEfectivo.css';
+import Layout from '../../components/Layout';
 
-const cobrosEfectivo = () => {
+const CobrosEfectivo = () => {
   return (
-    <div className='contenido'>
+    <Layout>
+<div className='contenido'>
         <div className='titulo'>
             <h1>REALIZAR COBRO</h1>
         </div>
@@ -19,7 +21,9 @@ const cobrosEfectivo = () => {
             <input type='text' className='BuscadorCi' id='buscadorCi' placeholder='Buscar... ' />
         </div>
     </div>
+    </Layout>
+    
   );
 };
 
-export default cobrosEfectivo;
+export default CobrosEfectivo;

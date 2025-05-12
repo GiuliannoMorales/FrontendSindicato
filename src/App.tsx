@@ -1,11 +1,22 @@
-import CobrosEfectivo from './Pages/cobrosEfectivo/cobrosEfectivo'
 
-function App() {
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css'
+
+import EstadoCuenta from './Pages/EstadoCuenta';
+import Inicio from './Pages/Inicio';
+import CobrosEfectivo from './Pages/CobrosEfectivo/cobrosEfectivo';
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <CobrosEfectivo />
-    </div>
-  )
+		<Router>
+			<Routes>
+				<Route path='/' element={<Inicio />} />
+				<Route path="/cuenta/estado" element={<EstadoCuenta />} />
+				<Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
+			</Routes>
+		</Router>
+	);
 }
 
 export default App
