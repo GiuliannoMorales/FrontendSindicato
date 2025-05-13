@@ -1,11 +1,7 @@
+import { useState } from "react";
 import TarifasTable from "../components/TarifasTable/TarifasTable";
+import FilterTarifas from "../FilterTarifas/FilterTarifas";
 import './TarifasHistoPage.css'
-
-const filtersData = [
-  { name: "Tipo Usuario", value: "tipoUsuario" },
-  { name: "Tipo de Vehículos", value: "tipoUsuario" },
-  { name: "Rangos de fechas", value: "tipoUsuario" },
-];
 
 const tarifasData = [
   {
@@ -39,13 +35,13 @@ const tarifasData = [
 ];
 
 const TarifasHistoPage = () => {
+  const [filteredData, setFilteredData] = useState(tarifasData);
+
   return (
     <section className="tarifasHistorial__container">
       <h2 className="tarifas__title">CONFIGURACIÓN DE TARIFAS</h2>
-      <label htmlFor="tarifasFilter">Filtrar por:</label>
-      <select name="tarifasFilter" id="tarifasFilter" className="tarifas__input">
-        {}
-      </select>
+
+      <FilterTarifas data={tarifasData} onFilter={() => setFilteredData(filteredData)}/>
       <TarifasTable data={tarifasData} fullView={true}/>
     </section>
   );

@@ -7,6 +7,10 @@ interface TarifasTableProps {
 }
 
 const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
+  if (data.length === 0) {
+    return <div className="tarifas-table__empty">No se encontraron resultados</div>;
+  }
+  
   return (
     <div className="tarifas__tablecontainer">
       <table className="tarifas__table">
