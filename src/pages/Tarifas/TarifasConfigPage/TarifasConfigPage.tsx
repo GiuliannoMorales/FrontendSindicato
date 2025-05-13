@@ -1,3 +1,4 @@
+import TarifasTable from "../components/TarifasTable/TarifasTable";
 import "./TarifasConfigPage.css";
 
 const vehiclesTypes = ["Automovil", "Motocicleta"];
@@ -9,25 +10,29 @@ const tarifasData = [
     usuario: "Administrat.",
     vehiculo: "Automóvil",
     tarifa: "3,50",
-    modificado: "14:50:14 - 04/05/2025",
+    fechaModificado: "14:50:14 - 04/05/2025",
+    modificadoPor: "Julieta",
   },
   {
     usuario: "Administrat.",
     vehiculo: "Motocicleta",
     tarifa: "2,50",
-    modificado: "11:21:54 - 02/05/2025",
+    fechaModificado: "11:21:54 - 02/05/2025",
+    modificadoPor: "Julieta",
   },
   {
     usuario: "Docente T. H.",
     vehiculo: "Motocicleta",
     tarifa: "3,00",
-    modificado: "08:24:19 - 24/04/2025",
+    fechaModificado: "08:24:19 - 24/04/2025",
+    modificadoPor: "Julieta",
   },
   {
     usuario: "Docente D. E.",
     vehiculo: "Automóvil",
     tarifa: "3.00",
-    modificado: "15:16:03 - 15/04/2025",
+    modificadoPor: "Julieta",
+    fechaModificado: "15:16:03 - 15/04/2025",
   },
 ];
 
@@ -41,7 +46,7 @@ const TarifasPage = () => {
           <form action="" className="tarifas__form">
             <div className="tarifas__formRow">
               <label htmlFor="clients">
-                Tipo Cliente: <span style={{color: 'red'}}>*</span>
+                Tipo Cliente: <span style={{ color: "red" }}>*</span>
               </label>
               <select name="clients" id="" className="tarifas__input">
                 {clientsTypes.map((vehicle, index) => (
@@ -53,7 +58,7 @@ const TarifasPage = () => {
             </div>
             <div className="tarifas__formRow">
               <label htmlFor="vehicles">
-                Tipo Vehículo: <span style={{color: 'red'}}>*</span>
+                Tipo Vehículo: <span style={{ color: "red" }}>*</span>
               </label>
               <select name="vehicles" id="" className="tarifas__input">
                 {vehiclesTypes.map((vehicle, index) => (
@@ -65,7 +70,7 @@ const TarifasPage = () => {
             </div>
             <div className="tarifas__formRow">
               <label htmlFor="newTarifa">
-                Nueva Tarifa (Bs.): <span style={{color: 'red'}}>*</span>
+                Nueva Tarifa (Bs.): <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="number"
@@ -77,7 +82,7 @@ const TarifasPage = () => {
         </div>
         <div className="tarifas__tableCol">
           <h3 className="tarifas__subtitle">Tarifas Registradas</h3>
-          <table className="tarifas__table">
+          {/* <table className="tarifas__table">
             <thead>
               <tr>
                 <th className="borde-derecho">Usuario</th>
@@ -96,7 +101,8 @@ const TarifasPage = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
+          <TarifasTable data={tarifasData} fullView={false}/>
           <div>
             <button className="tarifas__button">Ver historial completo</button>
           </div>

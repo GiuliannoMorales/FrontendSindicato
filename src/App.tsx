@@ -1,11 +1,13 @@
 import './App.css'
-import TarifasPage from './pages/TarifasConfigPage/TarifasConfigPage'
+import TarifasPage from './pages/Tarifas/TarifasConfigPage/TarifasConfigPage'
+import TarifasHistoPage from './pages/Tarifas/TarifasHistoPage/TarifasHistoPage'
 
 function App() {
 
   return (
     <>
       <TarifasPage/>
+      <TarifasHistoPage/>
     </>
   )
 }

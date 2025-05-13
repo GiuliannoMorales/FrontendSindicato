@@ -1,0 +1,9 @@
+.tarifasHistorial__container{
+    padding: 64px;
+}
+
+@media (max-width: 768px) {
+    .tarifasHistorial__container{
+        padding: 32px;
+    }
+}
