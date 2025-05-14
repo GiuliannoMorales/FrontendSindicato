@@ -39,7 +39,7 @@ const TarifasHistoPage = () => {
 
   return (
     <section className="tarifasHistorial__container">
-      <h2 className="tarifas__title">CONFIGURACIÓN DE TARIFAS</h2>
+      <h2 className="tarifas__title">HISTORIAL TARIFAS REGISTRADAS</h2>
 
       <FilterTarifas data={tarifasData} onFilter={() => setFilteredData(filteredData)}/>
       <TarifasTable data={tarifasData} fullView={true}/>
