@@ -1,3 +1,67 @@
+@font-face {
+	font-family: 'uni-sans';
+	src: url(/src/assets/fonts/uni-sans-regular.ttf) format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'uni-sans';
+	src: url(/src/assets/fonts/uni-sans-semi-bold.ttf) format('truetype');
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'uni-sans';
+	src: url(/src/assets/fonts/uni-sans-bold.ttf) format('truetype');
+	font-weight: 700;
+	font-style: normal;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	--fondo: #ffffff;
+
+	--menuFondo: #072543;
+	--menuHover: #395673;
+
+	--encabezado: #a21426;
+
+	--tblLineas: #d2d0d6;
+	--tblHead: #6d88a5;
+
+	--btnPrimario: #395673;
+	--btnSecundario: #7b94aa;
+	--btnPeligro: #b54351;
+
+	--txtTitulos: #041b2c;
+	--txtCuerpo: #000000;
+	--txtMenu: #ffffff;
+	/* --rojo-obs: #601A33; */
+
+	font-family: 'uni-sans';
+
+	color: var(--txtCuerpo);
+	background-color: var(--fondo);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	font-size: 0.875rem;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+
+h2,
+h3 {
+	font-size: 1.25rem;
 }

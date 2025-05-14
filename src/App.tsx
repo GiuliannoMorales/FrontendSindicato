@@ -1,15 +1,21 @@
+
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
-import TarifasPage from './pages/Tarifas/TarifasConfigPage/TarifasConfigPage'
-import TarifasHistoPage from './pages/Tarifas/TarifasHistoPage/TarifasHistoPage'
 
-function App() {
+import EstadoCuenta from './pages/EstadoCuenta';
+import Inicio from './pages/Inicio';
 
+const App: React.FC = () => {
   return (
-    <>
-      <TarifasPage/>
-      <TarifasHistoPage/>
-    </>
-  )
+		<Router>
+			<Routes>
+				<Route path='/' element={<Inicio />} />
+				<Route path="/cuenta/estado" element={<EstadoCuenta />} />
+			</Routes>
+		</Router>
+	);
+
 }
 
 export default App
