@@ -6,7 +6,7 @@ import './App.css'
 import EstadoCuenta from './Pages/EstadoCuenta';
 import Inicio from './Pages/Inicio';
 import CobrosEfectivo from './Pages/CobrosEfectivo/cobrosEfectivo';
-import CobrosEfectivoUsuario from './Pages/cobrosEfectivoUsuario/cobrosEfectivoUsuario';
+import ResultadoCI from './Pages/resultadoCI/ResultadoCI';
 
 const App: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const App: React.FC = () => {
 				<Route path='/' element={<Inicio />} />
 				<Route path="/cuenta/estado" element={<EstadoCuenta />} />
 				<Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
-				<Route path="/cobros/realizarCobros/Usuario" element={<CobrosEfectivoUsuario  />} />
+				<Route path="/cobros/ResultadoCI" element={<ResultadoCI />} />
 			</Routes>
 		</Router>
 	);

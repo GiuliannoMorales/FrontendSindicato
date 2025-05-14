@@ -20,12 +20,12 @@
     margin-bottom: 10px; 
   }
   
-
-  .BuscadorUsuario{
-    padding: 8px;
-    margin: 10px; 
-    width: 200px;
+  .tabla {
+    border: 1px solid black;
+    border-collapse: collapse;
   }
-
-
   
+  .tabla td {
+    padding: 10px;
+    border: 1px solid black;
+  }
