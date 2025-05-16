@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TarifasTable from "../components/TarifasTable/TarifasTable";
-import FilterTarifas from "../FilterTarifas/FilterTarifas";
+import FilterTarifas from "../components/FilterTarifas/FilterTarifas";
 import './TarifasHistoPage.css'
 
 const tarifasData = [

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { Tarifa } from "../TarifasHistoPage/TarifasModel";
+import type { Tarifa } from "../../TarifasHistoPage/TarifasModel";
 import "./FilterTarifas.css";
 
 interface FiltrosTarifasProps {
