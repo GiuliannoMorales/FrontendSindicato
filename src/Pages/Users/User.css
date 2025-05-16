@@ -139,3 +139,41 @@
     color: white;
   }
   
+  .user-photo-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #ccc;
+}
+
+.vehicle-photo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vehicle-photo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f2f2f2;
+  padding: 8px 12px;
+  border-radius: 6px;
+  max-width: 280px;
+}
+
+.vehicle-photo-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.vehicle-edit-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}

@@ -1,12 +1,47 @@
-import { useState } from "react";
-import "./User.css"
+import { useRef, useState } from "react";
+import "./User.css";
 import Layout from "../../components/Layout";
 
 const User = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [userPhotoPreview, setUserPhotoPreview] = useState<string | null>(null);
+    const [vehiclePhotos, setVehiclePhotos] = useState<File[]>([]);
+    const [editIndex, setEditIndex] = useState<number | null>(null);
 
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
+    const userPhotoRef = useRef<HTMLInputElement>(null);
+    const vehiclePhotoRef = useRef<HTMLInputElement>(null);
+    const vehicleEditRef = useRef<HTMLInputElement>(null);
+
+    const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+    const handleUserPhotoClick = () => userPhotoRef.current?.click();
+    const handleVehiclePhotoClick = () => vehiclePhotoRef.current?.click();
+
+    const handleUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => setUserPhotoPreview(reader.result as string);
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleVehiclePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        setVehiclePhotos(prev => [...prev, ...files]);
+    };
+
+    const handleEditVehicleClick = (index: number) => {
+        setEditIndex(index);
+        vehicleEditRef.current?.click();
+    };
+
+    const handleReplaceVehiclePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file !== undefined && editIndex !== null) {
+            const updated = [...vehiclePhotos];
+            updated[editIndex] = file;
+            setVehiclePhotos(updated);
+        }
     };
 
     return (
@@ -21,17 +56,14 @@ const User = () => {
                             <label>Nombre(s): <span className="required">*</span></label>
                             <input type="text" required />
                         </div>
-
                         <div className="input-group">
                             <label>Apellido(s): <span className="required">*</span></label>
                             <input type="text" required />
                         </div>
-
                         <div className="input-group">
                             <label>Teléfono: <span className="required">*</span></label>
                             <input type="tel" required />
                         </div>
-
                         <div className="input-group">
                             <label>Correo Electrónico: <span className="required">*</span></label>
                             <input type="email" required />
@@ -45,10 +77,10 @@ const User = () => {
                             <select required>
                                 <option value="">Seleccione</option>
                                 <option value="admin">Administrativo</option>
-                                <option value="user">Usuario</option>
+                                <option value="docentE">Docente a dedicación exclusiva</option>
+                                <option value="docentH">Docente horario</option>
                             </select>
                         </div>
-
                         <div className="input-group">
                             <label>Contraseña: <span className="required">*</span></label>
                             <div className="password-wrapper">
@@ -74,13 +106,66 @@ const User = () => {
                     <div className="input-group">
                         <label>Foto Usuario: <span className="required">*</span></label>
                         <div className="upload-box">
-                            <button type="button">Subir Foto</button>
+                            {userPhotoPreview ? (
+                                <img
+                                    src={userPhotoPreview}
+                                    alt="Foto de usuario"
+                                    onClick={handleUserPhotoClick}
+                                    className="user-photo-preview"
+                                />
+                            ) : (
+                                <button type="button" onClick={handleUserPhotoClick}>Subir Foto</button>
+                            )}
+                            <input
+                                type="file"
+                                ref={userPhotoRef}
+                                onChange={handleUserPhotoChange}
+                                style={{ display: "none" }}
+                                accept="image/*"
+                            />
                         </div>
                     </div>
 
                     <div className="input-group">
                         <label>Vehículo(s): <span className="required">*</span></label>
-                        <button type="button" className="add-vehicle">+ Añadir vehículo</button>
+
+                        {/* Lista de imágenes seleccionadas */}
+                        <div className="vehicle-photo-list">
+                            {vehiclePhotos.map((file, index) => (
+                                <div key={index} className="vehicle-photo-item">
+                                    <span className="vehicle-photo-name">{file.name}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEditVehicleClick(index)}
+                                        className="vehicle-edit-button"
+                                        title="Cambiar imagen"
+                                    >
+                                        ✏️
+                                    </button>
+                                </div>
+                            ))}
+
+                            <button type="button" className="add-vehicle" onClick={handleVehiclePhotoClick}>
+                                + Añadir vehículo
+                            </button>
+                        </div>
+
+                        {/* Selectores de archivos ocultos */}
+                        <input
+                            type="file"
+                            ref={vehiclePhotoRef}
+                            onChange={handleVehiclePhotoChange}
+                            style={{ display: "none" }}
+                            accept="image/*"
+                            multiple
+                        />
+                        <input
+                            type="file"
+                            ref={vehicleEditRef}
+                            onChange={handleReplaceVehiclePhoto}
+                            style={{ display: "none" }}
+                            accept="image/*"
+                        />
                     </div>
                 </div>
             </form>
