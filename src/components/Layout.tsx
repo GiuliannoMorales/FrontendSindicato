@@ -1,9 +1,10 @@
-import React, {ReactNode} from 'react';
+//////Ximport React, {ReactNode} from 'react';
 import './Layout.css';
 
 interface LayoutProps {
   children: ReactNode;
 }
+
 
 export default function Layout({children}: LayoutProps) {
   return (
