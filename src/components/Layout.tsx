@@ -1,4 +1,4 @@
-//////Ximport React, {ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 import './Layout.css';
 
 interface LayoutProps {

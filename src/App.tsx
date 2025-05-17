@@ -7,6 +7,7 @@ import EstadoCuenta from './Pages/EstadoCuenta';
 import Inicio from './Pages/Inicio';
 import CobrosEfectivo from './Pages/CobrosEfectivo/cobrosEfectivo';
 import ResulCI from './Pages/ResulCI/ResulCI';
+import VistaUsuario from './Pages/VistaUsuario/VistaUsuario';
 
 
 const App: React.FC = () => {
@@ -17,6 +18,7 @@ const App: React.FC = () => {
 				<Route path="/cuenta/estado" element={<EstadoCuenta />} />
 				<Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
 				<Route path="/cobros/ResultadoCI" element={<ResulCI/>} />
+				<Route path="/cobros/Formulario" element={<VistaUsuario/>} />
 			</Routes>
 		</Router>
 	);

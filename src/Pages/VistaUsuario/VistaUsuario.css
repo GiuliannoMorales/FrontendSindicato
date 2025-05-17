@@ -1,0 +1,60 @@
+/* Título principal */
+.titulo h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Sección de información del usuario */
+p {
+  margin: 5px 0;
+}
+
+/* Sección de selección de meses y años */
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* Estilo de los controles numéricos */
+button {
+  padding: 4px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+input[type="number"] {
+  width: 50px;
+  text-align: center;
+}
+
+/* Tabla de detalles del pago */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+table th,
+table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Sección de resumen de pago */
+p strong {
+  display: inline-block;
+  width: 130px;
+}
+
+/* Botón de confirmar cobro */
+button:last-of-type {
+  background-color: crimson;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-weight: bold;
+}
