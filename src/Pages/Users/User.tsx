@@ -16,6 +16,12 @@ const User = () => {
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
     const handleVehiclePhotoClick = () => vehiclePhotoRef.current?.click();
 
+    const [ci, setCi] = useState("");
+
+    const handleCiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCi(e.target.value);
+    };
+
     const handleUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -52,6 +58,18 @@ const User = () => {
                 <div className="form-left">
                     <legend>• Datos Personales:</legend>
                     <fieldset>
+                        <div className="input-group ci-group">
+                            <label>CI: <span className="required">*</span></label>
+                            <input
+                                type="text"
+                                value={ci}
+                                onChange={handleCiChange}
+                                required
+                            />
+                            {!/^\d+$/.test(ci) && ci !== "" && (
+                                <p className="error-message">Formato inválido.</p>
+                            )}
+                        </div>
                         <div className="input-group">
                             <label>Nombre(s): <span className="required">*</span></label>
                             <input type="text" required />
@@ -61,12 +79,12 @@ const User = () => {
                             <input type="text" required />
                         </div>
                         <div className="input-group">
-                            <label>Teléfono: <span className="required">*</span></label>
-                            <input type="tel" required />
-                        </div>
-                        <div className="input-group">
                             <label>Correo Electrónico: <span className="required">*</span></label>
                             <input type="email" required />
+                        </div>
+                        <div className="input-group">
+                            <label>Teléfono: <span className="required">*</span></label>
+                            <input type="tel" required />
                         </div>
                     </fieldset>
 

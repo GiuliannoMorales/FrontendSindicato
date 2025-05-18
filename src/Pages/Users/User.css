@@ -177,3 +177,17 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+.ci-group {
+  position: relative;
+  display: flex;
+}
+
+.ci-group .error-message {
+  position: absolute;
+  left: 135px;
+  margin-top: 55px;
+  color: red;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
