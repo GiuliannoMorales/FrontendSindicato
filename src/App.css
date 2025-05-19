@@ -1,0 +1,18 @@
+.btn-primary{
+  background: #B54351;
+  color: white;
+  font-weight: 550;
+  border: none;
+  padding-inline: 30px;
+  padding-block: 10px;
+  border-radius: 10px;
+}
+.btn-secondary{
+  background: #072543;
+  color: white;
+  font-weight: 550;
+  border: none;
+  padding-inline: 30px;
+  padding-block: 10px;
+  border-radius: 10px;
+}

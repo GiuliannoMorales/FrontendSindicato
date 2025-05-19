@@ -1,0 +1,8 @@
+.tarifas-table__empty {
+  padding: 20px;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin-top: 20px;
+  color: #6c757d;
+}
