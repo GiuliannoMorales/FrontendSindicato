@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import "./User.css";
 import Layout from "../../components/Layout";
+import { EditIcon } from "../../assets/icons/EditIcon";
+import { TrashIcon } from "../../assets/icons/TrashIcon";
 
 const User = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -166,7 +168,7 @@ const User = () => {
                                             className="vehicle-edit-button"
                                             title="Cambiar imagen"
                                         >
-                                            ✏️
+                                            <EditIcon/>
                                         </button>
 
                                         <button
@@ -175,7 +177,7 @@ const User = () => {
                                             className="vehicle-delete-button"
                                             title="Eliminar imagen"
                                         >
-                                            🗑️
+                                            <TrashIcon/>
                                         </button>
                                     </div>
                                 </div>
