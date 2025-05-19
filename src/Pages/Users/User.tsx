@@ -41,6 +41,12 @@ const User = () => {
         vehicleEditRef.current?.click();
     };
 
+    const handleDeleteVehicleClick = (index:number) => {
+        const newVehiclePhotos = [...vehiclePhotos];
+        newVehiclePhotos.splice(index, 1);
+        setVehiclePhotos(newVehiclePhotos);
+    };
+
     const handleReplaceVehiclePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file !== undefined && editIndex !== null) {
@@ -121,7 +127,7 @@ const User = () => {
                 </div>
 
                 <div className="form-right">
-                    <div className="input-group">
+                    <div className="input-group2">
                         <label>Foto Usuario: <span className="required">*</span></label>
                         <div className="upload-box">
                             {userPhotoPreview ? (
@@ -144,7 +150,7 @@ const User = () => {
                         </div>
                     </div>
 
-                    <div className="input-group">
+                    <div className="input-group2">
                         <label>Vehículo(s): <span className="required">*</span></label>
 
                         {/* Lista de imágenes seleccionadas */}
@@ -152,14 +158,26 @@ const User = () => {
                             {vehiclePhotos.map((file, index) => (
                                 <div key={index} className="vehicle-photo-item">
                                     <span className="vehicle-photo-name">{file.name}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleEditVehicleClick(index)}
-                                        className="vehicle-edit-button"
-                                        title="Cambiar imagen"
-                                    >
-                                        ✏️
-                                    </button>
+
+                                    <div className="vehicle-photo-actions">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleEditVehicleClick(index)}
+                                            className="vehicle-edit-button"
+                                            title="Cambiar imagen"
+                                        >
+                                            ✏️
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteVehicleClick(index)}
+                                            className="vehicle-delete-button"
+                                            title="Eliminar imagen"
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
 

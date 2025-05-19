@@ -1,151 +1,166 @@
 .form-title {
-    text-align: center;
-    color: #143a59;
-    font-size: 1.8rem;
-    margin-bottom: 24px;
-    font-weight: normal;
-  }
-  
-  .form-two-columns {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 0 50px;
-  }
-  
-  .form-left,
-  .form-right {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  fieldset {
-    border: none;
-    margin-bottom: 20px;
-    margin-left: 50px;
-  }
-  
-  legend {
-    font-weight: bold;
-    margin-bottom: 12px;
-    font-size: 20px;
-  }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-  
-  label {
-    margin: 0;
-    flex: 0 0 150px;
-  }
-  
-  .required {
-    color: red;
-  }
-  
-  input,
-  select {
-    flex: 1;
-    padding: 5px;
-    margin-bottom: 5px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-  }
-  
-  .password-wrapper {
-    position: relative;
-    width: 100%;
-  }
-  
-  .password-wrapper input {
-    width: 100%;
-    padding-right: 34px;
-    box-sizing: border-box;
-  }
-  
-  .toggle-eye {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    color: #555;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-  
-  .upload-box {
-    background-color: #f5f5f5;
-    padding: 16px;
-    text-align: center;
-    border-radius: 8px;
-    border: 1px dashed #ccc;
-    margin-bottom: 16px;
-  }
-  
-  .upload-box button {
-    background: none;
-    color: #143a59;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .add-vehicle {
-    padding: 6px 10px;
-    background-color: #8da9c4;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: center;
-    gap: 100px;
-    margin-top: 1px;
-  }
-  
-  .cancel-button,
-  .submit-button {
-    padding: 10px 20px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .cancel-button {
-    background-color: #2c4561;
-    color: white;
-  }
-  
-  .submit-button {
-    background-color: #c44040;
-    color: white;
-  }
-  
-  .user-photo-preview {
-  width: 120px;
-  height: 120px;
+  text-align: center;
+  color: #143a59;
+  font-size: 1.8rem;
+  margin-bottom: 24px;
+  font-weight: normal;
+}
+
+.form-two-columns {
+  display: flex;
+  gap: 70px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 50px;
+}
+
+.form-left,
+.form-right {
+  flex: 1;
+  min-width: 300px;
+}
+
+fieldset {
+  border: none;
+  margin-bottom: 20px;
+  margin-left: 50px;
+}
+
+legend {
+  font-weight: bold;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-group2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+
+label {
+  margin: 0;
+  flex: 0 0 150px;
+}
+
+.required {
+  color: red;
+}
+
+input,
+select {
+  flex: 1;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 34px;
+  box-sizing: border-box;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #555;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.upload-box {
+  background-color: #f5f5f5;
+  padding: 65px 0px;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-box button {
+  background: none;
+  color: #143a59;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-vehicle {
+  padding: 6px 10px;
+  background-color: #8da9c4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 150px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  margin-top: -15px;
+  padding-bottom: 30px;
+}
+
+.cancel-button,
+.submit-button {
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #2c4561;
+  color: white;
+}
+
+.submit-button {
+  background-color: #c44040;
+  color: white;
+}
+
+.user-photo-preview {
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
-  border: 2px solid #ccc;
 }
 
 .vehicle-photo-list {
@@ -158,7 +173,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f2f2f2;
   padding: 8px 12px;
   border-radius: 6px;
   max-width: 280px;
@@ -171,7 +185,13 @@
   max-width: 200px;
 }
 
-.vehicle-edit-button {
+.vehicle-photo-actions {
+  display: flex;
+  margin-left: 10px;
+}
+
+.vehicle-edit-button,
+.vehicle-delete-button {
   background: transparent;
   border: none;
   cursor: pointer;
