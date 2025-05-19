@@ -48,7 +48,7 @@ const VistaUsuario = () => {
               <li><span className="info-label">Tipo de Vehículo:</span> Automóvil</li>
             </ul>
           </div>
-
+          <h3 className='res'>1. Cantidad de meses o años a pagar</h3>
           <p>
             Meses:
             <button onClick={() => cambiarValor('meses', -1)} className='bot'>-</button>
@@ -63,7 +63,7 @@ const VistaUsuario = () => {
             <button onClick={() => cambiarValor('anios', 1)} className='bot'>+</button>
           </p>
 
-          <h3>2. Detalles del Pago</h3>
+          <h3 className='res'>2. Detalles del Pago</h3>
 
           <div className="contenedor-pago">
             <table>
