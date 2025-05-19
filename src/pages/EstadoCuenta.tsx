@@ -59,10 +59,10 @@ const EstadoCuenta: React.FC = () => {
             <tbody>
               {datosFiltrados.map((fila, i) => (
                 <tr key={i}>
-                  <td>{fila.mes}</td>
-                  <td>{fila.estado}</td>
-                  <td>{fila.monto}</td>
-                  <td>{fila.fechaPago}</td>
+                  <td className="colLinea">{fila.mes}</td>
+                  <td className="colLinea">{fila.estado}</td>
+                  <td className="center">{fila.monto}</td>
+                  <td className="center">{fila.fechaPago}</td>
                 </tr>
               ))}
             </tbody>
@@ -70,7 +70,7 @@ const EstadoCuenta: React.FC = () => {
         </div>
 
         <div className="saldo">
-          <strong>Saldo Total Pendiente:</strong> {saldoPendiente.toFixed(1)} Bs.
+          <strong>Saldo Total Pendiente: </strong> <p>{saldoPendiente.toFixed(1)} Bs.</p>
         </div>
       </div>
     </Layout>

@@ -5,8 +5,8 @@
 h2 {
 	text-align: center;
 	margin-bottom: 1.5rem;
-	color: #205083;
-	font-weight: 500;
+	color: var(--txtTitulos);
+	font-weight: 400;
 }
 
 .controlVehiculo {
@@ -21,7 +21,7 @@ h2 {
 	width: 220px;
 	margin-left: 30px;
 	border-radius: 6px;
-	background-color: #ffffff;
+	background-color: var(--fondo);
 }
 
 .info {
@@ -29,13 +29,14 @@ h2 {
 }
 
 h3 {
-	font-size: 20px;
+	font-weight: 600;
 	margin-bottom: 0;
 }
 
 p {
 	font-size: 14px;
 	margin-top: 0;
+	font-weight: 400;
 	padding-left: 1.5rem;
 }
 
@@ -52,7 +53,7 @@ p {
 	width: 220px;
 	margin-left: 125px;
 	border-radius: 6px;
-	background-color: #ffffff;
+	background-color: var(--fondo);
 }
 
 .contenedorTabla {
@@ -70,26 +71,38 @@ p {
 }
 
 .tablaEstado th,
-.tablaEstado td {
+td,
+.center {
 	width: 25%;
-	padding: 0.3rem 1rem;
-	border: 1px solid #d1ced6;
+	padding: 0.5rem 2rem;
+	border: 1px solid var(--tblLineas);
+	text-align: center;
+}
+
+.colLinea {
 	text-align: start;
 }
 
 .tablaEstado thead {
-	background-color: #7a93ab;
-	color: #ffffff;
+	background-color: var(--tblHead);
+	color: var(--txtMenu);
+}
+
+.tablaEstado tbody {
+	color: var(--txtTitulos);
+	font-weight: 400;
 }
 
 .saldo {
+	display: flex;
 	width: 82%;
 	margin-top: 1rem;
-	text-align: right;
+	justify-content: right;
 	font-size: 1rem;
-	font-weight: 300;
+	font-weight: 400;
 }
 
-.strong {
-	padding-right: 200px;
+strong {
+	padding-right: 40px;
+	font-weight: 400;
 }
