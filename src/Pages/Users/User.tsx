@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import "./User.css";
-import Layout from "../../components/Layout";
 import { EditIcon } from "../../assets/icons/EditIcon";
 import { TrashIcon } from "../../assets/icons/TrashIcon";
 
@@ -59,7 +58,7 @@ const User = () => {
     };
 
     return (
-        <Layout>
+        <section>
             <h2 className="form-title">REGISTRAR USUARIO</h2>
 
             <form className="form-two-columns">
@@ -212,7 +211,7 @@ const User = () => {
                 <button type="button" className="cancel-button">CANCELAR</button>
                 <button type="submit" className="submit-button">REGISTRAR</button>
             </div>
-        </Layout>
+        </section>
     );
 };
 
