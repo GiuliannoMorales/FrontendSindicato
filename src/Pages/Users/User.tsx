@@ -2,12 +2,14 @@ import { useRef, useState } from "react";
 import "./User.css";
 import { EditIcon } from "../../assets/icons/EditIcon";
 import { TrashIcon } from "../../assets/icons/TrashIcon";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [userPhotoPreview, setUserPhotoPreview] = useState<string | null>(null);
     const [vehiclePhotos, setVehiclePhotos] = useState<File[]>([]);
     const [editIndex, setEditIndex] = useState<number | null>(null);
+    const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement>(null);
     const vehiclePhotoRef = useRef<HTMLInputElement>(null);
@@ -15,7 +17,7 @@ const User = () => {
 
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
-    const handleVehiclePhotoClick = () => vehiclePhotoRef.current?.click();
+   // const handleVehiclePhotoClick = () => vehiclePhotoRef.current?.click();
 
     const [ci, setCi] = useState("");
 
@@ -182,7 +184,7 @@ const User = () => {
                                 </div>
                             ))}
 
-                            <button type="button" className="add-vehicle" onClick={handleVehiclePhotoClick}>
+                            <button type="button" className="add-vehicle" onClick={() => navigate("/registrar/vehiculo")}>
                                 + Añadir vehículo
                             </button>
                         </div>
