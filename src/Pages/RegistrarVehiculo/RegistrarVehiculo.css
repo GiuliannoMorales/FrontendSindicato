@@ -1,4 +1,4 @@
-.vehiculo-form-title {
+.vehiculo__form-title {
     text-align: center;
     color: #143a59;
     font-size: 1.8rem;
@@ -6,7 +6,7 @@
     font-weight: normal;
 }
 
-.vehiculo-form-two-columns {
+.vehiculo__form-two-columns {
     display: flex;
     gap: 70px;
     justify-content: center;
@@ -14,42 +14,42 @@
     padding: 0 50px;
 }
 
-.vehiculo-form-left,
-.vehiculo-form-right {
+.vehiculo__form-left,
+.vehiculo__form-right {
     flex: 1;
     min-width: 300px;
 }
 
-.vehiculo-container fieldset {
+.vehiculo fieldset {
     border: none;
     margin-top: 70px;
 }
 
-.vehiculo-input-group {
+.vehiculo__input-group {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
 }
 
-.vehiculo-input-group2 {
+.vehiculo__input-group2 {
     display: flex;
     align-items: center;
     gap: 30px;
     margin-bottom: 20px;
 }
 
-label {
+.vehiculo label {
     margin: 0;
     flex: 0 0 150px;
 }
 
-.vehiculo-required {
+.vehiculo__required {
     color: red;
 }
 
-input,
-select {
+.vehiculo input,
+.vehiculo select {
     flex: 1;
     padding: 5px;
     margin-bottom: 5px;
@@ -58,7 +58,7 @@ select {
     box-sizing: border-box;
 }
 
-.vehiculo-upload-box {
+.vehiculo__upload-box {
     background-color: #f5f5f5;
     padding: 65px 0;
     width: 150px;
@@ -73,7 +73,7 @@ select {
     box-sizing: border-box;
 }
 
-.vehiculo-upload-box button {
+.vehiculo__upload-box button {
     background: none;
     color: #143a59;
     border: none;
@@ -81,7 +81,7 @@ select {
     font-weight: bold;
 }
 
-.vehiculo-photo-preview {
+.vehiculo__photo-preview {
     width: 150px;
     height: 150px;
     object-fit: cover;
@@ -89,7 +89,7 @@ select {
     cursor: pointer;
 }
 
-.vehiculo-form-actions {
+.vehiculo__form-actions {
     display: flex;
     justify-content: center;
     gap: 100px;
@@ -97,8 +97,8 @@ select {
     padding-bottom: 30px;
 }
 
-.vehiculo-cancel-button,
-.vehiculo-submit-button {
+.vehiculo__cancel-button,
+.vehiculo__submit-button {
     padding: 10px 20px;
     font-weight: bold;
     border: none;
@@ -106,72 +106,72 @@ select {
     cursor: pointer;
 }
 
-.vehiculo-cancel-button {
+.vehiculo__cancel-button {
     background-color: #2c4561;
     color: white;
 }
 
-.vehiculo-submit-button {
+.vehiculo__submit-button {
     background-color: #c44040;
     color: white;
 }
 
 /* Parte responsive */
 @media (max-width: 1024px) {
-    .vehiculo-form-two-columns {
+    .vehiculo__form-two-columns {
         gap: 40px;
         padding: 0 30px;
     }
 
-    label {
+    .vehiculo label {
         flex: 0 0 120px;
     }
 }
 
 @media (max-width: 768px) {
-    .vehiculo-form-two-columns {
+    .vehiculo__form-two-columns {
         flex-direction: column;
         gap: 30px;
         padding: 0 20px;
     }
 
-    fieldset {
+    .vehiculo fieldset {
         margin-left: 0;
     }
 
-    .vehiculo-form-actions {
+    .vehiculo__form-actions {
         flex-direction: column;
         gap: 20px;
     }
 
-    .vehiculo-cancel-button,
-    .vehiculo-submit-button {
+    .vehiculo__cancel-button,
+    .vehiculo__submit-button {
         width: 100%;
     }
 
-    .vehiculo-upload-box,
-    .vehiculo-photo-preview {
+    .vehiculo__upload-box,
+    .vehiculo__photo-preview {
         width: 120px;
         height: 120px;
     }
 }
 
 @media (max-width: 480px) {
-    .vehiculo-form-title {
+    .vehiculo__form-title {
         font-size: 1.5rem;
     }
 
-    label {
+    .vehiculo label {
         flex: 0 0 100px;
         font-size: 0.9rem;
     }
 
-    input,
-    select {
+    .vehiculo input,
+    .vehiculo select {
         font-size: 0.9rem;
     }
 
-    .vehiculo-upload-box button {
+    .vehiculo__upload-box button {
         font-size: 0.9rem;
     }
 }

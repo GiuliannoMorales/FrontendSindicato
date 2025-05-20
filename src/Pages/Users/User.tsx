@@ -17,7 +17,7 @@ const User = () => {
 
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
-   // const handleVehiclePhotoClick = () => vehiclePhotoRef.current?.click();
+       // const handleVehiclePhotoClick = () => vehiclePhotoRef.current?.click();
 
     const [ci, setCi] = useState("");
 
@@ -44,7 +44,7 @@ const User = () => {
         vehicleEditRef.current?.click();
     };
 
-    const handleDeleteVehicleClick = (index:number) => {
+    const handleDeleteVehicleClick = (index: number) => {
         const newVehiclePhotos = [...vehiclePhotos];
         newVehiclePhotos.splice(index, 1);
         setVehiclePhotos(newVehiclePhotos);
@@ -60,65 +60,72 @@ const User = () => {
     };
 
     return (
-        <section>
-            <h2 className="form-title">REGISTRAR USUARIO</h2>
+        <section className="user">
+            <h2 className="user__title">REGISTRAR USUARIO</h2>
 
-            <form className="form-two-columns">
-                <div className="form-left">
-                    <legend>• Datos Personales:</legend>
-                    <fieldset>
-                        <div className="input-group ci-group">
-                            <label>CI: <span className="required">*</span></label>
+            <form className="user__form">
+                <div className="user__form-left">
+                    <legend className="user__legend">• Datos Personales:</legend>
+                    <fieldset className="user__fieldset">
+                        <div className="user__input-group user__input-group--ci">
+                            <label className="user__label">CI: <span className="user__required">*</span></label>
                             <input
                                 type="text"
                                 value={ci}
                                 onChange={handleCiChange}
                                 required
+                                className="user__input"
                             />
                             {!/^\d+$/.test(ci) && ci !== "" && (
-                                <p className="error-message">Formato inválido.</p>
+                                <p className="user__error-message">Formato inválido.</p>
                             )}
                         </div>
-                        <div className="input-group">
-                            <label>Nombre(s): <span className="required">*</span></label>
-                            <input type="text" required />
+
+                        <div className="user__input-group">
+                            <label className="user__label">Nombre(s): <span className="user__required">*</span></label>
+                            <input type="text" required className="user__input" />
                         </div>
-                        <div className="input-group">
-                            <label>Apellido(s): <span className="required">*</span></label>
-                            <input type="text" required />
+
+                        <div className="user__input-group">
+                            <label className="user__label">Apellido(s): <span className="user__required">*</span></label>
+                            <input type="text" required className="user__input" />
                         </div>
-                        <div className="input-group">
-                            <label>Correo Electrónico: <span className="required">*</span></label>
-                            <input type="email" required />
+
+                        <div className="user__input-group">
+                            <label className="user__label">Correo Electrónico: <span className="user__required">*</span></label>
+                            <input type="email" required className="user__input" />
                         </div>
-                        <div className="input-group">
-                            <label>Teléfono: <span className="required">*</span></label>
-                            <input type="tel" required />
+
+                        <div className="user__input-group">
+                            <label className="user__label">Teléfono: <span className="user__required">*</span></label>
+                            <input type="tel" required className="user__input" />
                         </div>
                     </fieldset>
 
-                    <legend>• Datos Cuenta:</legend>
-                    <fieldset>
-                        <div className="input-group">
-                            <label>Tipo Usuario: <span className="required">*</span></label>
-                            <select required>
+                    <legend className="user__legend">• Datos Cuenta:</legend>
+                    <fieldset className="user__fieldset">
+                        <div className="user__input-group">
+                            <label className="user__label">Tipo Usuario: <span className="user__required">*</span></label>
+                            <select required className="user__select">
                                 <option value="">Seleccione</option>
                                 <option value="admin">Administrativo</option>
                                 <option value="docentE">Docente a dedicación exclusiva</option>
                                 <option value="docentH">Docente horario</option>
                             </select>
                         </div>
-                        <div className="input-group">
-                            <label>Contraseña: <span className="required">*</span></label>
-                            <div className="password-wrapper">
+
+                        <div className="user__input-group">
+                            <label className="user__label">Contraseña: <span className="user__required">*</span></label>
+                            <div className="user__password-wrapper">
                                 <input
                                     type={passwordVisible ? "text" : "password"}
                                     required
                                     placeholder="Ingrese su contraseña"
+                                    className="user__input"
                                 />
                                 <button
                                     type="button"
-                                    className="toggle-eye"
+                                    className="user__toggle-eye"
                                     onClick={togglePasswordVisibility}
                                     aria-label="Mostrar/Ocultar contraseña"
                                 >
@@ -129,19 +136,19 @@ const User = () => {
                     </fieldset>
                 </div>
 
-                <div className="form-right">
-                    <div className="input-group2">
-                        <label>Foto Usuario: <span className="required">*</span></label>
-                        <div className="upload-box">
+                <div className="user__form-right">
+                    <div className="user__input-group user__input-group--photo">
+                        <label className="user__label">Foto Usuario: <span className="user__required">*</span></label>
+                        <div className="user__upload-box">
                             {userPhotoPreview ? (
                                 <img
                                     src={userPhotoPreview}
                                     alt="Foto de usuario"
                                     onClick={handleUserPhotoClick}
-                                    className="user-photo-preview"
+                                    className="user__photo-preview"
                                 />
                             ) : (
-                                <button type="button" onClick={handleUserPhotoClick}>Subir Foto</button>
+                                <button type="button" onClick={handleUserPhotoClick} className="user__upload-button">Subir Foto</button>
                             )}
                             <input
                                 type="file"
@@ -149,47 +156,46 @@ const User = () => {
                                 onChange={handleUserPhotoChange}
                                 style={{ display: "none" }}
                                 accept="image/*"
+                                className="user__file-input"
                             />
                         </div>
                     </div>
 
-                    <div className="input-group2">
-                        <label>Vehículo(s): <span className="required">*</span></label>
+                    <div className="user__input-group user__input-group--vehicles">
+                        <label className="user__label">Vehículo(s): <span className="user__required">*</span></label>
 
-                        {/* Lista de imágenes seleccionadas */}
-                        <div className="vehicle-photo-list">
+                        <div className="user__vehicle-photo-list">
                             {vehiclePhotos.map((file, index) => (
-                                <div key={index} className="vehicle-photo-item">
-                                    <span className="vehicle-photo-name">{file.name}</span>
+                                <div key={index} className="user__vehicle-photo-item">
+                                    <span className="user__vehicle-photo-name">{file.name}</span>
 
-                                    <div className="vehicle-photo-actions">
+                                    <div className="user__vehicle-photo-actions">
                                         <button
                                             type="button"
                                             onClick={() => handleEditVehicleClick(index)}
-                                            className="vehicle-edit-button"
+                                            className="user__vehicle-edit-button"
                                             title="Cambiar imagen"
                                         >
-                                            <EditIcon/>
+                                            <EditIcon />
                                         </button>
 
                                         <button
                                             type="button"
                                             onClick={() => handleDeleteVehicleClick(index)}
-                                            className="vehicle-delete-button"
+                                            className="user__vehicle-delete-button"
                                             title="Eliminar imagen"
                                         >
-                                            <TrashIcon/>
+                                            <TrashIcon />
                                         </button>
                                     </div>
                                 </div>
                             ))}
 
-                            <button type="button" className="add-vehicle" onClick={() => navigate("/registrar/vehiculo")}>
+                            <button type="button" className="user__add-vehicle" onClick={() => navigate("/registrar/vehiculo")}>
                                 + Añadir vehículo
                             </button>
                         </div>
 
-                        {/* Selectores de archivos ocultos */}
                         <input
                             type="file"
                             ref={vehiclePhotoRef}
@@ -197,6 +203,7 @@ const User = () => {
                             style={{ display: "none" }}
                             accept="image/*"
                             multiple
+                            className="user__file-input"
                         />
                         <input
                             type="file"
@@ -204,14 +211,15 @@ const User = () => {
                             onChange={handleReplaceVehiclePhoto}
                             style={{ display: "none" }}
                             accept="image/*"
+                            className="user__file-input"
                         />
                     </div>
                 </div>
             </form>
 
-            <div className="form-actions">
-                <button type="button" className="cancel-button">CANCELAR</button>
-                <button type="submit" className="submit-button">REGISTRAR</button>
+            <div className="user__form-actions">
+                <button type="button" className="user__cancel-button">CANCELAR</button>
+                <button type="submit" className="user__submit-button">REGISTRAR</button>
             </div>
         </section>
     );
