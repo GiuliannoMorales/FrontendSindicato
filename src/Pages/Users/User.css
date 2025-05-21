@@ -182,7 +182,7 @@
 .user__vehicle-photo-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
 
 .user__vehicle-photo-item {
@@ -214,6 +214,11 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
+}
+
+.user__add-vehicle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Responsive */
