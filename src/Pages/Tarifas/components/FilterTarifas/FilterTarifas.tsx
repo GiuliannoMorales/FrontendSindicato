@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { Tarifa } from "../../TarifasHistoPage/TarifasModel";
+import type { Tarifa } from "../../models/TarifasModel";
 import "./FilterTarifas.css";
 
 interface FiltrosTarifasProps {
@@ -21,9 +21,9 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
 
   // Obtener valores únicos para los selects
   const vehiculosUnicos = Array.from(
-    new Set(data.map((item) => item.vehiculo))
+    new Set(data.map((item) => item.tipoVehiculo))
   );
-  const usuariosUnicos = Array.from(new Set(data.map((item) => item.usuario)));
+  const usuariosUnicos = Array.from(new Set(data.map((item) => item.tipoCliente)));
   const modificadoresUnicos = Array.from(
     new Set(data.map((item) => item.modificadoPor))
   );
@@ -41,7 +41,7 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
         ? new Date(filtros.fechaHasta)
         : null;
 
-      const tarifaNum = parseFloat(item.tarifa.replace(",", "."));
+      const tarifaNum = parseFloat(item.monto.replace(",", "."));
       const tarifaMin = filtros.tarifaMin
         ? parseFloat(filtros.tarifaMin)
         : null;
@@ -50,8 +50,8 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
         : null;
 
       return (
-        (filtros.vehiculo === "" || item.vehiculo === filtros.vehiculo) &&
-        (filtros.usuario === "" || item.usuario.includes(filtros.usuario)) &&
+        (filtros.vehiculo === "" || item.tipoVehiculo === filtros.vehiculo) &&
+        (filtros.usuario === "" || item.tipoCliente.includes(filtros.usuario)) &&
         (!fechaDesde || fechaItem >= fechaDesde) &&
         (!fechaHasta || fechaItem <= fechaHasta) &&
         (!tarifaMin || tarifaNum >= tarifaMin) &&
