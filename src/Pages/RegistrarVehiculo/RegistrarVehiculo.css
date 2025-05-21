@@ -22,21 +22,18 @@
 
 .vehiculo fieldset {
     border: none;
-    margin-top: 70px;
+    margin-top: 50px;
+    margin-left: 30px;
 }
 
 .vehiculo__input-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     margin-bottom: 15px;
 }
-
-.vehiculo__input-group2 {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 20px;
+.vehiculo__form-right .vehiculo__input-group {
+    gap: 60px;
 }
 
 .vehiculo label {
@@ -54,8 +51,9 @@
     padding: 5px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 4px;
     box-sizing: border-box;
+    height: 32px;
 }
 
 .vehiculo__upload-box {
@@ -64,7 +62,7 @@
     width: 150px;
     height: 150px;
     text-align: center;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px dashed #ccc;
     margin-bottom: 16px;
     display: flex;
@@ -85,7 +83,7 @@
     width: 150px;
     height: 150px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -93,7 +91,7 @@
     display: flex;
     justify-content: center;
     gap: 100px;
-    margin-top: 55px;
+    margin-top: 30px;
     padding-bottom: 30px;
 }
 
@@ -102,7 +100,7 @@
     padding: 10px 20px;
     font-weight: bold;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
 }
 

@@ -10,6 +10,7 @@ const User = () => {
     const [userPhotoPreview, setUserPhotoPreview] = useState<string | null>(null);
     const [vehiculos, setVehiculos] = useState<any[]>([]);
     const [ci, setCi] = useState("");
+    const [userType, setUserType] = useState("");
 
     const navigate = useNavigate();
     const userPhotoRef = useRef<HTMLInputElement>(null);
@@ -124,11 +125,11 @@ const User = () => {
                     <fieldset className="user__fieldset">
                         <div className="user__input-group">
                             <label className="user__label">Tipo Usuario: <span className="user__required">*</span></label>
-                            <select required className="user__select">
+                            <select required className="user__select" value={userType} onChange={(e) => setUserType(e.target.value)} >
                                 <option value="">Seleccione</option>
                                 <option value="admin">Administrativo</option>
-                                <option value="docentE">Docente a dedicación exclusiva</option>
-                                <option value="docentH">Docente horario</option>
+                                <option value="docenteExclusivo">Docente a dedicación exclusiva</option>
+                                <option value="docenteHorario">Docente horario</option>
                             </select>
                         </div>
                         <div className="user__input-group">
@@ -223,6 +224,19 @@ const User = () => {
                             className="user__file-input"
                         />
                     </div>
+
+                    {(userType === "admin" || userType === "docenteExclusivo") && (
+                        <div className="user__input-group user__input-group--space">
+                            <label className="user__label">Asignar espacio: <span className="user__required">*</span></label>
+                            <select required className="user__select">
+                                <option value="">Seleccione un espacio</option>
+                                <option value="espacio1">Espacio 1</option>
+                                <option value="espacio43">Espacio 43</option>
+                                <option value="espacio72">Espacio 72</option>
+                                <option value="espacio100">Espacio 100</option>
+                            </select>
+                        </div>
+                    )}
                 </div>
             </form>
 
