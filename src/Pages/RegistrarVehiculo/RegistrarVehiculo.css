@@ -100,8 +100,10 @@
     padding: 10px 20px;
     font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
+    height: 40px;
+    width: 210px;
 }
 
 .vehiculo__cancel-button {
