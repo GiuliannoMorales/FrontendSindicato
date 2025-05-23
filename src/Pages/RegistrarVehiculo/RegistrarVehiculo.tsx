@@ -31,7 +31,7 @@ const RegistrarVehiculo = () => {
         }
     };
 
-    const handleSave = async() => {
+    const handleSave = async () => {
         if (
             !formData.tipo ||
             !formData.placa ||
@@ -53,7 +53,7 @@ const RegistrarVehiculo = () => {
 
         try {
             await guardarVehiculo(data);
-            alert("Vehículo guardado exitosamente en IndexedDB");
+            alert("Vehículo guardado exitosamente en VehiculosDB");
             navigate("/registrar/usuario");
         } catch (error) {
             alert("Error al guardar el vehículo");
@@ -81,7 +81,8 @@ const RegistrarVehiculo = () => {
                         </div>
                         <div className="vehiculo__input-group">
                             <label>Placa: <span className="vehiculo__required">*</span></label>
-                            <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} required />
+                            <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} maxLength={10}
+                                title="La placa no debe superar los 10 caracteres" required />
                         </div>
                         <div className="vehiculo__input-group">
                             <label>Marca: <span className="vehiculo__required">*</span></label>

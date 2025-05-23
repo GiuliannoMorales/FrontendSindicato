@@ -32,7 +32,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (userType !== "admin" && userType !== "docenteExclusivo") {
+        if (userType !== "ADMINISTRATIVO" && userType !== "DOCENTE_EXCLUSIVA") {
             onAssignedSpaceChange(null);
         }
     }, [userType]);
@@ -149,7 +149,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                 />
             </div>
 
-            {(userType === "admin" || userType === "docenteExclusivo") && (
+            {(userType === "ADMINISTRATIVO" || userType === "DOCENTE_EXCLUSIVA") && (
                 <div className="user__input-group user__input-group--space">
                     <label className="user__label">
                         Asignar espacio: <span className="user__required">*</span>

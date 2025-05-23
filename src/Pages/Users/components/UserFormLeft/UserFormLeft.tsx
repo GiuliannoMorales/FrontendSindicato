@@ -69,9 +69,9 @@ const UserFormLeft = ({
                         onChange={(e) => onUserTypeChange(e.target.value)}
                     >
                         <option value="">Seleccione</option>
-                        <option value="admin">Administrativo</option>
-                        <option value="docenteExclusivo">Docente a dedicación exclusiva</option>
-                        <option value="docenteHorario">Docente horario</option>
+                        <option value="ADMINISTRATIVO">Administrativo</option>
+                        <option value="DOCENTE_EXCLUSIVA">Docente a dedicación exclusiva</option>
+                        <option value="DOCENTE_HORARIO">Docente horario</option>
                     </select>
                 </div>
                 <div className="user__input-group">
