@@ -13,6 +13,7 @@ const User = () => {
     const [userType, setUserType] = useState("");
     const [assignedSpace, setAssignedSpace] = useState<string | null>(null);
     const [showCancelModal, setShowCancelModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
     const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
@@ -115,14 +116,15 @@ const User = () => {
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
-           // const response = await axios.post("http://localhost:3001/api/usuarios", newUser);
-           // console.log("Usuario registrado:", response.data);
+            // const response = await axios.post("http://localhost:3001/api/usuarios", newUser);
+            // console.log("Usuario registrado:", response.data);
             await resetForm();
-
         } catch (error) {
             console.error("Error al registrar usuario:", error);
+            setShowErrorModal(true);
         }
     };
+
 
     return (
         <section className="user">
@@ -169,6 +171,17 @@ const User = () => {
                         <div className="modal-buttons">
                             <button onClick={closeModal} className="cancel">No</button>
                             <button onClick={confirmCancel} className="confirm">Sí</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showErrorModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <p>Ocurrió un error al guardar los datos. Por favor, intente nuevamente.</p>
+                        <div className="modal-buttons">
+                            <button onClick={() => setShowErrorModal(false)} className="confirm">Aceptar</button>
                         </div>
                     </div>
                 </div>
