@@ -1,4 +1,4 @@
-import { type RefObject } from "react";
+import React, { useEffect, type RefObject } from "react";
 import { EditIcon } from "../../../../assets/icons/EditIcon";
 import { TrashIcon } from "../../../../assets/icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,8 @@ interface UserFormRightProps {
     vehicleEditRef: RefObject<HTMLInputElement | null>;
     handleDeleteVehicle: (id: number) => void;
     userType: string;
+    assignedSpace: string | null;
+    onAssignedSpaceChange: (space: string | null) => void;
 }
 
 const UserFormRight: React.FC<UserFormRightProps> = ({
@@ -24,8 +26,20 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     vehicleEditRef,
     handleDeleteVehicle,
     userType,
+    assignedSpace,
+    onAssignedSpaceChange,
 }) => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (userType !== "admin" && userType !== "docenteExclusivo") {
+            onAssignedSpaceChange(null);
+        }
+    }, [userType]);
+
+    const handleAssignedSpaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        onAssignedSpaceChange(e.target.value || null);
+    };
 
     const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -140,7 +154,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                     <label className="user__label">
                         Asignar espacio: <span className="user__required">*</span>
                     </label>
-                    <select required className="user__select">
+                    <select required className="user__select" value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
                         <option value="">Seleccione un espacio</option>
                         <option value="espacio1">Espacio 1</option>
                         <option value="espacio43">Espacio 43</option>

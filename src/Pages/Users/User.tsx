@@ -1,50 +1,69 @@
 import { useEffect, useRef, useState } from "react";
 import "./User.css";
-import { openVehiculosDB } from "../../bd/vehiculosBD";
+import { getAllVehiculos, deleteVehiculoById, clearVehiculos, borrarVehiculosDB } from "../../pages/Users/services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
-
+import { useNavigate } from "react-router-dom";
+//import axios from "axios";
 
 const User = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [userPhoto, setUserPhoto] = useState<string | null>(null);
     const [vehiculos, setVehiculos] = useState<any[]>([]);
     const [userType, setUserType] = useState("");
+    const [assignedSpace, setAssignedSpace] = useState<string | null>(null);
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const vehicleEditRef = useRef<HTMLInputElement>(null);
 
+    const handleAssignedSpaceChange = (space: string | null) => {
+        setAssignedSpace(space);
+    };
+
     useEffect(() => {
-        const fetchVehiculosFromDB = async () => {
+        if (!sessionStorage.getItem("vehiculosDBIniciada")) {
+            borrarVehiculosDB().then(() => {
+                sessionStorage.setItem("vehiculosDBIniciada", "true");
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        const fetchVehiculos = async () => {
             try {
-                const db = await openVehiculosDB();
-                const transaction = db.transaction("vehiculos", "readonly");
-                const store = transaction.objectStore("vehiculos");
-
-                // para obtener todos los vehículos
-                const request = store.getAll();
-
-                request.onsuccess = () => {
-                    const resultados = request.result;
-                    if (resultados.length > 0) {
-                        setVehiculos(resultados);
-
-                    } else {
-                        setVehiculos([]);
-
-                    }
-                };
-
-                request.onerror = () => {
-                    console.error("Error al leer vehículos desde VehiculosDB");
-                };
+                const resultados = await getAllVehiculos();
+                setVehiculos(resultados);
             } catch (error) {
-                console.error("Error al abrir VehiculosDB", error);
+                console.error("Error al obtener vehículos:", error);
             }
         };
 
-        fetchVehiculosFromDB();
+        fetchVehiculos();
     }, []);
+
+    const resetForm = async () => {
+        setFormData({ ci: "", nombre: "", apellido: "", correo: "", telefono: "", tipoUsuario: "", contrasena: "" });
+        setUserPhoto(null);
+        setVehiculos([]);
+        setAssignedSpace(null);
+
+        try {
+            await clearVehiculos();
+        } catch (error) {
+            console.error("Error al limpiar vehículos:", error);
+        }
+    };
+
+    const handleDeleteVehicle = async (id: number) => {
+        try {
+            await deleteVehiculoById(id);
+            setVehiculos(prev => prev.filter(v => v.id !== id));
+        } catch (error) {
+            console.error("Error al eliminar vehículo:", error);
+        }
+    };
 
     const [formData, setFormData] = useState({
         ci: "",
@@ -70,25 +89,38 @@ const User = () => {
         setUserPhoto(base64);
     };
 
-    const handleDeleteVehicle = async (id: number) => {
+    const handleCancelClick = () => {
+        setShowCancelModal(true);
+    };
+
+    const confirmCancel = async () => {
+        setShowCancelModal(false);
+        await resetForm();
+        navigate("/");
+    };
+
+    const closeModal = () => {
+        setShowCancelModal(false);
+    };
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const vehiculosSinId = vehiculos.map(({ id, ...rest }) => rest);
+        const newUser = {
+            ...formData,
+            tipoUsuario: userType,
+            foto: userPhoto,
+            vehiculos: vehiculosSinId,
+            assignedSpace,
+        };
+        console.log("Datos que se enviarán al backend:", newUser);
         try {
-            const db = await openVehiculosDB();
-            const transaction = db.transaction("vehiculos", "readwrite");
-            const store = transaction.objectStore("vehiculos");
+           // const response = await axios.post("http://localhost:3001/api/usuarios", newUser);
+           // console.log("Usuario registrado:", response.data);
+            await resetForm();
 
-            const deleteRequest = store.delete(id);
-
-            deleteRequest.onsuccess = () => {
-                // Actualizar el estado local para reflejar el cambio
-                setVehiculos((prevVehiculos) => prevVehiculos.filter(v => v.id !== id));
-                console.log(`Vehículo con id ${id} eliminado correctamente.`);
-            };
-
-            deleteRequest.onerror = () => {
-                console.error("Error al eliminar vehículo");
-            };
         } catch (error) {
-            console.error("Error al acceder a la base de datos", error);
+            console.error("Error al registrar usuario:", error);
         }
     };
 
@@ -119,14 +151,28 @@ const User = () => {
                         vehicleEditRef={vehicleEditRef}
                         handleDeleteVehicle={handleDeleteVehicle}
                         userType={userType}
+                        assignedSpace={assignedSpace}
+                        onAssignedSpaceChange={handleAssignedSpaceChange}
                     />
                 </div>
             </form>
 
             <div className="user__form-actions">
-                <button type="button" className="user__cancel-button">CANCELAR</button>
-                <button type="submit" className="user__submit-button">REGISTRAR</button>
+                <button type="button" className="user__cancel-button" onClick={handleCancelClick}> CANCELAR</button>
+                <button type="submit" className="user__submit-button" onClick={handleRegister}>REGISTRAR</button>
             </div>
+
+            {showCancelModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <p>¿Estás seguro de cancelar?</p>
+                        <div className="modal-buttons">
+                            <button onClick={closeModal} className="cancel">No</button>
+                            <button onClick={confirmCancel} className="confirm">Sí</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };
