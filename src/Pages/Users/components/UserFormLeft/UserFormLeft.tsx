@@ -52,7 +52,7 @@ const UserFormLeft = ({
                 </div>
                 <div className="user__input-group">
                     <label className="user__label">Teléfono: <span className="user__required">*</span></label>
-                    <input type="tel" required className="user__input" onChange={(e) => onChange("telefono", e.target.value)} />
+                    <input type="tel" required className="user__input" onChange={(e) => onChange("nroCelular", e.target.value)} />
                 </div>
             </fieldset>
 
@@ -69,9 +69,9 @@ const UserFormLeft = ({
                         onChange={(e) => onUserTypeChange(e.target.value)}
                     >
                         <option value="">Seleccione</option>
-                        <option value="ADMINISTRATIVO">Administrativo</option>
-                        <option value="DOCENTE_EXCLUSIVA">Docente a dedicación exclusiva</option>
-                        <option value="DOCENTE_HORARIO">Docente horario</option>
+                        <option value="Administrativo">Administrativo</option>
+                        <option value="Docente a dedicación exclusiva">Docente a dedicación exclusiva</option>
+                        <option value="Docente a tiempo horario">Docente a tiempo horario</option>
                     </select>
                 </div>
                 <div className="user__input-group">

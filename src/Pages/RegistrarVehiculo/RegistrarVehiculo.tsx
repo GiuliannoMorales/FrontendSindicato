@@ -53,10 +53,10 @@ const RegistrarVehiculo = () => {
 
         try {
             await guardarVehiculo(data);
-            alert("Vehículo guardado exitosamente en VehiculosDB");
+           console.log("Vehículo guardado exitosamente en VehiculosDB");
             navigate("/registrar/usuario");
         } catch (error) {
-            alert("Error al guardar el vehículo");
+           console.log("Error al guardar el vehículo");
         }
     };
 
@@ -75,8 +75,8 @@ const RegistrarVehiculo = () => {
                             <label>Tipo Vehículo: <span className="vehiculo__required">*</span></label>
                             <select name="tipo" value={formData.tipo} onChange={handleInputChange} required>
                                 <option value="">Seleccione</option>
-                                <option value="Automóvil">Automóvil</option>
-                                <option value="Motocicleta">Motocicleta</option>
+                                <option value="Auto">Automóvil</option>
+                                <option value="Moto">Motocicleta</option>
                             </select>
                         </div>
                         <div className="vehiculo__input-group">

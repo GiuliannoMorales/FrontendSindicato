@@ -45,7 +45,7 @@ const User = () => {
     }, []);
 
     const resetForm = async () => {
-        setFormData({ ci: "", nombre: "", apellido: "", correo: "", telefono: "", tipoUsuario: "", contrasena: "" });
+        setFormData({ ci: "", nombre: "", apellido: "", correo: "", nroCelular: "", tipo: "", password: "" });
         setUserPhoto(null);
         setVehiculos([]);
         setAssignedSpace(null);
@@ -71,9 +71,9 @@ const User = () => {
         nombre: "",
         apellido: "",
         correo: "",
-        telefono: "",
-        tipoUsuario: "",
-        contrasena: "",
+        nroCelular: "",
+        tipo: "",
+        password: "",
     });
 
     const handleFormChange = (field: string, value: string) => {
@@ -108,11 +108,13 @@ const User = () => {
         e.preventDefault();
         const vehiculosSinId = vehiculos.map(({ id, ...rest }) => rest);
         const newUser = {
+            cliente: {
             ...formData,
-            tipoUsuario: userType,
+            tipo: userType,
             foto: userPhoto,
+            },
             vehiculos: vehiculosSinId,
-            assignedSpace,
+            parqueo: assignedSpace ? [{ nroEspacio: Number(assignedSpace) }] : [],
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
@@ -137,8 +139,8 @@ const User = () => {
                         userType={userType}
                         onUserTypeChange={setUserType}
                         passwordVisible={passwordVisible}
-                        password={formData.contrasena}
-                        onPasswordChange={(value) => handleFormChange("contrasena", value)}
+                        password={formData.password}
+                        onPasswordChange={(value) => handleFormChange("password", value)}
                         onTogglePasswordVisibility={togglePasswordVisibility}
                     />
                 </div>
