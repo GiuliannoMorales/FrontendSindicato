@@ -110,17 +110,6 @@
 
 /*Responsive*/
 
-@media (max-width: 1024px) {
-  .user__form {
-    gap: 40px;
-    padding: 0 30px;
-  }
-
-  .user__label {
-    flex: 0 0 120px;
-  }
-}
-
 @media (max-width: 768px) {
   .user__form-actions {
     flex-direction: column;
@@ -147,30 +136,5 @@
   .user__vehicle-photo-actions {
     margin-left: 0;
     margin-top: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .user__add-vehicle {
-    width: 100%;
-  }
-
-  .user__upload-box button {
-    font-size: 0.9rem;
-  }
-
-  .user__vehicle-photo-name {
-    max-width: 100%;
-  }
-
-  .user__vehicle-photo-item {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .user__vehicle-photo-actions {
-    margin-left: 10px;
-    margin-top: 0;
   }
 }

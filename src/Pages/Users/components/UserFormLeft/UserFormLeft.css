@@ -77,16 +77,6 @@
 }
 
 /* Responsive*/
-@media (max-width: 1024px) {
-  .user__form {
-    gap: 40px;
-    padding: 0 30px;
-  }
-
-  .user__label {
-    flex: 0 0 120px;
-  }
-}
 
 @media (max-width: 768px) {
   .user__form {
@@ -105,22 +95,3 @@
   }
 }
 
-@media (max-width: 480px) {
-  .user__title {
-    font-size: 1.5rem;
-  }
-
-  .user__label {
-    flex: 0 0 100px;
-    font-size: 0.9rem;
-  }
-
-  .user__input,
-  .user__select {
-    font-size: 0.9rem;
-  }
-
-  .user__legend {
-    font-size: 1rem;
-  }
-}
