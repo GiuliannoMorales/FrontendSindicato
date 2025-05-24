@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import api from "../../api/axios"
 import '../EstadoCuenta/EstadoCuenta.css';
 import type { VehiculoActivo, VehiculosActivosResponse, EstadoCuentaResponse, DetalleMes } from "./EstadoCuentaModelos";
-// import mockVehiculos from "./mock/vehiculos-activos.json";
-// import mockEstadoCuenta from "./mock/estado-cuenta.json";
 
 const idUsuario = import.meta.env.VITE_ID_USUARIO;
 
@@ -20,10 +18,6 @@ const EstadoCuenta: React.FC = () => {
   const [fechaA, setFechaA] = useState<string>('');
 
   useEffect(() => {
-    /*
-    Prueba
-    setVehiculos(mockVehiculos.data)
-    */
     api.get<VehiculosActivosResponse>(`reporte/cliente/${idUsuario}/vehiculos-activos`)
     .then(res => {
       setVehiculos(res.data.data)
@@ -40,12 +34,6 @@ const EstadoCuenta: React.FC = () => {
       setUltimaActualizacion('');
       return
     }
-    /*
-    Prueba
-    setDetallesMes(mockEstadoCuenta.data.detallesMes);
-    setSaldoPendiente(mockEstadoCuenta.data.saldoTotalPendiente);
-    setUltimaActualizacion(mockEstadoCuenta.data.ultimaActualizacion);
-    */
 
     api.get<EstadoCuentaResponse>(`reporte/cliente/${idUsuario}/vehiculo/${placaSeleccionada}/estado-cuenta`)
       .then(res => {
