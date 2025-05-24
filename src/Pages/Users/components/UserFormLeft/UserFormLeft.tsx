@@ -1,4 +1,6 @@
 import "./UserFormLeft.css";
+import EyeIcon from "../../../../assets/icons/EyeIcon";
+import EyeSlashIcon from "../../../../assets/icons/EyeSlashIcon";
 
 interface UserFormLeftProps {
     ci: string;
@@ -93,7 +95,7 @@ const UserFormLeft = ({
                             onClick={onTogglePasswordVisibility}
                             aria-label="Mostrar/Ocultar contraseña"
                         >
-                            <i className={passwordVisible ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                            {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
                     </div>
                 </div>
