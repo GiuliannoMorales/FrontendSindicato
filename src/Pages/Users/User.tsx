@@ -109,17 +109,7 @@ const User = () => {
         e.preventDefault();
         const { ci, nombre, apellido, correo, nroCelular, password } = formData;
         const tipo = userType;
-        console.log({
-            ci,
-            nombre,
-            apellido,
-            correo,
-            nroCelular,
-            tipo,
-            password,
-            assignedSpace,
-            vehiculosLength: vehiculos.length,
-        });
+    
         if (
             !ci.trim() ||
             !nombre.trim() ||
@@ -128,7 +118,7 @@ const User = () => {
             !nroCelular.trim() ||
             !tipo.trim() ||
             !password.trim() ||
-            !assignedSpace ||
+            (userType !== "Docente a tiempo horario" && !assignedSpace) ||
             vehiculos.length === 0
         ) {
             alert("Por favor, complete todos los campos requeridos y agregue al menos un vehículo.");
@@ -142,13 +132,16 @@ const User = () => {
                 foto: userPhoto,
             },
             vehiculos: vehiculosSinId,
-            parqueo: assignedSpace ? { nroEspacio: Number(assignedSpace) } : null,
+            parqueo: userType === "Docente a tiempo horario"
+                ? null
+                : assignedSpace ? { nroEspacio: Number(assignedSpace) } : null,
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
             const response = await axios.post("https://backendproyectoparqueoumss.onrender.com/api/clientes/registrar", newUser);
             console.log("Usuario registrado:", response.data);
             await resetForm();
+            navigate(0);
         } catch (error) {
             console.error("Error al registrar usuario:", error);
             setShowErrorModal(true);
