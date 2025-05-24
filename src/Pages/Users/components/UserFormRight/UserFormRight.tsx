@@ -1,8 +1,9 @@
-import React, { useEffect, type RefObject } from "react";
+import React, { useEffect, useState, type RefObject } from "react";
 import { EditIcon } from "../../../../assets/icons/EditIcon";
 import { TrashIcon } from "../../../../assets/icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
 import "./UserFormRight.css";
+import axios from "axios";
 
 interface UserFormRightProps {
     userPhotoPreview: string | null;
@@ -30,12 +31,23 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     onAssignedSpaceChange,
 }) => {
     const navigate = useNavigate();
+    const [espacios, setEspacios] = useState([]);
+
+    useEffect(() => {
+        axios.get("https://backendproyectoparqueoumss.onrender.com/api/parqueo/espacios-disponibles")
+            .then((response) => {
+                setEspacios(response.data.data);
+            })
+            .catch((error) => {
+                console.error("Error al obtener espacios:", error);
+            });
+    }, []);
 
     useEffect(() => {
         if (userType !== "Administrativo" && userType !== "Docente a dedicación exclusiva") {
             onAssignedSpaceChange(null);
         }
-    }, [userType]);
+    }, [userType, onAssignedSpaceChange]);
 
     const handleAssignedSpaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onAssignedSpaceChange(e.target.value || null);
@@ -48,7 +60,8 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
         const reader = new FileReader();
         reader.onloadend = () => {
             const base64String = reader.result as string;
-            handleUserPhotoChange(base64String);
+            const base64WithoutPrefix = base64String.split(",")[1] || "";
+            handleUserPhotoChange(base64WithoutPrefix);
         };
         reader.readAsDataURL(file);
     };
@@ -62,7 +75,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                 <div className="user__upload-box">
                     {userPhotoPreview ? (
                         <img
-                            src={userPhotoPreview}
+                            src={`data:image/jpeg;base64,${userPhotoPreview}`}
                             alt="Foto de usuario"
                             onClick={handleUserPhotoClick}
                             className="user__photo-preview"
@@ -156,10 +169,11 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                     </label>
                     <select required className="user__select" value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
                         <option value="">Seleccione un espacio</option>
-                        <option value="1">Espacio 1</option>
-                        <option value="43">Espacio 43</option>
-                        <option value="72">Espacio 72</option>
-                        <option value="100">Espacio 100</option>
+                        {espacios.map((espacio: number) => (
+                            <option key={espacio} value={espacio}>
+                                Espacio {espacio}
+                            </option>
+                        ))}
                     </select>
                 </div>
             )}

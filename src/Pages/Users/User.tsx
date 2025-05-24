@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./User.css";
-import { getAllVehiculos, deleteVehiculoById, clearVehiculos, borrarVehiculosDB } from "../../pages/Users/services/vehiculosService";
+import { getAllVehiculos, deleteVehiculoById, clearVehiculos, deleteVehiculosDB } from "../../pages/Users/services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
-//import axios from "axios";
+import axios from "axios";
 
 const User = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -25,7 +25,7 @@ const User = () => {
 
     useEffect(() => {
         if (!sessionStorage.getItem("vehiculosDBIniciada")) {
-            borrarVehiculosDB().then(() => {
+            deleteVehiculosDB().then(() => {
                 sessionStorage.setItem("vehiculosDBIniciada", "true");
             });
         }
@@ -87,7 +87,8 @@ const User = () => {
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
 
     const handleUserPhotoChange = (base64: string) => {
-        setUserPhoto(base64);
+        const base64WithoutPrefix = base64.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
+        setUserPhoto(base64WithoutPrefix);
     };
 
     const handleCancelClick = () => {
@@ -106,20 +107,47 @@ const User = () => {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+        const { ci, nombre, apellido, correo, nroCelular, password } = formData;
+        const tipo = userType;
+        console.log({
+            ci,
+            nombre,
+            apellido,
+            correo,
+            nroCelular,
+            tipo,
+            password,
+            assignedSpace,
+            vehiculosLength: vehiculos.length,
+        });
+        if (
+            !ci.trim() ||
+            !nombre.trim() ||
+            !apellido.trim() ||
+            !correo.trim() ||
+            !nroCelular.trim() ||
+            !tipo.trim() ||
+            !password.trim() ||
+            !assignedSpace ||
+            vehiculos.length === 0
+        ) {
+            alert("Por favor, complete todos los campos requeridos y agregue al menos un vehículo.");
+            return;
+        }
         const vehiculosSinId = vehiculos.map(({ id, ...rest }) => rest);
         const newUser = {
             cliente: {
-            ...formData,
-            tipo: userType,
-            foto: userPhoto,
+                ...formData,
+                tipo: userType,
+                foto: userPhoto,
             },
             vehiculos: vehiculosSinId,
-            parqueo: assignedSpace ? [{ nroEspacio: Number(assignedSpace) }] : [],
+            parqueo: assignedSpace ? { nroEspacio: Number(assignedSpace) } : null,
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
-            // const response = await axios.post("http://localhost:3001/api/usuarios", newUser);
-            // console.log("Usuario registrado:", response.data);
+            const response = await axios.post("https://backendproyectoparqueoumss.onrender.com/api/clientes/registrar", newUser);
+            console.log("Usuario registrado:", response.data);
             await resetForm();
         } catch (error) {
             console.error("Error al registrar usuario:", error);

@@ -26,7 +26,11 @@ const RegistrarVehiculo = () => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => setPreview(reader.result as string);
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                const base64WithoutPrefix = base64String.split(",")[1] || "";
+                setPreview(base64WithoutPrefix);
+            };
             reader.readAsDataURL(file);
         }
     };
@@ -53,10 +57,10 @@ const RegistrarVehiculo = () => {
 
         try {
             await guardarVehiculo(data);
-           console.log("Vehículo guardado exitosamente en VehiculosDB");
+            console.log("Vehículo guardado exitosamente en VehiculosDB");
             navigate("/registrar/usuario");
         } catch (error) {
-           console.log("Error al guardar el vehículo");
+            console.log("Error al guardar el vehículo");
         }
     };
 
@@ -105,7 +109,7 @@ const RegistrarVehiculo = () => {
                         <div className="vehiculo__upload-box">
                             {delanteraPreview ? (
                                 <img
-                                    src={delanteraPreview}
+                                    src={`data:image/jpeg;base64,${delanteraPreview}`}
                                     alt="Foto delantera"
                                     onClick={() => delanteraRef.current?.click()}
                                     className="vehiculo__photo-preview"
@@ -128,7 +132,7 @@ const RegistrarVehiculo = () => {
                         <div className="vehiculo__upload-box">
                             {traseraPreview ? (
                                 <img
-                                    src={traseraPreview}
+                                    src={`data:image/jpeg;base64,${traseraPreview}`}
                                     alt="Foto trasera"
                                     onClick={() => traseraRef.current?.click()}
                                     className="vehiculo__photo-preview"

@@ -58,7 +58,7 @@ export const clearVehiculos = async (): Promise<void> => {
     });
 };
 
-export const borrarVehiculosDB = (): Promise<void> => {
+export const deleteVehiculosDB = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const deleteRequest = indexedDB.deleteDatabase("VehiculosDB");
 
