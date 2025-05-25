@@ -34,6 +34,12 @@ input {
 	width: 200px;
 }
 
+.error {
+	color: var(--encabezado);
+	font-weight: 600;
+	text-align: center;
+}
+
 .info {
 	padding-left: 2rem;
 }

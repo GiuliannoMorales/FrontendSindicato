@@ -1,14 +1,18 @@
-export interface VehiculosActivosResponse {
+export interface VehiculosResponse {
 	status: string;
 	statusCode: number;
 	message: string;
-	data: VehiculoActivo[];
+	data: Vehiculo[];
+	errors?: Errores[];
 }
 
-export interface VehiculoActivo {
+export interface Vehiculo {
 	idParqueo: number;
 	placa: string;
-	tipoVehiculo: string;
+	marca: string;
+	tipo: string;
+	modelo: string;
+	color: string;
 }
 
 export interface EstadoCuentaResponse {
@@ -16,6 +20,7 @@ export interface EstadoCuentaResponse {
 	statusCode: number;
 	message: string;
 	data: EstadoCuentaData;
+	errors?: Errores[];
 }
 
 export interface EstadoCuentaData {
@@ -32,4 +37,10 @@ export interface DetalleMes {
 	estado: string;
 	monto: number;
 	fechaPago?: string;
+}
+
+export interface Errores {
+	message?: string;
+	field: string;
+	details?: string;
 }
