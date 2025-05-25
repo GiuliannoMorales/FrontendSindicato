@@ -153,3 +153,6 @@ strong {
 	padding-right: 40px;
 	font-weight: 400;
 }
+
+@media (max-width: 750px) {
+}
