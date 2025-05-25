@@ -1,0 +1,155 @@
+.container {
+	margin: 2.2rem;
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	color: var(--txtTitulos);
+	font-weight: 400;
+}
+
+.controlVehiculo {
+	margin-bottom: 1rem;
+	text-align: center;
+}
+
+select,
+input {
+	margin: 0 2rem;
+	padding: 0 0.5rem;
+	height: 2rem;
+	border: 1px solid #b4bbc5;
+	border-radius: 6px;
+	background-color: var(--fondo);
+}
+
+.vehiculo {
+	border: 1px solid #000000;
+	height: 1.7rem;
+}
+
+.vehiculo,
+#filtroEstado {
+	width: 200px;
+}
+
+.error {
+	color: var(--encabezado);
+	font-weight: 600;
+	text-align: center;
+}
+
+.info {
+	padding-left: 2rem;
+}
+
+h3 {
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+p {
+	font-size: 14px;
+	margin-top: 0;
+	font-weight: 400;
+	padding-left: 1.5rem;
+}
+
+.filtros {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+	margin: 1.5rem 0 1.5rem 0;
+	width: 100%;
+}
+
+.filtroSelectores {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: center;
+}
+
+.filtroBoton {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	justify-content: right;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.labelFiltro {
+	font-weight: 600;
+}
+
+.defaultFiltro {
+	color: #363636;
+}
+
+#filtroFechaDe,
+#filtroFechaA {
+	width: 150px;
+}
+
+button {
+	background-color: var(--menuFondo);
+	color: var(--txtMenu);
+	border: solid;
+	border-radius: 6px;
+	height: 2.5rem;
+	padding: 0 2rem;
+}
+
+.contenedorTabla {
+	max-height: 175px;
+	max-width: 95%;
+	overflow-y: auto;
+	margin: 0 auto;
+}
+
+.tablaEstado {
+	width: 100%;
+	border-collapse: collapse;
+	height: 40px;
+	border: 2px solid #000000;
+}
+
+.tablaEstado th,
+td,
+.center {
+	width: 25%;
+	padding: 0.5rem 2rem;
+	border: 1px solid var(--tblLineas);
+	text-align: center;
+}
+
+.colLinea {
+	text-align: start;
+}
+
+.tablaEstado thead {
+	background-color: var(--tblHead);
+	color: var(--txtMenu);
+}
+
+.tablaEstado tbody {
+	color: var(--txtTitulos);
+	font-weight: 400;
+}
+
+.saldo {
+	display: flex;
+	width: 82%;
+	margin-top: 1rem;
+	justify-content: right;
+	font-size: 1rem;
+	font-weight: 400;
+}
+
+strong {
+	padding-right: 40px;
+	font-weight: 400;
+}
