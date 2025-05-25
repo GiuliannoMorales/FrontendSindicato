@@ -1,4 +1,4 @@
-import type { Tarifa } from "../../TarifasHistoPage/TarifasModel";
+import type { Tarifa } from "../../models/TarifasModel";
 import './TarifasTable.css'
 
 interface TarifasTableProps {
@@ -26,9 +26,9 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
         <tbody>
           {data.map((fila, index) => (
             <tr key={index}>
-              <td className="borde-derecho">{fila.usuario}</td>
-              <td className="borde-derecho">{fila.vehiculo}</td>
-              <td className="borde-derecho">{fila.tarifa}</td>
+              <td className="borde-derecho">{fila.tipoCliente}</td>
+              <td className="borde-derecho">{fila.tipoVehiculo}</td>
+              <td className="borde-derecho">{fila.monto}</td>
               <td>{fila.fechaModificado}</td>
               {fullView && <td>{fila.modificadoPor}</td>}
             </tr>

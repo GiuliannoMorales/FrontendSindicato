@@ -1,13 +1,8 @@
 import axios from 'axios';
-
-const api_url = import.meta.env.VITE_API_URL;
-
-if (!api_url) {
-	throw new Error('VITE_API_URL no está definida en las variables de entorno');
-}
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
-	baseURL: api_url,
+	baseURL: BASE_URL,
 	headers: {
 		'Content-Type': 'application/json',
 	},
