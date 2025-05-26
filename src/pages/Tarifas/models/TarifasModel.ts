@@ -1,7 +1,7 @@
 export interface Tarifa{
-    usuario: string,
-    vehiculo: string,
-    tarifa: string,
+    tipoCliente: string,
+    tipoVehiculo: string,
+    monto: string,
     fechaModificado: string,
     modificadoPor: string,
 }

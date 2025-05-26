@@ -3,7 +3,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
 
-import EstadoCuenta from './pages/EstadoCuenta';
+import EstadoCuenta from './pages/EstadoCuenta/EstadoCuenta';
 import Inicio from './pages/Inicio';
 import TarifasHistoPage from './pages/Tarifas/TarifasHistoPage/TarifasHistoPage';
 import TarifasPage from './pages/Tarifas/TarifasConfigPage/TarifasConfigPage';
