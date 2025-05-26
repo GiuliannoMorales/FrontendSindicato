@@ -11,6 +11,7 @@
 }
 
 .user__input-group,
+.user__input-group--password,
 .user__input-group--ci {
   display: flex;
   align-items: center;
@@ -19,9 +20,18 @@
   position: relative;
 }
 
+.user__input-group--password .user__error-message {
+  position: absolute;
+  left: 170px;
+  margin-top: 65px;
+  color: black;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
 .user__input-group--ci .user__error-message {
   position: absolute;
-  left: 135px;
+  left: 170px;
   margin-top: 55px;
   color: red;
   font-size: 0.875rem;
@@ -49,19 +59,26 @@
 }
 
 .user__password-wrapper {
+  display: flex;
+  align-items: center;
   position: relative;
-  width: 100%;
+  flex: 1;
+  height: 32px;
 }
 
 .user__password-wrapper input {
-  width: 100%;
+  flex: 1;
+  padding: 5px 40px 5px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   box-sizing: border-box;
+  height: 32px;
 }
 
 .user__toggle-eye {
   position: absolute;
-  right: 8px;
-  top: 50%;
+  right: 40px;
+  top: 45%;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -88,10 +105,9 @@
   .user__fieldset {
     margin-left: 0;
   }
-  
+
   .user__input-group--ci .user__error-message {
     left: 0;
     margin-top: 40px;
   }
 }
-
