@@ -1,4 +1,9 @@
-.vehiculo__form-title {
+.registrarVehiculo {
+    padding: 30px;
+    font-family: Arial, sans-serif;
+}
+
+.registrarVehiculo__title {
     text-align: center;
     color: #143a59;
     font-size: 1.8rem;
@@ -6,7 +11,7 @@
     font-weight: normal;
 }
 
-.vehiculo__form-two-columns {
+.registrarVehiculo__form {
     display: flex;
     gap: 70px;
     justify-content: center;
@@ -14,39 +19,40 @@
     padding: 0 50px;
 }
 
-.vehiculo__form-left,
-.vehiculo__form-right {
+.registrarVehiculo__form-left,
+.registrarVehiculo__form-right {
     flex: 1;
     min-width: 300px;
 }
 
-.vehiculo fieldset {
+.registrarVehiculo__form-left fieldset {
     border: none;
     margin-top: 50px;
     margin-left: 30px;
 }
 
-.vehiculo__input-group {
+.registrarVehiculo__input-group {
     display: flex;
     align-items: center;
     gap: 5px;
     margin-bottom: 15px;
 }
-.vehiculo__form-right .vehiculo__input-group {
+
+.registrarVehiculo__form-right .registrarVehiculo__input-group {
     gap: 60px;
 }
 
-.vehiculo label {
+.registrarVehiculo label {
     margin: 0;
-    flex: 0 0 150px;
+    flex: 0 0 170px;
 }
 
-.vehiculo__required {
+.registrarVehiculo__required {
     color: red;
 }
 
-.vehiculo input,
-.vehiculo select {
+.registrarVehiculo input,
+.registrarVehiculo select {
     flex: 1;
     padding: 5px;
     margin-bottom: 5px;
@@ -56,7 +62,7 @@
     height: 32px;
 }
 
-.vehiculo__upload-box {
+.registrarVehiculo__upload-box {
     background-color: #f5f5f5;
     padding: 65px 0;
     width: 150px;
@@ -71,7 +77,7 @@
     box-sizing: border-box;
 }
 
-.vehiculo__upload-box button {
+.registrarVehiculo__upload-box button {
     background: none;
     color: #143a59;
     border: none;
@@ -79,7 +85,7 @@
     font-weight: bold;
 }
 
-.vehiculo__photo-preview {
+.registrarVehiculo__photo-preview {
     width: 150px;
     height: 150px;
     object-fit: cover;
@@ -87,7 +93,7 @@
     cursor: pointer;
 }
 
-.vehiculo__form-actions {
+.registrarVehiculo__actions {
     display: flex;
     justify-content: center;
     gap: 100px;
@@ -95,8 +101,8 @@
     padding-bottom: 30px;
 }
 
-.vehiculo__cancel-button,
-.vehiculo__submit-button {
+.registrarVehiculo__cancel-button,
+.registrarVehiculo__submit-button {
     padding: 10px 20px;
     font-weight: bold;
     border: none;
@@ -106,72 +112,42 @@
     width: 210px;
 }
 
-.vehiculo__cancel-button {
+.registrarVehiculo__cancel-button {
     background-color: #2c4561;
     color: white;
 }
 
-.vehiculo__submit-button {
+.registrarVehiculo__submit-button {
     background-color: #c44040;
     color: white;
 }
 
 /* Parte responsive */
-@media (max-width: 1024px) {
-    .vehiculo__form-two-columns {
-        gap: 40px;
-        padding: 0 30px;
-    }
-
-    .vehiculo label {
-        flex: 0 0 120px;
-    }
-}
 
 @media (max-width: 768px) {
-    .vehiculo__form-two-columns {
+    .registrarVehiculo__form {
         flex-direction: column;
         gap: 30px;
         padding: 0 20px;
     }
 
-    .vehiculo fieldset {
+    .registrarVehiculo__form-left fieldset {
         margin-left: 0;
     }
 
-    .vehiculo__form-actions {
+    .registrarVehiculo__actions {
         flex-direction: column;
         gap: 20px;
     }
 
-    .vehiculo__cancel-button,
-    .vehiculo__submit-button {
+    .registrarVehiculo__cancel-button,
+    .registrarVehiculo__submit-button {
         width: 100%;
     }
 
-    .vehiculo__upload-box,
-    .vehiculo__photo-preview {
+    .registrarVehiculo__upload-box,
+    .registrarVehiculo__photo-preview {
         width: 120px;
         height: 120px;
-    }
-}
-
-@media (max-width: 480px) {
-    .vehiculo__form-title {
-        font-size: 1.5rem;
-    }
-
-    .vehiculo label {
-        flex: 0 0 100px;
-        font-size: 0.9rem;
-    }
-
-    .vehiculo input,
-    .vehiculo select {
-        font-size: 0.9rem;
-    }
-
-    .vehiculo__upload-box button {
-        font-size: 0.9rem;
     }
 }

@@ -69,50 +69,50 @@ const RegistrarVehiculo = () => {
     };
 
     return (
-        <section className="vehiculo">
-            <h2 className="vehiculo__form-title">REGISTRAR VEHICULO</h2>
+        <section className="registrarVehiculo">
+            <h2 className="registrarVehiculo__title">REGISTRAR VEHICULO</h2>
 
-            <form className="vehiculo__form-two-columns">
-                <div className="vehiculo__form-left">
+            <form className="registrarVehiculo__form">
+                <div className="registrarVehiculo__form-left">
                     <fieldset>
-                        <div className="vehiculo__input-group">
-                            <label>Tipo Vehículo: <span className="vehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__input-group">
+                            <label>Tipo Vehículo: <span className="registrarVehiculo__required">*</span></label>
                             <select name="tipo" value={formData.tipo} onChange={handleInputChange} required>
                                 <option value="">Seleccione</option>
                                 <option value="Auto">Automóvil</option>
                                 <option value="Moto">Motocicleta</option>
                             </select>
                         </div>
-                        <div className="vehiculo__input-group">
-                            <label>Placa: <span className="vehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__input-group">
+                            <label>Placa: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} maxLength={10}
                                 title="La placa no debe superar los 10 caracteres" required />
                         </div>
-                        <div className="vehiculo__input-group">
-                            <label>Marca: <span className="vehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__input-group">
+                            <label>Marca: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="marca" value={formData.marca} onChange={handleInputChange} required />
                         </div>
-                        <div className="vehiculo__input-group">
-                            <label>Modelo: <span className="vehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__input-group">
+                            <label>Modelo: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="modelo" value={formData.modelo} onChange={handleInputChange} required />
                         </div>
-                        <div className="vehiculo__input-group">
-                            <label>Color: <span className="vehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__input-group">
+                            <label>Color: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="color" value={formData.color} onChange={handleInputChange} required />
                         </div>
                     </fieldset>
                 </div>
 
-                <div className="vehiculo__form-right">
-                    <div className="vehiculo__input-group">
-                        <label>Foto vehículo delantera: <span className="vehiculo__required">*</span></label>
-                        <div className="vehiculo__upload-box">
+                <div className="registrarVehiculo__form-right">
+                    <div className="registrarVehiculo__input-group">
+                        <label>Foto vehículo delantera: <span className="registrarVehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__upload-box">
                             {delanteraPreview ? (
                                 <img
                                     src={`data:image/jpeg;base64,${delanteraPreview}`}
                                     alt="Foto delantera"
                                     onClick={() => delanteraRef.current?.click()}
-                                    className="vehiculo__photo-preview"
+                                    className="registrarVehiculo__photo-preview"
                                 />
                             ) : (
                                 <button type="button" onClick={() => delanteraRef.current?.click()}>Subir Foto</button>
@@ -127,18 +127,18 @@ const RegistrarVehiculo = () => {
                         </div>
                     </div>
 
-                    <div className="vehiculo__input-group">
-                        <label>Foto vehículo trasera: <span className="vehiculo__required">*</span></label>
-                        <div className="vehiculo__upload-box">
+                    <div className="registrarVehiculo__input-group">
+                        <label>Foto vehículo trasera: <span className="registrarVehiculo__required">*</span></label>
+                        <div className="registrarVehiculo__upload-box">
                             {traseraPreview ? (
                                 <img
                                     src={`data:image/jpeg;base64,${traseraPreview}`}
                                     alt="Foto trasera"
                                     onClick={() => traseraRef.current?.click()}
-                                    className="vehiculo__photo-preview"
+                                    className="registrarVehiculo__photo-preview"
                                 />
                             ) : (
-                                <button type="button" onClick={() => traseraRef.current?.click()}>Subir Foto</button>
+                                <button type="button" onClick={() => traseraRef.current?.click()} className="registrarVehiculo__upload-button">Subir Foto</button>
                             )}
                             <input
                                 type="file"
@@ -152,9 +152,9 @@ const RegistrarVehiculo = () => {
                 </div>
             </form>
 
-            <div className="vehiculo__form-actions">
-                <button type="button" className="vehiculo__cancel-button" onClick={() => navigate("/registrar/usuario")}>CANCELAR</button>
-                <button type="button" className="vehiculo__submit-button" onClick={handleSave}>GUARDAR</button>
+            <div className="registrarVehiculo__actions">
+                <button type="button" className="registrarVehiculo__cancel-button" onClick={() => navigate("/registrar/usuario")}>CANCELAR</button>
+                <button type="button" className="registrarVehiculo__submit-button" onClick={handleSave}>GUARDAR</button>
             </div>
         </section>
     );
