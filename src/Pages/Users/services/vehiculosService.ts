@@ -58,23 +58,3 @@ export const clearVehiculos = async (): Promise<void> => {
     });
 };
 
-export const deleteVehiculosDB = (): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const deleteRequest = indexedDB.deleteDatabase("VehiculosDB");
-
-    deleteRequest.onsuccess = () => {
-      console.log("Base de datos VehiculosDB borrada exitosamente");
-      resolve();
-    };
-
-    deleteRequest.onerror = () => {
-      console.error("Error al borrar la base de datos VehiculosDB");
-      reject("Error al borrar la base de datos VehiculosDB");
-    };
-
-    deleteRequest.onblocked = () => {
-      console.warn("El borrado de la base de datos está bloqueado");
-    };
-  });
-};
-

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./User.css";
-import { getAllVehiculos, deleteVehiculoById, clearVehiculos, deleteVehiculosDB } from "../../pages/Users/services/vehiculosService";
+import { getAllVehiculos, deleteVehiculoById, clearVehiculos} from "../../pages/Users/services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 
 const User = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -24,11 +24,13 @@ const User = () => {
     };
 
     useEffect(() => {
-        if (!sessionStorage.getItem("vehiculosDBIniciada")) {
-            deleteVehiculosDB().then(() => {
+        const limpiarVehiculos = async () => {
+            if (!sessionStorage.getItem("vehiculosDBIniciada")) {
+                await clearVehiculos();
                 sessionStorage.setItem("vehiculosDBIniciada", "true");
-            });
-        }
+            }
+        };
+        limpiarVehiculos();
     }, []);
 
     useEffect(() => {
@@ -42,6 +44,19 @@ const User = () => {
         };
 
         fetchVehiculos();
+    }, []);
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            clearVehiculos();
+            sessionStorage.removeItem("vehiculosDBIniciada");
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
     }, []);
 
     const resetForm = async () => {
@@ -109,7 +124,7 @@ const User = () => {
         e.preventDefault();
         const { ci, nombre, apellido, correo, nroCelular, password } = formData;
         const tipo = userType;
-    
+
         if (
             !ci.trim() ||
             !nombre.trim() ||
@@ -138,12 +153,23 @@ const User = () => {
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
-            const response = await axios.post("https://backendproyectoparqueoumss.onrender.com/api/clientes/registrar", newUser);
+            const response = await api.post("/clientes/registrar", newUser);
             console.log("Usuario registrado:", response.data);
-            await resetForm();
+            await clearVehiculos();
             navigate(0);
-        } catch (error) {
-            console.error("Error al registrar usuario:", error);
+        } catch (error: any) { //para ver errores de campos
+            if (error.response) {
+                console.error("Error status:", error.response.status);
+                console.error("Error data:", error.response.data);
+
+                if (error.response.data.errors) {
+                    error.response.data.errors.forEach((err: any) => {
+                        console.error(`Campo: ${err.field}, Mensaje: ${err.message}`);
+                    });
+                }
+            } else {
+                console.error("Error:", error.message);
+            }
             setShowErrorModal(true);
         }
     };
