@@ -3,7 +3,7 @@ import { EditIcon } from "../../../../assets/icons/EditIcon";
 import { TrashIcon } from "../../../../assets/icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
 import "./UserFormRight.css";
-import axios from "axios";
+import api from "../../../../api/axios";
 
 interface UserFormRightProps {
     userPhotoPreview: string | null;
@@ -34,7 +34,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     const [espacios, setEspacios] = useState([]);
 
     useEffect(() => {
-        axios.get("https://backendproyectoparqueoumss.onrender.com/api/parqueo/espacios-disponibles")
+        api.get("/parqueo/espacios-disponibles")
             .then((response) => {
                 setEspacios(response.data.data);
             })

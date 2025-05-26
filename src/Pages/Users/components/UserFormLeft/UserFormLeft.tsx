@@ -76,7 +76,7 @@ const UserFormLeft = ({
                         <option value="Docente a tiempo horario">Docente a tiempo horario</option>
                     </select>
                 </div>
-                <div className="user__input-group">
+                <div className="user__input-group user__input-group--password">
                     <label className="user__label">
                         Contraseña: <span className="user__required">*</span>
                     </label>
@@ -98,6 +98,9 @@ const UserFormLeft = ({
                             {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
                     </div>
+                    {password !== "" && !/^(?=.*[A-Z]).{6,}$/.test(password) && (
+                        <p className="user__error-message">La contraseña debe tener al menos 6 caracteres y una letra mayúscula.</p>
+                    )}
                 </div>
             </fieldset>
         </>
