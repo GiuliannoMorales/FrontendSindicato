@@ -246,7 +246,7 @@ const EstadoCuenta: React.FC = () => {
                 </tr>
               )
               : (
-                datosFiltrados.map((fila, i) => (
+                datosFiltrados.map((fila) => (
                   <tr key={fila.periodo}>
                     <td className="colLinea">{fila.periodo}</td>
                     <td className="colLinea">{fila.estado}</td>
