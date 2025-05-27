@@ -24,7 +24,7 @@ const EstadoCuenta: React.FC = () => {
 
   useEffect(() => {
     api.post<VehiculosResponse>(
-      `vehiculo/reporte`,
+      `reporte/cliente/vehiculo`,
       { id: idUsuario },
     )
       .then((res) => {
@@ -91,17 +91,21 @@ const EstadoCuenta: React.FC = () => {
           setUltimaActualizacion("");
         } else if (
           res.data.status === "success" &&
-          (Array.isArray(res.data.data) || !res.data.data)
+          Array.isArray(res.data.data) &&
+          res.data.data.length > 0
         ) {
+          const cuenta = res.data.data[0];
+          setDetallesMes(
+            Array.isArray(cuenta.detallesMes) ? cuenta.detallesMes : [],
+          );
+          setSaldoPendiente(cuenta.saldoTotalPendiente);
+          setUltimaActualizacion(cuenta.ultimaActualizacion);
+          setError(null);
+        } else {
           setError(res.data.message || "No se encontraron registros.");
           setDetallesMes([]);
           setSaldoPendiente(0);
           setUltimaActualizacion("");
-        } else {
-          setDetallesMes(res.data.data.detallesMes);
-          setSaldoPendiente(res.data.data.saldoTotalPendiente);
-          setUltimaActualizacion(res.data.data.ultimaActualizacion);
-          setError(null);
         }
       })
       .catch((error) => {
@@ -126,17 +130,19 @@ const EstadoCuenta: React.FC = () => {
       });
   }, [placaSeleccionada]);
 
-  const datosFiltrados = detallesMes.filter((d) => {
-    const estadoOk = estado === "" ||
-      d.estado.toLowerCase() === estado.toLowerCase();
-    let fechaOk = true;
-    if (d.fechaPago) {
-      const fechaPago = new Date(d.fechaPago);
-      if (fechaDe && fechaPago < new Date(fechaDe)) fechaOk = false;
-      if (fechaA && fechaPago > new Date(fechaA)) fechaOk = false;
-    }
-    return estadoOk && fechaOk;
-  });
+  const datosFiltrados = Array.isArray(detallesMes)
+    ? detallesMes.filter((d) => {
+      const estadoOk = estado === "" ||
+        d.estado.toLowerCase() === estado.toLowerCase();
+      let fechaOk = true;
+      if (d.fechaPago) {
+        const fechaPago = new Date(d.fechaPago.split(" ")[0]);
+        if (fechaDe && fechaPago < new Date(fechaDe)) fechaOk = false;
+        if (fechaA && fechaPago > new Date(fechaA)) fechaOk = false;
+      }
+      return estadoOk && fechaOk;
+    })
+    : [];
 
   return (
     <div className="container">
@@ -149,7 +155,10 @@ const EstadoCuenta: React.FC = () => {
             name="vehiculo"
             id="vehiculo"
             value={placaSeleccionada}
-            onChange={(e) => setPlacaSeleccionada(e.target.value)}
+            onChange={(e) => {
+              setPlacaSeleccionada(e.target.value);
+              setError(null);
+            }}
           >
             <option value="">Vehiculo...</option>
             {vehiculos.map((v, idx) => (
@@ -193,7 +202,7 @@ const EstadoCuenta: React.FC = () => {
               value={fechaDe}
               onChange={(e) => setFechaDe(e.target.value)}
             />
-            a
+            <span>a</span>
             <input
               type="date"
               name="filtroFechaA"
@@ -238,7 +247,7 @@ const EstadoCuenta: React.FC = () => {
               )
               : (
                 datosFiltrados.map((fila, i) => (
-                  <tr key={i}>
+                  <tr key={fila.periodo}>
                     <td className="colLinea">{fila.periodo}</td>
                     <td className="colLinea">{fila.estado}</td>
                     <td className="center">{fila.monto}</td>
@@ -251,8 +260,7 @@ const EstadoCuenta: React.FC = () => {
       </div>
 
       <div className="saldo">
-        <strong>Saldo Total Pendiente:</strong>{" "}
-        <p>{saldoPendiente.toFixed(1)} Bs.</p>
+        <strong>Saldo Total Pendiente:</strong> <p>{saldoPendiente} Bs.</p>
       </div>
     </div>
   );
