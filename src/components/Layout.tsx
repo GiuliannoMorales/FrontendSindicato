@@ -7,6 +7,9 @@ import { SettingsIcon } from "../assets/icons/SettingsIcon";
 import "./Layout.css";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { ArrowUpIcon } from "../assets/icons/ArrowUpIcon";
+import { PeopleIcon } from "../assets/icons/PeopleIcon";
+import { UserAddIcon } from "../assets/icons/UserAddIcon";
+import { UserIcon } from "../assets/icons/UserIcon";
 
 // interface LayoutProps {
 //   children: ReactNode;
@@ -14,10 +17,15 @@ import { ArrowUpIcon } from "../assets/icons/ArrowUpIcon";
 
 export default function Layout() {
   const [groupOpen, setGroupOpen] = useState(false);
-  const location = useLocation()
+  const [userGroupOpen, setUserGroupOpen] = useState(false);
+  const location = useLocation();
 
   const handlerOpen = () => {
     setGroupOpen(!groupOpen);
+  };
+
+  const toggleUserGroup = () => {
+    setUserGroupOpen(!userGroupOpen);
   };
 
   return (
@@ -64,6 +72,41 @@ export default function Layout() {
                   className={"sidebar__item-link"}
                 >
                   Ver Tarifas
+                </NavLink>
+              </li>
+            </div>
+          ) : (
+            <></>
+          )}
+        </ul>
+
+        <ul className="sidebar__group">
+          <div className="sidebar__group-header" onClick={toggleUserGroup}>
+            <div className="sidebar__group-container">
+              <PeopleIcon />
+              Usuarios
+            </div>
+            <div>{userGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
+          </div>
+
+          {userGroupOpen ? (
+            <div>
+              <li className={`sidebar__item ${location.pathname === '/registrar/usuario' ? 'sidebar__item-active' : ''}`}>
+                <UserAddIcon/>
+                <NavLink
+                  to={"/registrar/usuario"}
+                  className={"sidebar__item-link"}
+                >
+                  Crear Usuario
+                </NavLink>
+              </li>
+              <li className={`sidebar__item ${location.pathname === '/ver/usuario' ? 'sidebar__item-active' : ''}`}>
+                <UserIcon/>
+                <NavLink
+                  to={"/ver/usuario"}
+                  className={"sidebar__item-link"}
+                >
+                  Ver Usuarios
                 </NavLink>
               </li>
             </div>
