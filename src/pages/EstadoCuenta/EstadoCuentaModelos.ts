@@ -19,7 +19,7 @@ export interface EstadoCuentaResponse {
 	status: string;
 	statusCode: number;
 	message: string;
-	data: EstadoCuentaData;
+	data: EstadoCuentaData[];
 	errors?: Errores[];
 }
 
