@@ -18,6 +18,7 @@ import { UserIcon } from "../assets/icons/UserIcon";
 export default function Layout() {
   const [groupOpen, setGroupOpen] = useState(false);
   const [userGroupOpen, setUserGroupOpen] = useState(false);
+  const [cuentaGroupOpen, setCuentaGroupOpen] = useState(false);
   const location = useLocation();
 
   const handlerOpen = () => {
@@ -26,6 +27,10 @@ export default function Layout() {
 
   const toggleUserGroup = () => {
     setUserGroupOpen(!userGroupOpen);
+  };
+
+  const toggleCuentagroup = () => {
+    setCuentaGroupOpen(!cuentaGroupOpen);
   };
 
   return (
@@ -54,30 +59,42 @@ export default function Layout() {
             <div>{groupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
           </div>
 
-          {groupOpen ? (
-            <div>
-              <li className={`sidebar__item ${location.pathname === '/tarifas/configuracion' ? 'sidebar__item-active' : ''}`}>
-                <SettingsIcon />
-                <NavLink
-                  to={"/tarifas/configuracion"}
-                  className={"sidebar__item-link"}
+          {groupOpen
+            ? (
+              <div>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/tarifas/configuracion"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
                 >
-                  Configuración
-                </NavLink>
-              </li>
-              <li className={`sidebar__item ${location.pathname === '/tarifas/historial' ? 'sidebar__item-active' : ''}`}>
-                <CashInHandIcon />
-                <NavLink
-                  to={"/tarifas/historial"}
-                  className={"sidebar__item-link"}
+                  <SettingsIcon />
+                  <NavLink
+                    to={"/tarifas/configuracion"}
+                    className={"sidebar__item-link"}
+                  >
+                    Configuración
+                  </NavLink>
+                </li>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/tarifas/historial"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
                 >
-                  Ver Tarifas
-                </NavLink>
-              </li>
-            </div>
-          ) : (
-            <></>
-          )}
+                  <CashInHandIcon />
+                  <NavLink
+                    to={"/tarifas/historial"}
+                    className={"sidebar__item-link"}
+                  >
+                    Ver Tarifas
+                  </NavLink>
+                </li>
+              </div>
+            )
+            : <></>}
         </ul>
 
         <ul className="sidebar__group">
@@ -89,30 +106,72 @@ export default function Layout() {
             <div>{userGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
           </div>
 
-          {userGroupOpen ? (
-            <div>
-              <li className={`sidebar__item ${location.pathname === '/registrar/usuario' ? 'sidebar__item-active' : ''}`}>
-                <UserAddIcon/>
-                <NavLink
-                  to={"/registrar/usuario"}
-                  className={"sidebar__item-link"}
+          {userGroupOpen
+            ? (
+              <div>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/registrar/usuario"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
                 >
-                  Crear Usuario
-                </NavLink>
-              </li>
-              <li className={`sidebar__item ${location.pathname === '/ver/usuario' ? 'sidebar__item-active' : ''}`}>
-                <UserIcon/>
-                <NavLink
-                  to={"/ver/usuario"}
-                  className={"sidebar__item-link"}
+                  <UserAddIcon />
+                  <NavLink
+                    to={"/registrar/usuario"}
+                    className={"sidebar__item-link"}
+                  >
+                    Crear Usuario
+                  </NavLink>
+                </li>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/ver/usuario"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
                 >
-                  Ver Usuarios
-                </NavLink>
-              </li>
+                  <UserIcon />
+                  <NavLink
+                    to={"/ver/usuario"}
+                    className={"sidebar__item-link"}
+                  >
+                    Ver Usuarios
+                  </NavLink>
+                </li>
+              </div>
+            )
+            : <></>}
+        </ul>
+
+        <ul className="sidebar__group">
+          <div className="sidebar__group-header" onClick={toggleCuentagroup}>
+            <div className="sidebar__group-container">
+              Mi Cuenta
             </div>
-          ) : (
-            <></>
-          )}
+            <div>{cuentaGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
+          </div>
+
+          {cuentaGroupOpen
+            ? (
+              <div>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/cuenta/estado"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
+                >
+                  <NavLink
+                    to={"/cuenta/estado"}
+                    className={"sidebar__item-link"}
+                  >
+                    Ver Estado
+                  </NavLink>
+                </li>
+              </div>
+            )
+            : <></>}
         </ul>
       </aside>
       <main className="contenido">
