@@ -2,8 +2,11 @@ import { useForm } from "react-hook-form";
 import TarifasTable from "../components/TarifasTable/TarifasTable";
 import "./TarifasConfigPage.css";
 import toast, { Toaster } from "react-hot-toast";
+import { createTarifa, getTarifasHistorial } from "../services/tarifas.service";
+import { useEffect, useState } from "react";
+import type { Tarifa } from "../models/TarifasModel";
 
-const vehiclesTypes = ["Automovil", "Motocicleta"];
+const vehiclesTypes = ["Auto", "Moto"];
 
 const clientsTypes = ["Administrativo", "Docente"];
 
@@ -39,6 +42,7 @@ const tarifasData = [
 ];
 
 const TarifasPage = () => {
+  const [tarifas, setTarifas] = useState<Array<Tarifa>>([])
   const {
     register,
     handleSubmit,
@@ -48,10 +52,29 @@ const TarifasPage = () => {
 
   const onSubmit = (data: any) => {
     console.log("Datos del formulario:", data);
-    // Aquí puedes llamar a una API o actualizar el estado
-    reset()
-    toast.success('Successfully created!');
+    try {
+      createTarifa({...data, idAdministrador: "11111111-1111-1111-1111-111111111111"})
+      reset()
+      toast.success('Tarifa actualizada correctamente.');
+    } catch (error) {
+      toast.error('Ocurrio un error!');
+      
+    }
+    
   };
+
+  const fetchTarifas = async () => {
+    try {
+      const response = (await getTarifasHistorial()).data
+      setTarifas(response.data?.slice(0, 5) || [])
+    } catch (error) {
+      console.error('error', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchTarifas()
+  }, [])
 
   return (
     <section className="tarifas">
@@ -65,7 +88,7 @@ const TarifasPage = () => {
                 Tipo Cliente: <span style={{ color: "red" }}>*</span>
               </label>
               <select
-                {...register("clientType", { required: true })}
+                {...register("tipoCliente", { required: true })}
                 className="tarifas__input"
               >
                 {clientsTypes.map((vehicle, index) => (
@@ -83,7 +106,7 @@ const TarifasPage = () => {
                 Tipo Vehículo: <span style={{ color: "red" }}>*</span>
               </label>
               <select
-                {...register("vehicleType", { required: true })}
+                {...register("tipoVehiculo", { required: true })}
                 className="tarifas__input"
               >
                 {vehiclesTypes.map((vehicle, index) => (
@@ -103,7 +126,7 @@ const TarifasPage = () => {
               <input
                 type="number"
                 step="0.01"
-                {...register("tarifa", { required: true, min: 0 })}
+                {...register("monto", { required: true, min: 0 })}
                 className="tarifas__input"
               />
               {errors.tarifa && (
@@ -114,27 +137,7 @@ const TarifasPage = () => {
         </div>
         <div className="tarifas__tableCol">
           <h3 className="tarifas__subtitle">Tarifas Registradas</h3>
-          {/* <table className="tarifas__table">
-            <thead>
-              <tr>
-                <th className="borde-derecho">Usuario</th>
-                <th className="borde-derecho">Vehículo</th>
-                <th className="borde-derecho">Tarifa (Bs)</th>
-                <th>Modificado en...</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tarifasData.map((fila, index) => (
-                <tr key={index}>
-                  <td className="borde-derecho">{fila.usuario}</td>
-                  <td className="borde-derecho">{fila.vehiculo}</td>
-                  <td className="borde-derecho">{fila.tarifa}</td>
-                  <td>{fila.modificado}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
-          <TarifasTable data={tarifasData} fullView={false} />
+          <TarifasTable data={tarifas} fullView={false} />
           <div>
             <button className="tarifas__button">Ver historial completo</button>
           </div>
