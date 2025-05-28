@@ -15,36 +15,36 @@ const clientsTypes = [
   "Docente a tiempo horario",
 ];
 
-const tarifasData = [
-  {
-    tipoCliente: "Administrat.",
-    tipoVehiculo: "Automóvil",
-    monto: "3,50",
-    fechaModificado: "14:50:14 - 04/05/2025",
-    modificadoPor: "Julieta",
-  },
-  {
-    tipoCliente: "Administrat.",
-    tipoVehiculo: "Motocicleta",
-    monto: "2,50",
-    fechaModificado: "11:21:54 - 02/05/2025",
-    modificadoPor: "Julieta",
-  },
-  {
-    tipoCliente: "Docente T. H.",
-    tipoVehiculo: "Motocicleta",
-    monto: "3,00",
-    fechaModificado: "08:24:19 - 24/04/2025",
-    modificadoPor: "Julieta",
-  },
-  {
-    tipoCliente: "Docente D. E.",
-    tipoVehiculo: "Automóvil",
-    monto: "3.00",
-    modificadoPor: "Julieta",
-    fechaModificado: "15:16:03 - 15/04/2025",
-  },
-];
+// const tarifasData = [
+//   {
+//     tipoCliente: "Administrat.",
+//     tipoVehiculo: "Automóvil",
+//     monto: "3,50",
+//     fechaModificado: "14:50:14 - 04/05/2025",
+//     modificadoPor: "Julieta",
+//   },
+//   {
+//     tipoCliente: "Administrat.",
+//     tipoVehiculo: "Motocicleta",
+//     monto: "2,50",
+//     fechaModificado: "11:21:54 - 02/05/2025",
+//     modificadoPor: "Julieta",
+//   },
+//   {
+//     tipoCliente: "Docente T. H.",
+//     tipoVehiculo: "Motocicleta",
+//     monto: "3,00",
+//     fechaModificado: "08:24:19 - 24/04/2025",
+//     modificadoPor: "Julieta",
+//   },
+//   {
+//     tipoCliente: "Docente D. E.",
+//     tipoVehiculo: "Automóvil",
+//     monto: "3.00",
+//     modificadoPor: "Julieta",
+//     fechaModificado: "15:16:03 - 15/04/2025",
+//   },
+// ];
 
 const TarifasPage = () => {
   const [tarifas, setTarifas] = useState<Array<Tarifa>>([]);

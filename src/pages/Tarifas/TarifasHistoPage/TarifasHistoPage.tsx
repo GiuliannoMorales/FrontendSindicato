@@ -36,7 +36,7 @@ const tarifasData = [
 ];
 
 const TarifasHistoPage = () => {
-  const [tarifas, setTarifas] = useState<Array<Tarifa>>([])
+  const [tarifas] = useState<Array<Tarifa>>([])
   const [filteredData, setFilteredData] = useState(tarifasData);
 
   return (
