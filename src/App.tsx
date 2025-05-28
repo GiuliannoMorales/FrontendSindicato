@@ -6,8 +6,8 @@ import EstadoCuenta from "./pages/EstadoCuenta/EstadoCuenta";
 import Inicio from "./pages/Inicio";
 import TarifasHistoPage from "./pages/Tarifas/TarifasHistoPage/TarifasHistoPage";
 import TarifasPage from "./pages/Tarifas/TarifasConfigPage/TarifasConfigPage";
-import User from "./Pages/Users/User";
-import RegistrarVehiculo from "./Pages/RegistrarVehiculo/RegistrarVehiculo";
+import User from "./pages/Users/User";
+import RegistrarVehiculo from "./pages/RegistrarVehiculo/RegistrarVehiculo";
 import Layout from "./components/Layout";
 
 const App: React.FC = () => {

@@ -184,6 +184,12 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
         >
           Limpiar Filtros
         </button>
+        <button
+          onClick={limpiarFiltros}
+          className="filtros-tarifas__boton"
+        >
+          Filtrar
+        </button>
       </div>
     </div>
   );

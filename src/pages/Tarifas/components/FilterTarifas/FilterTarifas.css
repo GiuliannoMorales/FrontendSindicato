@@ -17,10 +17,11 @@
 	display: flex;
 	margin-bottom: 15px;
 	gap: 10px;
+	align-items: center;
 }
 
 .filtros-tarifas__label {
-	display: block;
+	/* display: block; */
 	margin-bottom: 5px;
 	font-weight: 600;
 	color: #555;
@@ -48,6 +49,8 @@
 .filtros-tarifas__boton-container {
 	display: flex;
 	justify-content: end;
+	align-items: center;
+	gap: 8px;
 }
 
 .filtros-tarifas__boton {
@@ -61,6 +64,7 @@
 	transition: background-color 0.3s;
 	display: flex;
 	justify-items: end;
+	align-items: center;
 }
 
 .filtros-tarifas__boton:hover {
@@ -69,7 +73,6 @@
 
 .filtros-tarifas__boton--limpiar {
 	background-color: #6c757d;
-	margin-top: 10px;
 }
 
 .filtros-tarifas__boton--limpiar:hover {
@@ -84,6 +87,7 @@
 
 	.filtros-tarifas__select {
 		margin-bottom: 10px;
+		margin-inline: 5px;
 	}
 
 	.filtros-tarifas__rango {
@@ -93,5 +97,11 @@
 
 	.filtros-tarifas__separador {
 		display: none;
+	}
+}
+
+@media (max-width: 1440px){
+	.filtros-tarifas__input{
+		margin-inline: 8px;
 	}
 }
