@@ -2,6 +2,7 @@ import { useState } from "react";
 import TarifasTable from "../components/TarifasTable/TarifasTable";
 import FilterTarifas from "../components/FilterTarifas/FilterTarifas";
 import './TarifasHistoPage.css'
+import type { Tarifa } from "../models/TarifasModel";
 
 const tarifasData = [
   {
@@ -35,14 +36,15 @@ const tarifasData = [
 ];
 
 const TarifasHistoPage = () => {
+  const [tarifas] = useState<Array<Tarifa>>([])
   const [filteredData, setFilteredData] = useState(tarifasData);
 
   return (
     <section className="tarifasHistorial__container">
       <h2 className="tarifas__title">HISTORIAL TARIFAS REGISTRADAS</h2>
 
-      <FilterTarifas data={tarifasData} onFilter={() => setFilteredData(filteredData)}/>
-      <TarifasTable data={tarifasData} fullView={true}/>
+      <FilterTarifas data={tarifas} onFilter={() => setFilteredData(filteredData)}/>
+      <TarifasTable data={tarifas} fullView={true}/>
     </section>
   );
 };

@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./User.css";
-import { getAllVehiculos, deleteVehiculoById, clearVehiculos } from "../../pages/Users/services/vehiculosService";
+import {
+    clearVehiculos,
+    deleteVehiculoById,
+    getAllVehiculos,
+} from "./services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
@@ -61,7 +65,15 @@ const User = () => {
     }, []);
 
     const resetForm = async () => {
-        setFormData({ ci: "", nombre: "", apellido: "", correo: "", nroCelular: "", tipo: "", password: "" });
+        setFormData({
+            ci: "",
+            nombre: "",
+            apellido: "",
+            correo: "",
+            nroCelular: "",
+            tipo: "",
+            password: "",
+        });
         setUserPhoto(null);
         setVehiculos([]);
         setAssignedSpace(null);
@@ -76,7 +88,7 @@ const User = () => {
     const handleDeleteVehicle = async (id: number) => {
         try {
             await deleteVehiculoById(id);
-            setVehiculos(prev => prev.filter(v => v.id !== id));
+            setVehiculos((prev) => prev.filter((v) => v.id !== id));
         } catch (error) {
             console.error("Error al eliminar vehículo:", error);
         }
@@ -103,7 +115,10 @@ const User = () => {
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
 
     const handleUserPhotoChange = (base64: string) => {
-        const base64WithoutPrefix = base64.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
+        const base64WithoutPrefix = base64.replace(
+            /^data:image\/[a-zA-Z]+;base64,/,
+            "",
+        );
         setUserPhoto(base64WithoutPrefix);
     };
 
@@ -137,7 +152,9 @@ const User = () => {
             (userType !== "Docente a tiempo horario" && !assignedSpace) ||
             vehiculos.length === 0
         ) {
-            alert("Por favor, complete todos los campos requeridos y agregue al menos un vehículo.");
+            alert(
+                "Por favor, complete todos los campos requeridos y agregue al menos un vehículo.",
+            );
             return;
         }
         const vehiculosSinId = vehiculos.map(({ id, ...rest }) => rest);
@@ -150,7 +167,9 @@ const User = () => {
             vehiculos: vehiculosSinId,
             parqueo: userType === "Docente a tiempo horario"
                 ? null
-                : assignedSpace ? { nroEspacio: Number(assignedSpace) } : null,
+                : assignedSpace
+                ? { nroEspacio: Number(assignedSpace) }
+                : null,
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
@@ -168,7 +187,9 @@ const User = () => {
                     error.response.data.errors.forEach((err: any) => {
                         const field = err.field.replace("cliente.", "");
                         errors[field] = err.message;
-                        console.error(`Campo: ${field}, Mensaje: ${err.message}`);
+                        console.error(
+                            `Campo: ${err.field}, Mensaje: ${err.message}`,
+                        );
                     });
                     setFormErrors(errors);
                 } else {
@@ -193,7 +214,8 @@ const User = () => {
                         onUserTypeChange={setUserType}
                         passwordVisible={passwordVisible}
                         password={formData.password}
-                        onPasswordChange={(value) => handleFormChange("password", value)}
+                        onPasswordChange={(value) =>
+                            handleFormChange("password", value)}
                         onTogglePasswordVisibility={togglePasswordVisibility}
                         errors={formErrors}
                     />
@@ -216,8 +238,20 @@ const User = () => {
             </form>
 
             <div className="user__form-actions">
-                <button type="button" className="user__cancel-button" onClick={handleCancelClick}> CANCELAR</button>
-                <button type="submit" className="user__submit-button" onClick={handleRegister}>REGISTRAR</button>
+                <button
+                    type="button"
+                    className="user__cancel-button"
+                    onClick={handleCancelClick}
+                >
+                    CANCELAR
+                </button>
+                <button
+                    type="submit"
+                    className="user__submit-button"
+                    onClick={handleRegister}
+                >
+                    REGISTRAR
+                </button>
             </div>
 
             {showCancelModal && (
@@ -225,8 +259,12 @@ const User = () => {
                     <div className="modal-content">
                         <p>¿Estás seguro de cancelar?</p>
                         <div className="modal-buttons">
-                            <button onClick={closeModal} className="cancel">No</button>
-                            <button onClick={confirmCancel} className="confirm">Sí</button>
+                            <button onClick={closeModal} className="cancel">
+                                No
+                            </button>
+                            <button onClick={confirmCancel} className="confirm">
+                                Sí
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -235,9 +273,17 @@ const User = () => {
             {showErrorModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <p>Ocurrió un error al guardar los datos. Por favor, intente nuevamente.</p>
+                        <p>
+                            Ocurrió un error al guardar los datos. Por favor,
+                            intente nuevamente.
+                        </p>
                         <div className="modal-buttons">
-                            <button onClick={() => setShowErrorModal(false)} className="confirm">Aceptar</button>
+                            <button
+                                onClick={() => setShowErrorModal(false)}
+                                className="confirm"
+                            >
+                                Aceptar
+                            </button>
                         </div>
                     </div>
                 </div>
