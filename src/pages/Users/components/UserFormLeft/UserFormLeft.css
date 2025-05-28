@@ -10,9 +10,7 @@
   font-size: 20px;
 }
 
-.user__input-group,
-.user__input-group--password,
-.user__input-group--ci {
+.user__input-group {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -27,15 +25,22 @@
   color: black;
   font-size: 0.875rem;
   white-space: nowrap;
+  font-size: 12px;
 }
 
+.user__input-group--name .user__error-message,
+.user__input-group--lastname .user__error-message,
+.user__input-group--email .user__error-message,
+.user__input-group--phone .user__error-message,
 .user__input-group--ci .user__error-message {
   position: absolute;
   left: 170px;
-  margin-top: 55px;
+  margin-top: 65px;
   color: red;
   font-size: 0.875rem;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 12px;
 }
 
 .user__label {
@@ -106,8 +111,13 @@
     margin-left: 0;
   }
 
+  .user__input-group{
+    padding-bottom: 20px;
+  }
+
+  .user__input-group--password .user__error-message,
+  .user__input-group--phone .user__error-message,
   .user__input-group--ci .user__error-message {
-    left: 0;
-    margin-top: 40px;
+    margin-top: 80px;
   }
 }

@@ -18,6 +18,7 @@ const User = () => {
     const [assignedSpace, setAssignedSpace] = useState<string | null>(null);
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
@@ -176,22 +177,28 @@ const User = () => {
             console.log("Usuario registrado:", response.data);
             await clearVehiculos();
             navigate(0);
-        } catch (error: any) { //para ver errores de campos
+        } catch (error: any) {
             if (error.response) {
                 console.error("Error status:", error.response.status);
                 console.error("Error data:", error.response.data);
 
                 if (error.response.data.errors) {
+                    const errors: { [key: string]: string } = {};
                     error.response.data.errors.forEach((err: any) => {
+                        const field = err.field.replace("cliente.", "");
+                        errors[field] = err.message;
                         console.error(
                             `Campo: ${err.field}, Mensaje: ${err.message}`,
                         );
                     });
+                    setFormErrors(errors);
+                } else {
+                    setShowErrorModal(true);
                 }
             } else {
                 console.error("Error:", error.message);
+                setShowErrorModal(true);
             }
-            setShowErrorModal(true);
         }
     };
 
@@ -210,6 +217,7 @@ const User = () => {
                         onPasswordChange={(value) =>
                             handleFormChange("password", value)}
                         onTogglePasswordVisibility={togglePasswordVisibility}
+                        errors={formErrors}
                     />
                 </div>
 
