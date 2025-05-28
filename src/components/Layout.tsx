@@ -21,6 +21,7 @@ export default function Layout() {
   const [groupOpen, setGroupOpen] = useState(false);
   const [userGroupOpen, setUserGroupOpen] = useState(false);
   const [cuentaGroupOpen, setCuentaGroupOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
   const handlerOpen = () => {
@@ -39,19 +40,38 @@ export default function Layout() {
     <div className="layout">
       <header>
         <div className="headerLogo">
-          <img
-            src="/Logo_umss.png"
-            alt="Logo UMSS"
-            height={"100%"}
-            style={{ objectFit: "contain" }}
-          />
+          <picture>
+            <source srcSet="/Escudo_umss.png" media="(max-width: 768px)" />
+            <img
+              src="/Logo_umss.png"
+              alt="Logo UMSS"
+              height={"100%"}
+              // width={"7rem"}
+              style={{ objectFit: "cover" }}
+            />
+          </picture>
         </div>
         <div className="headerTitulo">
           <h1 className="titulo">SISTEMA DE GESTION DEL PARQUEO</h1>
           <div className="lineaRoja"></div>
         </div>
+        <button
+          className={`hamburguer${sidebarOpen ? " open" : ""}`}
+          onClick={() => setSidebarOpen((prev) => !prev)}
+          aria-label="Abrir menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </header>
-      <aside>
+      {sidebarOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      <aside className={sidebarOpen ? "sidebar open" : "sidebar"}>
         <ul className="sidebar__group">
           <div className="sidebar__group-header" onClick={handlerOpen}>
             <div className="sidebar__group-container">
