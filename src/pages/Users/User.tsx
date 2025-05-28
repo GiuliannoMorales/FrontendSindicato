@@ -168,15 +168,16 @@ const User = () => {
             parqueo: userType === "Docente a tiempo horario"
                 ? null
                 : assignedSpace
-                ? { nroEspacio: Number(assignedSpace) }
-                : null,
+                    ? { nroEspacio: Number(assignedSpace) }
+                    : null,
         };
         console.log("Datos que se enviarán al backend:", newUser);
         try {
             const response = await api.post("/clientes/registrar", newUser);
             console.log("Usuario registrado:", response.data);
             await clearVehiculos();
-            navigate(0);
+            await resetForm();
+
         } catch (error: any) {
             if (error.response) {
                 console.error("Error status:", error.response.status);
@@ -185,14 +186,12 @@ const User = () => {
                 if (error.response.data.errors) {
                     const errors: { [key: string]: string } = {};
                     error.response.data.errors.forEach((err: any) => {
-                        const field = err.field.replace("cliente.", "");
-                        errors[field] = err.message;
-                        console.error(
-                            `Campo: ${err.field}, Mensaje: ${err.message}`,
-                        );
+                        const field = err.field ? err.field.replace("cliente.", "") : "unknown";
+                        errors[field] = err.message || "Error desconocido";
+                        console.error(`Campo: ${err.field}, Mensaje: ${err.message}`);
                     });
                     setFormErrors(errors);
-                } else {
+                }else {
                     setShowErrorModal(true);
                 }
             } else {
@@ -209,6 +208,10 @@ const User = () => {
                 <div className="user__form-left">
                     <UserFormLeft
                         ci={formData.ci}
+                        nombre={formData.nombre}
+                        apellido={formData.apellido}
+                        correo={formData.correo}
+                        nroCelular={formData.nroCelular}
                         onChange={handleFormChange}
                         userType={userType}
                         onUserTypeChange={setUserType}
