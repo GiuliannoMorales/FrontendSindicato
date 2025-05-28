@@ -4,7 +4,7 @@ import {
     clearVehiculos,
     deleteVehiculoById,
     getAllVehiculos,
-} from "../../pages/Users/services/vehiculosService";
+} from "./services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
