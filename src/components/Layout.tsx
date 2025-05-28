@@ -10,6 +10,8 @@ import { ArrowUpIcon } from "../assets/icons/ArrowUpIcon";
 import { PeopleIcon } from "../assets/icons/PeopleIcon";
 import { UserAddIcon } from "../assets/icons/UserAddIcon";
 import { UserIcon } from "../assets/icons/UserIcon";
+import { PayIcon } from "../assets/icons/PayIcon";
+import { CoinInHandIcon } from "../assets/icons/CoinInHand";
 
 // interface LayoutProps {
 //   children: ReactNode;
@@ -147,6 +149,7 @@ export default function Layout() {
         <ul className="sidebar__group">
           <div className="sidebar__group-header" onClick={toggleCuentagroup}>
             <div className="sidebar__group-container">
+              <PayIcon />
               Mi Cuenta
             </div>
             <div>{cuentaGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
@@ -162,6 +165,7 @@ export default function Layout() {
                       : ""
                   }`}
                 >
+                  <CoinInHandIcon />
                   <NavLink
                     to={"/cuenta/estado"}
                     className={"sidebar__item-link"}
