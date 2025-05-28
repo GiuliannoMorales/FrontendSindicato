@@ -4,6 +4,10 @@ import EyeSlashIcon from "../../../../assets/icons/EyeSlashIcon";
 
 interface UserFormLeftProps {
     ci: string;
+    nombre: string;
+    apellido: string;
+    correo: string;
+    nroCelular: string;
     onChange: (field: string, value: string) => void;
     userType: string;
     onUserTypeChange: (value: string) => void;
@@ -16,6 +20,10 @@ interface UserFormLeftProps {
 
 const UserFormLeft = ({
     ci,
+    nombre,
+    apellido,
+    correo,
+    nroCelular,
     onChange,
     userType,
     onUserTypeChange,
@@ -45,22 +53,22 @@ const UserFormLeft = ({
                 </div>
                 <div className="user__input-group user__input-group--name">
                     <label className="user__label">Nombre(s): <span className="user__required">*</span></label>
-                    <input type="text" required className="user__input" onChange={(e) => onChange("nombre", e.target.value)} />
+                    <input type="text" required className="user__input" value={nombre} onChange={(e) => onChange("nombre", e.target.value)} />
                     {errors.nombre && <p className="user__error-message">{errors.nombre}</p>}
                 </div>
                 <div className="user__input-group user__input-group--lastname">
                     <label className="user__label">Apellido(s): <span className="user__required">*</span></label>
-                    <input type="text" required className="user__input" onChange={(e) => onChange("apellido", e.target.value)} />
+                    <input type="text" required className="user__input" value={apellido} onChange={(e) => onChange("apellido", e.target.value)} />
                     {errors.apellido && <p className="user__error-message">{errors.apellido}</p>}
                 </div>
                 <div className="user__input-group user__input-group--email">
                     <label className="user__label">Correo Electrónico: <span className="user__required">*</span></label>
-                    <input type="email" required className="user__input" onChange={(e) => onChange("correo", e.target.value)} />
+                    <input type="email" required className="user__input" value={correo} onChange={(e) => onChange("correo", e.target.value)} />
                     {errors.correo && <p className="user__error-message">{errors.correo}</p>}
                 </div>
                 <div className="user__input-group user__input-group--phone">
                     <label className="user__label">Teléfono: <span className="user__required">*</span></label>
-                    <input type="tel" required className="user__input" onChange={(e) => onChange("nroCelular", e.target.value)} />
+                    <input type="tel" required className="user__input" value={nroCelular} onChange={(e) => onChange("nroCelular", e.target.value)} />
                     {errors.nroCelular && <p className="user__error-message">{errors.nroCelular}</p>}
                 </div>
             </fieldset>
