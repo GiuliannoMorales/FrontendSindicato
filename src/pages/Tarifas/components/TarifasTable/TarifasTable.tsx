@@ -29,8 +29,8 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
               <td className="borde-derecho">{fila.tipoCliente}</td>
               <td className="borde-derecho">{fila.tipoVehiculo}</td>
               <td className="borde-derecho">{fila.monto}</td>
-              <td>{fila.fechaModificado}</td>
-              {fullView && <td>{fila.modificadoPor}</td>}
+              <td>{fila.fechaInicio}</td>
+              {fullView && <td>{fila.nombreCompleto}</td>}
             </tr>
           ))}
         </tbody>

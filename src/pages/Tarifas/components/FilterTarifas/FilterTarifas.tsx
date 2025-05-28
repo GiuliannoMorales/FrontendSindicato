@@ -25,14 +25,14 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
   );
   const usuariosUnicos = Array.from(new Set(data.map((item) => item.tipoCliente)));
   const modificadoresUnicos = Array.from(
-    new Set(data.map((item) => item.modificadoPor))
+    new Set(data.map((item) => item.nombreCompleto))
   );
 
   // Aplicar filtros
   useEffect(() => {
     const filteredData = data.filter((item) => {
       const fechaItem = new Date(
-        item.fechaModificado.split(" - ")[1].split("/").reverse().join("-")
+        item.fechaInicio.split(" - ")[1].split("/").reverse().join("-")
       );
       const fechaDesde = filtros.fechaDesde
         ? new Date(filtros.fechaDesde)
@@ -57,7 +57,7 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
         (!tarifaMin || tarifaNum >= tarifaMin) &&
         (!tarifaMax || tarifaNum <= tarifaMax) &&
         (filtros.modificadoPor === "" ||
-          item.modificadoPor.includes(filtros.modificadoPor))
+          item.nombreCompleto.includes(filtros.modificadoPor))
       );
     });
 
@@ -183,6 +183,12 @@ const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
           className="filtros-tarifas__boton filtros-tarifas__boton--limpiar"
         >
           Limpiar Filtros
+        </button>
+        <button
+          onClick={limpiarFiltros}
+          className="filtros-tarifas__boton"
+        >
+          Filtrar
         </button>
       </div>
     </div>
