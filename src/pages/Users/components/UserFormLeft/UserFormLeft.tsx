@@ -1,22 +1,7 @@
 import "./UserFormLeft.css";
 import EyeIcon from "../../../../assets/icons/EyeIcon";
 import EyeSlashIcon from "../../../../assets/icons/EyeSlashIcon";
-
-interface UserFormLeftProps {
-    ci: string;
-    nombre: string;
-    apellido: string;
-    correo: string;
-    nroCelular: string;
-    onChange: (field: string, value: string) => void;
-    userType: string;
-    onUserTypeChange: (value: string) => void;
-    passwordVisible: boolean;
-    password: string;
-    onPasswordChange: (value: string) => void;
-    onTogglePasswordVisibility: () => void;
-    errors: { [key: string]: string };
-}
+import type { UserFormLeftProps } from "../../models/UserModel";
 
 const UserFormLeft = ({
     ci,
