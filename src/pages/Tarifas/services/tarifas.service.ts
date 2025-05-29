@@ -13,18 +13,18 @@ export interface FiltroTarifas {
   modificadoPor?: string;
 }
 
-export const createTarifa = (tarifaData : NewTarifa) : AxiosPromise<BackendResponse<Tarifa>> => {
+export const createTarifa = (tarifaData : NewTarifa) : AxiosPromise<Tarifa> => {
     try {
-        return api.post('tarifas', tarifaData)
+        return api.post('tarifa', tarifaData)
     } catch (error) {
         console.error('error al crear tarifas', error)
         throw error
     }
 }
 
-export const getTarifasHistorial = async (): AxiosPromise<BackendResponse<Tarifa>> => {
+export const getTarifasHistorial = async (): AxiosPromise<Array<Tarifa>> => {
   try {
-    const response = await api.get('historial-tarifas/filtrar');
+    const response = await api.get('historial-tarifas');
     console.log("Respuesta del servicio:", response);
     return response;
   } catch (error) {
@@ -43,5 +43,6 @@ export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<BackendResp
     }
   });
 
+  console.log('query', params.toString())
   return api.get(`/historial-tarifas/filtrar?${params.toString()}`);
 };
