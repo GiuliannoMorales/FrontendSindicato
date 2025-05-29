@@ -149,6 +149,11 @@
   justify-content: end;
 }
 
+.tarifas__button-link{
+  text-decoration: none;
+  padding-block: 12px;
+}
+
 .tarifas__buttonsContainer {
   display: flex;
   gap: 81px;

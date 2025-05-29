@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { createTarifa, getTarifasHistorial } from "../services/tarifas.service";
 import { useEffect, useState } from "react";
 import type { Tarifa } from "../models/TarifasModel";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const vehiclesTypes = ["Auto", "Moto"];
 
@@ -56,13 +56,23 @@ const TarifasPage = () => {
   } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log("Datos del formulario:", data);
     try {
-      createTarifa({
+      const response = await createTarifa({
         ...data,
         idAdministrador: "11111111-1111-1111-1111-111111111111",
       });
+      setTarifas([
+        {
+          tipoCliente: response.data.tipoCliente,
+          tipoVehiculo: response.data.tipoVehiculo,
+          monto: response.data.monto,
+          fechaInicio: response.data.fechaInicio,
+          nombreCompleto: response.data.nombreCompleto,
+        },
+        ...tarifas,
+      ]);
       reset();
       toast.success("Tarifa actualizada correctamente.");
     } catch (error) {
@@ -77,7 +87,7 @@ const TarifasPage = () => {
 
   const fetchTarifas = async () => {
     try {
-      const response = (await getTarifasHistorial()).data;
+      const response = await getTarifasHistorial();
       setTarifas(response.data?.slice(0, 5) || []);
     } catch (error) {
       console.error("error", error);
@@ -150,16 +160,23 @@ const TarifasPage = () => {
                 className="tarifas__input"
               />
             </div>
-              {errors.monto && (
-                <span className="error">{(errors.monto as FieldError).message}</span>
-              )}
+            {errors.monto && (
+              <span className="error">
+                {(errors.monto as FieldError).message}
+              </span>
+            )}
           </form>
         </div>
         <div className="tarifas__tableCol">
           <h3 className="tarifas__subtitle">Tarifas Registradas</h3>
           <TarifasTable data={tarifas} fullView={false} />
           <div>
-            <button className="tarifas__button">Ver historial completo</button>
+            <NavLink
+              to={"/tarifas/historial"}
+              className="tarifas__button tarifas__button-link"
+            >
+              Ver historial completo
+            </NavLink>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { formatISODateToReadable } from "../../../../utils/formatDate";
 import type { Tarifa } from "../../models/TarifasModel";
 import './TarifasTable.css'
 
@@ -16,9 +17,10 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
       <table className="tarifas__table">
         <thead>
           <tr>
+            {fullView && <th>Tarifa</th>}
             <th className="borde-derecho">Usuario</th>
             <th className="borde-derecho">Vehículo</th>
-            <th className="borde-derecho">Tarifa (Bs)</th>
+            <th className="borde-derecho">Monto (Bs)</th>
             <th>Modificado en...</th>
             {fullView && <th>Modificado por...</th>}
           </tr>
@@ -26,11 +28,12 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
         <tbody>
           {data.map((fila, index) => (
             <tr key={index}>
+              {fullView && <td className="borde-derecho">{`Tarifa #${index + 1}`}</td>}
               <td className="borde-derecho">{fila.tipoCliente}</td>
               <td className="borde-derecho">{fila.tipoVehiculo}</td>
               <td className="borde-derecho">{fila.monto}</td>
-              <td>{fila.fechaInicio}</td>
-              {fullView && <td>{fila.nombreCompleto}</td>}
+              <td className="borde-derecho">{formatISODateToReadable(fila.fechaInicio)}</td>
+              {fullView && <td className="borde-derecho">{fila.nombreCompleto}</td>}
             </tr>
           ))}
         </tbody>
