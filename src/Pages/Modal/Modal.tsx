@@ -1,7 +1,11 @@
 import React from 'react';
 import './Modal.css';
 
-const Modal = ({ visible, onClose, onConfirm }: {
+const Modal = ({
+  visible,
+  onClose,
+  onConfirm,
+}: {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;

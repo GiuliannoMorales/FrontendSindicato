@@ -6,7 +6,7 @@ const ResulCI = () => {
   const [ci, setCi] = useState('');
   const [cliente, setCliente] = useState<any>(null);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // 👈 AÑADIR
+  const navigate = useNavigate();
 
   const buscarCliente = async () => {
     try {
@@ -33,7 +33,7 @@ const ResulCI = () => {
   };
 
   const irAVistaUsuario = () => {
-    navigate('/cobros/Formulario', { state: { cliente } }); // 👈 ENVÍA CLIENTE POR `state`
+    navigate('/cobros/Formulario', { state: { cliente } });
   };
 
   return (

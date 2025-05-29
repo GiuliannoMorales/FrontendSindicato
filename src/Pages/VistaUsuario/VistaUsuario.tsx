@@ -3,53 +3,86 @@ import { useLocation } from 'react-router-dom';
 import Modal from '../Modal/Modal';
 import './VistaUsuario.css';
 
+interface Cliente {
+  idCliente: string;
+  nombre: string;
+  apellido: string;
+  tipo: string;
+}
+
+interface Vehiculo {
+  idVehiculo: string;
+  tipo: string;
+  placa: string;
+  idCliente: string;
+}
+
+interface Tarifa {
+  tipoCliente: string;
+  tipoVehiculo: string;
+  monto: number;
+}
+
 const VistaUsuario = () => {
   const location = useLocation();
-  const cliente = location.state?.cliente;
+  const cliente: Cliente | undefined = location.state?.cliente;
 
-  const [vehiculos, setVehiculos] = useState([]);
-  const [tarifa, setTarifa] = useState(0);
-  const [fechaInicioPago, setFechaInicioPago] = useState('');
-  const [meses, setMeses] = useState(0);
-  const [anios, setAnios] = useState(0);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
+  const [tarifa, setTarifa] = useState<number>(0);
+  const [fechaInicioPago, setFechaInicioPago] = useState<string>('');
+  const [meses, setMeses] = useState<number>(0);
+  const [anios, setAnios] = useState<number>(0);
+  const [mostrarModal, setMostrarModal] = useState<boolean>(false);
 
-  // Validación: si no hay cliente, no continuar
+  const idCajero = 'CAJERO_123'; // Simulado - reemplazar con ID real del cajero logueado
+
   if (!cliente) {
     return <div>No se recibió información del cliente. Por favor vuelva a buscar el CI.</div>;
   }
 
+  // Obtener vehículos y fecha de inicio de pago
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        // Obtener vehículos del cliente
         const resVehiculos = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/vehiculo/activos`);
         const dataVehiculos = await resVehiculos.json();
-        const vehiculosCliente = dataVehiculos.data.filter((v: any) => v.idCliente === cliente.idCliente);
+        const vehiculosCliente = dataVehiculos.data.filter((v: Vehiculo) => v.idCliente === cliente.idCliente);
         setVehiculos(vehiculosCliente);
 
-        // Obtener tarifa vigente
-        const resTarifa = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente`);
-        const dataTarifa = await resTarifa.json();
-        const tarifaFiltrada = dataTarifa.data.find(
-          (t: any) =>
-            t.tipoCliente.toLowerCase() === cliente.tipo.toLowerCase() &&
-            t.tipoVehiculo.toLowerCase() === vehiculosCliente[0]?.tipo.toLowerCase()
-        );
-        setTarifa(tarifaFiltrada?.monto || 0);
-
-        // Obtener fecha de inicio de pago
         const resFecha = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo`);
         const dataFecha = await resFecha.json();
         setFechaInicioPago(dataFecha.data?.fecha || '');
-
       } catch (error) {
-        console.error('Error al obtener datos del backend:', error);
+        console.error('Error al obtener vehículos o fecha:', error);
       }
     };
 
     obtenerDatos();
   }, [cliente]);
+
+  // Obtener tarifa después de tener el vehículo
+  useEffect(() => {
+    const obtenerTarifa = async () => {
+      try {
+        const resTarifa = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente`);
+        const dataTarifa = await resTarifa.json();
+
+        const tarifaFiltrada = dataTarifa.data.find(
+          (t: Tarifa) =>
+            t.tipoCliente.toLowerCase() === cliente.tipo.toLowerCase() &&
+            t.tipoVehiculo.toLowerCase() === vehiculos[0]?.tipo.toLowerCase()
+        );
+
+        setTarifa(tarifaFiltrada?.monto || 0);
+      } catch (error) {
+        console.error('Error al obtener tarifa:', error);
+      }
+    };
+
+    if (vehiculos.length > 0) {
+      obtenerTarifa();
+    }
+  }, [vehiculos, cliente]);
 
   const cambiarValor = (tipo: 'meses' | 'anios', delta: number) => {
     if (tipo === 'meses') {
@@ -59,9 +92,68 @@ const VistaUsuario = () => {
     }
   };
 
-  const confirmarCobro = () => {
+  const generarMesesPago = (): string[] => {
+    const fecha = new Date(fechaInicioPago);
+    const totalMeses = meses + anios * 12;
+    const resultado: string[] = [];
+
+    for (let i = 0; i < totalMeses; i++) {
+      const nuevaFecha = new Date(fecha);
+      nuevaFecha.setMonth(fecha.getMonth() + i);
+      const anio = nuevaFecha.getFullYear();
+      const mes = String(nuevaFecha.getMonth() + 1).padStart(2, '0');
+      resultado.push(`${anio}-${mes}`);
+    }
+
+    return resultado;
+  };
+
+  const confirmarCobro = async () => {
     setMostrarModal(false);
-    alert('Cobro procesado exitosamente');
+
+    try {
+      if (cliente.idCliente === idCajero) {
+        alert('El cajero no puede cobrarse a sí mismo.');
+        return;
+      }
+
+      if (!vehiculos[0]) {
+        alert('No se ha seleccionado un vehículo válido.');
+        return;
+      }
+
+      const mesesPago = generarMesesPago();
+
+      if (mesesPago.length === 0) {
+        alert('Debe seleccionar al menos un mes o año para pagar.');
+        return;
+      }
+
+      const payload = {
+        idCliente: cliente.idCliente,
+        idVehiculo: vehiculos[0].idVehiculo,
+        meses: mesesPago,
+        monto: montoTotal,
+        idCajero
+      };
+
+      const response = await fetch('https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al procesar el pago.');
+      }
+
+      alert('Pago procesado exitosamente');
+    } catch (error: any) {
+      console.error(error);
+      alert(`Error: ${error.message}`);
+    }
   };
 
   const pagos = Array.from({ length: meses + anios * 12 }, (_, i) => ({
