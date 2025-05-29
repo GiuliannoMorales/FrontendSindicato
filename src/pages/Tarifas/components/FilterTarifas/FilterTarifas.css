@@ -1,6 +1,7 @@
 .filtros-tarifas {
 	background-color: #f8f9fa;
 	padding: 20px;
+	margin-inline: 10px;
 	border-radius: 8px;
 	margin-bottom: 20px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
