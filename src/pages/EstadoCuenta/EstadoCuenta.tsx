@@ -8,8 +8,6 @@ import type {
   VehiculosResponse,
 } from "./EstadoCuentaModelos";
 
-const idUsuario = import.meta.env.VITE_ID_USUARIO;
-
 const EstadoCuenta: React.FC = () => {
   const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
   const [placaSeleccionada, setPlacaSeleccionada] = useState<string>("");
@@ -22,10 +20,13 @@ const EstadoCuenta: React.FC = () => {
   const [fechaDe, setFechaDe] = useState<string>("");
   const [fechaA, setFechaA] = useState<string>("");
 
+  // Provisional a borrar
+  const [inputUsuario, setInputUsuario] = useState<string>("");
+
   useEffect(() => {
     api.post<VehiculosResponse>(
       `reporte/cliente/vehiculo`,
-      { id: idUsuario },
+      { id: inputUsuario },
     )
       .then((res) => {
         if (res.data.status === "error") {
@@ -63,7 +64,7 @@ const EstadoCuenta: React.FC = () => {
         }
         setVehiculos([]);
       });
-  }, []);
+  }, [inputUsuario]);
 
   useEffect(() => {
     if (!placaSeleccionada) {
@@ -75,7 +76,7 @@ const EstadoCuenta: React.FC = () => {
 
     api.post<EstadoCuentaResponse>(
       `reporte/cliente-vehiculo/estados-cuenta`,
-      { clienteId: idUsuario, placa: placaSeleccionada },
+      { clienteId: inputUsuario, placa: placaSeleccionada },
     )
       .then((res) => {
         if (res.data.status === "error") {
@@ -147,6 +148,18 @@ const EstadoCuenta: React.FC = () => {
   return (
     <div className="container">
       <h2>ESTADO DE CUENTA</h2>
+      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+        <label>
+          ID Usuario:&nbsp;
+          <input
+            type="text"
+            value={inputUsuario}
+            onChange={(e) => setInputUsuario(e.target.value)}
+            style={{ width: "260px", marginRight: "1rem" }}
+            placeholder="ID de usuario"
+          />
+        </label>
+      </div>
       <div className="controlVehiculo">
         <label>
           Seleccione el vehiculo:
