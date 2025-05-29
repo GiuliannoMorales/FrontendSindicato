@@ -28,12 +28,12 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
         <tbody>
           {data.map((fila, index) => (
             <tr key={index}>
-              {fullView && <td className="borde-derecho">{`Tarifa #${index}`}</td>}
+              {fullView && <td className="borde-derecho">{`Tarifa #${index + 1}`}</td>}
               <td className="borde-derecho">{fila.tipoCliente}</td>
               <td className="borde-derecho">{fila.tipoVehiculo}</td>
               <td className="borde-derecho">{fila.monto}</td>
-              <td>{formatISODateToReadable(fila.fechaInicio)}</td>
-              {fullView && <td>{fila.nombreCompleto}</td>}
+              <td className="borde-derecho">{formatISODateToReadable(fila.fechaInicio)}</td>
+              {fullView && <td className="borde-derecho">{fila.nombreCompleto}</td>}
             </tr>
           ))}
         </tbody>

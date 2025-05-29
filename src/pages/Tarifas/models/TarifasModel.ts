@@ -4,7 +4,6 @@ export interface Tarifa{
     monto: string,
     fechaInicio: string,
     nombreCompleto: string,
-    cantidadTarifas: string
 }
 
 export interface NewTarifa{

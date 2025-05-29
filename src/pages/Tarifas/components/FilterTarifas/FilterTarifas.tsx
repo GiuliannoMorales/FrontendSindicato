@@ -1,196 +1,202 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import {
+  filtrarTarifas,
+  type FiltroTarifas,
+} from "../../services/tarifas.service";
 import type { Tarifa } from "../../models/TarifasModel";
 import "./FilterTarifas.css";
+import TarifasTable from "../TarifasTable/TarifasTable";
 
-interface FiltrosTarifasProps {
-  data: Array<Tarifa>;
-  onFilter: (filteredData: Array<Tarifa>) => void;
+interface FilterTarifasProps {
+  initialData: Tarifa[];
 }
 
-const FilterTarifas = ({ data, onFilter }: FiltrosTarifasProps) => {
-  // Estados para los filtros
-  const [filtros, setFiltros] = useState({
-    vehiculo: "",
-    usuario: "",
-    fechaDesde: "",
-    fechaHasta: "",
-    tarifaMin: "",
-    tarifaMax: "",
-    modificadoPor: "",
+// Interfaz para el formulario, ajustada a los nombres del servicio
+interface FiltrosForm {
+  tipoVehiculo: string;
+  tipoCliente: string;
+  montoMin: string;
+  montoMax: string;
+  fechaInicio: string;
+  fechaFin: string;
+  modificadoPor: string;
+}
+
+const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
+  const { register, handleSubmit, reset } = useForm<FiltrosForm>({
+    defaultValues: {
+      tipoVehiculo: "",
+      tipoCliente: "",
+      montoMin: "",
+      montoMax: "",
+      fechaInicio: "",
+      fechaFin: "",
+      modificadoPor: "",
+    },
   });
 
-  // Obtener valores únicos para los selects
+  const [filteredData, setFilteredData] = useState<Tarifa[]>(initialData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Obtener valores únicos de los datos iniciales
   const vehiculosUnicos = Array.from(
-    new Set(data.map((item) => item.tipoVehiculo))
-  );
-  const usuariosUnicos = Array.from(new Set(data.map((item) => item.tipoCliente)));
+    new Set(initialData.map((item) => item.tipoVehiculo))
+  ).filter(Boolean);
+
+  const usuariosUnicos = Array.from(
+    new Set(initialData.map((item) => item.tipoCliente))
+  ).filter(Boolean);
+
   const modificadoresUnicos = Array.from(
-    new Set(data.map((item) => item.nombreCompleto))
-  );
+    new Set(initialData.map((item) => item.nombreCompleto))
+  ).filter(Boolean);
 
-  // Aplicar filtros
-  useEffect(() => {
-    const filteredData = data.filter((item) => {
-      const fechaItem = new Date(
-        item.fechaInicio.split(" - ")[1].split("/").reverse().join("-")
-      );
-      const fechaDesde = filtros.fechaDesde
-        ? new Date(filtros.fechaDesde)
-        : null;
-      const fechaHasta = filtros.fechaHasta
-        ? new Date(filtros.fechaHasta)
-        : null;
+  const onSubmit = async (formData: FiltrosForm) => {
+    setIsLoading(true);
+    setError(null);
 
-      const tarifaNum = parseFloat(item.monto.replace(",", "."));
-      const tarifaMin = filtros.tarifaMin
-        ? parseFloat(filtros.tarifaMin)
-        : null;
-      const tarifaMax = filtros.tarifaMax
-        ? parseFloat(filtros.tarifaMax)
-        : null;
+    try {
+      const filtros: FiltroTarifas = {
+        tipoVehiculo: formData.tipoVehiculo || undefined,
+        tipoCliente: formData.tipoCliente || undefined,
+        montoMin: formData.montoMin ? parseFloat(formData.montoMin) : undefined,
+        montoMax: formData.montoMax ? parseFloat(formData.montoMax) : undefined,
+        fechaInicio: formData.fechaInicio
+          ? `${formData.fechaInicio}T00:00:00`
+          : undefined,
+        fechaFin: formData.fechaFin
+          ? `${formData.fechaFin}T23:59:59`
+          : undefined,
+        modificadoPor: formData.modificadoPor || undefined,
+      };
 
-      return (
-        (filtros.vehiculo === "" || item.tipoVehiculo === filtros.vehiculo) &&
-        (filtros.usuario === "" || item.tipoCliente.includes(filtros.usuario)) &&
-        (!fechaDesde || fechaItem >= fechaDesde) &&
-        (!fechaHasta || fechaItem <= fechaHasta) &&
-        (!tarifaMin || tarifaNum >= tarifaMin) &&
-        (!tarifaMax || tarifaNum <= tarifaMax) &&
-        (filtros.modificadoPor === "" ||
-          item.nombreCompleto.includes(filtros.modificadoPor))
-      );
-    });
+      const response = await filtrarTarifas(filtros);
 
-    onFilter(filteredData);
-  }, [filtros, data, onFilter]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFiltros((prev) => ({ ...prev, [name]: value }));
+      if (response.data) {
+        setFilteredData(response.data);
+      }
+    } catch (err) {
+      console.error("Error filtering data:", err);
+      setError("Error al aplicar los filtros. Por favor intente nuevamente.");
+      setFilteredData(initialData);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const limpiarFiltros = () => {
-    setFiltros({
-      vehiculo: "",
-      usuario: "",
-      fechaDesde: "",
-      fechaHasta: "",
-      tarifaMin: "",
-      tarifaMax: "",
-      modificadoPor: "",
-    });
+    reset();
+    setFilteredData(initialData);
+    setError(null);
   };
 
   return (
-    <div className="filtros-tarifas">
-      <h4 className="filtros-tarifas__titulo">Filtrar por:</h4>
-      <div className="filtros-tarifas__grupo">
-        <select
-          name="vehiculo"
-          value={filtros.vehiculo}
-          onChange={handleChange}
-          className="filtros-tarifas__select"
-        >
-          <option value="" defaultValue={""}>
-            Tipo de Vehículo
-          </option>
-          {vehiculosUnicos.map((vehiculo, index) => (
-            <option key={index} value={vehiculo}>
-              {vehiculo}
-            </option>
-          ))}
-        </select>
-        <select
-          name="usuario"
-          value={filtros.usuario}
-          onChange={handleChange}
-          className="filtros-tarifas__select"
-        >
-          <option value="" defaultValue={""}>
-            Tipo de Usuario
-          </option>
-          {usuariosUnicos.map((usuario, index) => (
-            <option key={index} value={usuario}>
-              {usuario}
-            </option>
-          ))}
-        </select>
-        <select
-          name="modificadoPor"
-          value={filtros.modificadoPor}
-          onChange={handleChange}
-          className="filtros-tarifas__select"
-        >
-          <option value="">Modificado por</option>
-          {modificadoresUnicos.map((modificador, index) => (
-            <option key={index} value={modificador}>
-              {modificador}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="filtros-tarifas-container">
+      <form onSubmit={handleSubmit(onSubmit)} className="filtros-tarifas">
+        <h4 className="filtros-tarifas__titulo">Filtrar por:</h4>
 
-      <div className="filtros-tarifas__grupo">
-        <label className="filtros-tarifas__label">Rango de Fechas:</label>
-        <div className="filtros-tarifas__rango">
-          <input
-            type="date"
-            name="fechaDesde"
-            value={filtros.fechaDesde}
-            onChange={handleChange}
-            className="filtros-tarifas__input"
-          />
-          <span className="filtros-tarifas__separador">a</span>
-          <input
-            type="date"
-            name="fechaHasta"
-            value={filtros.fechaHasta}
-            onChange={handleChange}
-            className="filtros-tarifas__input"
-          />
-        </div>
-        <label className="filtros-tarifas__label">Rango de Tarifas (Bs):</label>
-        <div className="filtros-tarifas__rango">
-          <input
-            type="number"
-            name="tarifaMin"
-            placeholder="Mínimo"
-            value={filtros.tarifaMin}
-            onChange={handleChange}
-            className="filtros-tarifas__input"
-            step="0.01"
-            min="0"
-          />
-          <span className="filtros-tarifas__separador">a</span>
-          <input
-            type="number"
-            name="tarifaMax"
-            placeholder="Máximo"
-            value={filtros.tarifaMax}
-            onChange={handleChange}
-            className="filtros-tarifas__input"
-            step="0.01"
-            min="0"
-          />
-        </div>
-      </div>
+        <div className="filtros-tarifas__grupo">
+          <select
+            {...register("tipoVehiculo")}
+            className="filtros-tarifas__select"
+          >
+            <option value="">Tipo de Vehículo</option>
+            {vehiculosUnicos.map((vehiculo, index) => (
+              <option key={`vehiculo-${index}`} value={vehiculo}>
+                {vehiculo}
+              </option>
+            ))}
+          </select>
 
-      <div className="filtros-tarifas__boton-container">
-        <button
-          onClick={limpiarFiltros}
-          className="filtros-tarifas__boton filtros-tarifas__boton--limpiar"
-        >
-          Limpiar Filtros
-        </button>
-        <button
-          onClick={limpiarFiltros}
-          className="filtros-tarifas__boton"
-        >
-          Filtrar
-        </button>
-      </div>
+          <select
+            {...register("tipoCliente")}
+            className="filtros-tarifas__select"
+          >
+            <option value="">Tipo de Usuario</option>
+            {usuariosUnicos.map((usuario, index) => (
+              <option key={`usuario-${index}`} value={usuario}>
+                {usuario}
+              </option>
+            ))}
+          </select>
+
+          <select
+            {...register("modificadoPor")}
+            className="filtros-tarifas__select"
+          >
+            <option value="">Modificado por</option>
+            {modificadoresUnicos.map((modificador, index) => (
+              <option key={`modificador-${index}`} value={modificador}>
+                {modificador}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filtros-tarifas__grupo">
+          <label className="filtros-tarifas__label">Rango de Fechas:</label>
+          <div className="filtros-tarifas__rango">
+            <input
+              type="date"
+              {...register("fechaInicio")}
+              className="filtros-tarifas__input"
+            />
+            <span className="filtros-tarifas__separador">a</span>
+            <input
+              type="date"
+              {...register("fechaFin")}
+              className="filtros-tarifas__input"
+            />
+          </div>
+
+          <label className="filtros-tarifas__label">
+            Rango de Tarifas (Bs):
+          </label>
+          <div className="filtros-tarifas__rango">
+            <input
+              type="number"
+              {...register("montoMin")}
+              placeholder="Mínimo"
+              className="filtros-tarifas__input"
+              step="0.01"
+              min="0"
+            />
+            <span className="filtros-tarifas__separador">a</span>
+            <input
+              type="number"
+              {...register("montoMax")}
+              placeholder="Máximo"
+              className="filtros-tarifas__input"
+              step="0.01"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div className="filtros-tarifas__boton-container">
+          <button
+            type="button"
+            onClick={limpiarFiltros}
+            className="filtros-tarifas__boton filtros-tarifas__boton--limpiar"
+            disabled={isLoading}
+          >
+            Limpiar Filtros
+          </button>
+          <button
+            type="submit"
+            className="filtros-tarifas__boton"
+            disabled={isLoading}
+          >
+            {isLoading ? "Filtrando..." : "Filtrar"}
+          </button>
+        </div>
+      </form>
+
+      {error && <div className="filtros-tarifas__error">{error}</div>}
+
+      <TarifasTable data={filteredData} fullView={true} />
     </div>
   );
 };

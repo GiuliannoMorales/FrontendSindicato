@@ -70,7 +70,6 @@ const TarifasPage = () => {
           monto: response.data.monto,
           fechaInicio: response.data.fechaInicio,
           nombreCompleto: response.data.nombreCompleto,
-          cantidadTarifas: response.data.cantidadTarifas,
         },
         ...tarifas,
       ]);

@@ -1,6 +1,6 @@
 import type { AxiosPromise } from "axios"
 import api from "../../../api/axios"
-import type { BackendResponse } from "../../../types/backendResponse"
+// import type { BackendResponse } from "../../../types/backendResponse"
 import type { NewTarifa, Tarifa } from "../models/TarifasModel"
 
 export interface FiltroTarifas {
@@ -33,7 +33,7 @@ export const getTarifasHistorial = async (): AxiosPromise<Array<Tarifa>> => {
   }
 }
 
-export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<BackendResponse<Tarifa[]>> => {
+export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<Tarifa[]> => {
   // Construir query params eliminando los undefined/empty
   const params = new URLSearchParams();
   
@@ -43,6 +43,5 @@ export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<BackendResp
     }
   });
 
-  console.log('query', params.toString())
   return api.get(`/historial-tarifas/filtrar?${params.toString()}`);
 };

@@ -1,50 +1,46 @@
-import { useState } from "react";
-import TarifasTable from "../components/TarifasTable/TarifasTable";
+import { useEffect, useState } from "react";
 import FilterTarifas from "../components/FilterTarifas/FilterTarifas";
-import './TarifasHistoPage.css'
+import "./TarifasHistoPage.css";
 import type { Tarifa } from "../models/TarifasModel";
-
-const tarifasData = [
-  {
-    usuario: "Administrat.",
-    vehiculo: "Automóvil",
-    tarifa: "3,50",
-    fechaModificado: "14:50:14 - 04/05/2025",
-    modificadoPor: "Julieta",
-  },
-  {
-    usuario: "Administrat.",
-    vehiculo: "Motocicleta",
-    tarifa: "2,50",
-    fechaModificado: "11:21:54 - 02/05/2025",
-    modificadoPor: "Julieta",
-  },
-  {
-    usuario: "Docente T. H.",
-    vehiculo: "Motocicleta",
-    tarifa: "3,00",
-    fechaModificado: "08:24:19 - 24/04/2025",
-    modificadoPor: "Julieta",
-  },
-  {
-    usuario: "Docente D. E.",
-    vehiculo: "Automóvil",
-    tarifa: "3.00",
-    modificadoPor: "Julieta",
-    fechaModificado: "15:16:03 - 15/04/2025",
-  },
-];
+import { getTarifasHistorial } from "../services/tarifas.service";
 
 const TarifasHistoPage = () => {
-  const [tarifas] = useState<Array<Tarifa>>([])
-  const [filteredData, setFilteredData] = useState(tarifasData);
+  const [tarifas, setTarifas] = useState<Array<Tarifa>>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTarifas = async () => {
+    try {
+      setLoading(true);
+      const response = await getTarifasHistorial();
+      if (response.data) {
+        setTarifas(response.data);
+      } else {
+        setError("No se pudieron cargar las tarifas");
+      }
+    } catch (error) {
+      console.error("Error al cargar tarifas:", error);
+      setError("Error al cargar el historial de tarifas");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTarifas();
+  }, []);
 
   return (
     <section className="tarifasHistorial__container">
       <h2 className="tarifas__title">HISTORIAL TARIFAS REGISTRADAS</h2>
 
-      <FilterTarifas data={tarifas} onFilter={() => setFilteredData(filteredData)}/>
-      <TarifasTable data={tarifas} fullView={true}/>
+      {loading ? (
+        <div className="loading-message">Cargando historial de tarifas...</div>
+      ) : error ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <FilterTarifas initialData={tarifas} />
+      )}
     </section>
   );
 };
