@@ -8,6 +8,7 @@ import {
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
+import { CancelModal, ErrorModal, SuccessModal } from "./components/Modal/Modal";
 import api from "../../api/axios";
 
 const User = () => {
@@ -18,11 +19,22 @@ const User = () => {
     const [assignedSpace, setAssignedSpace] = useState<string | null>(null);
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const vehicleEditRef = useRef<HTMLInputElement>(null);
+
+    const [formData, setFormData] = useState({
+        ci: "",
+        nombre: "",
+        apellido: "",
+        correo: "",
+        nroCelular: "",
+        tipo: "",
+        password: "",
+    });
 
     const handleAssignedSpaceChange = (space: string | null) => {
         setAssignedSpace(space);
@@ -77,6 +89,7 @@ const User = () => {
         setUserPhoto(null);
         setVehiculos([]);
         setAssignedSpace(null);
+        setFormErrors;
 
         try {
             await clearVehiculos();
@@ -93,16 +106,6 @@ const User = () => {
             console.error("Error al eliminar vehículo:", error);
         }
     };
-
-    const [formData, setFormData] = useState({
-        ci: "",
-        nombre: "",
-        apellido: "",
-        correo: "",
-        nroCelular: "",
-        tipo: "",
-        password: "",
-    });
 
     const handleFormChange = (field: string, value: string) => {
         setFormData((prevData) => ({
@@ -177,6 +180,7 @@ const User = () => {
             console.log("Usuario registrado:", response.data);
             await clearVehiculos();
             await resetForm();
+            setShowSuccessModal(true);
 
         } catch (error: any) {
             if (error.response) {
@@ -258,39 +262,17 @@ const User = () => {
             </div>
 
             {showCancelModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <p>¿Estás seguro de cancelar?</p>
-                        <div className="modal-buttons">
-                            <button onClick={closeModal} className="cancel">
-                                No
-                            </button>
-                            <button onClick={confirmCancel} className="confirm">
-                                Sí
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <CancelModal onClose={closeModal} onConfirm={confirmCancel} />
             )}
 
             {showErrorModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <p>
-                            Ocurrió un error al guardar los datos. Por favor,
-                            intente nuevamente.
-                        </p>
-                        <div className="modal-buttons">
-                            <button
-                                onClick={() => setShowErrorModal(false)}
-                                className="confirm"
-                            >
-                                Aceptar
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ErrorModal onClose={() => setShowErrorModal(false)} />
             )}
+
+            {showSuccessModal && (
+                <SuccessModal onClose={() => setShowSuccessModal(false)} />
+            )
+            }
         </section>
     );
 };
