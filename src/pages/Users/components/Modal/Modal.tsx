@@ -14,6 +14,11 @@ interface SuccessModalProps {
     onClose: () => void;
 }
 
+interface GeneralErrorModalProps {
+    message: string;
+    onClose: () => void;
+}
+
 const CancelModal: React.FC<CancelModalProps> = ({ onClose, onConfirm }) => (
     <div className="modal-overlay">
         <div className="modal-content">
@@ -48,4 +53,17 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose }) => (
     </div>
 );
 
-export { CancelModal, ErrorModal, SuccessModal };
+const GeneralErrorModal: React.FC<GeneralErrorModalProps> = ({ message, onClose }) => {
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <p>{message}</p>
+                <div className="modal-buttons">
+                    <button onClick={onClose} className="confirm"> Cerrar </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export { CancelModal, ErrorModal, SuccessModal, GeneralErrorModal };

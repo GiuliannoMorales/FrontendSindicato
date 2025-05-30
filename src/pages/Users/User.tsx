@@ -8,7 +8,7 @@ import {
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
-import { CancelModal, ErrorModal, SuccessModal } from "./components/Modal/Modal";
+import { CancelModal, ErrorModal, GeneralErrorModal, SuccessModal } from "./components/Modal/Modal";
 import api from "../../api/axios";
 
 const User = () => {
@@ -21,6 +21,8 @@ const User = () => {
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+    const [generalError, setGeneralError] = useState<string | null>(null);
+    const [showGeneralErrorModal, setShowGeneralErrorModal] = useState(false);
     const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
@@ -193,10 +195,14 @@ const User = () => {
                     error.response.data.errors.forEach((err: any) => {
                         const field = err.field ? err.field.replace("cliente.", "") : "unknown";
                         errors[field] = err.message || "Error desconocido";
+                        if (!err.field) {
+                            setGeneralError(err.message || "Error desconocido");
+                            setShowGeneralErrorModal(true);
+                        }
                         console.error(`Campo: ${err.field}, Mensaje: ${err.message}`);
                     });
                     setFormErrors(errors);
-                }else {
+                } else {
                     setShowErrorModal(true);
                 }
             } else {
@@ -274,6 +280,10 @@ const User = () => {
                 <SuccessModal onClose={() => setShowSuccessModal(false)} />
             )
             }
+
+            {showGeneralErrorModal && generalError && (
+                <GeneralErrorModal message={generalError} onClose={() => setShowGeneralErrorModal(false)} />
+            )}
         </section>
     );
 };
