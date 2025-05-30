@@ -80,7 +80,7 @@ const VistaUsuario: React.FC = () => {
     const obtenerTarifa = async () => {
       try {
         const resTarifa = await fetch(
-          "https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente"
+          `https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente?tipoCliente=${cliente.tipo}&tipoVehiculo=${vehiculos[0].tipo}`
         );
         const dataTarifa = await resTarifa.json();
 

@@ -98,3 +98,9 @@ main {
 	background-color: #6D88A5;
 	color: white;
 }
+
+.sidebar__icon {
+  width: 20px;
+  height: 30px;
+  margin-right: 8px;
+}
