@@ -43,6 +43,7 @@ export default function Layout() {
               Tarifas
             </div>
             <div>{groupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
+  
           </div>
 
           {groupOpen ? (
