@@ -1,6 +1,7 @@
 .filtros-tarifas {
 	background-color: #f8f9fa;
 	padding: 20px;
+	margin-inline: 10px;
 	border-radius: 8px;
 	margin-bottom: 20px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -40,6 +41,7 @@
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	position: relative;
 }
 
 .filtros-tarifas__separador {
@@ -67,6 +69,11 @@
 	align-items: center;
 }
 
+.filtros-tarifas__boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .filtros-tarifas__boton:hover {
 	background-color: #0056b3;
 }
@@ -77,6 +84,19 @@
 
 .filtros-tarifas__boton--limpiar:hover {
 	background-color: #5a6268;
+}
+
+.input-error {
+  border-color: #ff4444;
+  box-shadow: 0 0 0 1px #ff4444;
+}
+
+.errorFilter-message {
+  color: #ff4444;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
 }
 
 /* Responsive */

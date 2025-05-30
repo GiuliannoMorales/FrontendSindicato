@@ -6,3 +6,9 @@
   margin-top: 20px;
   color: #6c757d;
 }
+
+.tarifas__tablecontainer{
+	/* width: 65%; */
+	overflow-y: auto;
+	margin: 0 auto;
+}

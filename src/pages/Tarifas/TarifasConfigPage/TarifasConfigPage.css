@@ -30,6 +30,7 @@
   h3 {
     justify-self: center;
   }
+  width: auto;
 }
 
 .tarifas__formRow {
@@ -99,45 +100,6 @@
   border-right: 1px solid #000000;
 }
 
-/* Estilos responsivos */
-/* @media (max-width: 768px) {
-  .tarifas__table {
-    display: block;
-  }
-
-  .tarifas__table thead {
-    display: none;
-  }
-
-  .tarifas__table tbody tr {
-    display: block;
-    margin-bottom: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-  }
-
-  .tarifas__table tbody td {
-    display: block;
-    text-align: right;
-    padding-left: 50%;
-    position: relative;
-  }
-
-  .tarifas__table tbody td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 15px;
-    width: 45%;
-    padding-right: 10px;
-    font-weight: 600;
-    text-align: left;
-  }
-}
-
-.borde-derecho {
-  border-right: 1px solid #000000;
-} */
-
 .tarifas__button {
   border-radius: 5px;
   background: #6d88a5;
@@ -166,14 +128,36 @@
     padding-inline: 28px;
   }
 
+  .tarifas__input {
+    margin: 0;
+  }
+
   .tarifas__configContainer {
     display: block;
+    width: 100%;
   }
 
   .tarifas__buttonsContainer {
     display: flex;
-    gap: 36px;
+    gap: 20px;
     padding-block: 24px;
     justify-content: center;
+  }
+}
+
+@media (max-width: 375px) {
+  .tarifas__buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-block: 24px;
+    justify-content: center;
+  }
+
+  .tarifas__formRow{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
   }
 }

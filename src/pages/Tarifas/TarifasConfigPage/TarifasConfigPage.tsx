@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import type { Tarifa } from "../models/TarifasModel";
 import { NavLink, useNavigate } from "react-router-dom";
 
+const MONTO_MAX_TARIFA = 200;
+
 const vehiclesTypes = ["Auto", "Moto"];
 
 const clientsTypes = [
@@ -153,6 +155,10 @@ const TarifasPage = () => {
                   min: {
                     value: 0,
                     message: "La tarifa no puede ser negativa",
+                  },
+                  max: {
+                    value: MONTO_MAX_TARIFA,
+                    message: `La tarifa no puede ser mayor a ${MONTO_MAX_TARIFA} Bs`,
                   },
                   validate: (value) =>
                     value > 0 || "La tarifa debe ser mayor que cero",
