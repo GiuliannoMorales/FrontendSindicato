@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ResulCI.css';
 
+interface Cliente {
+  id: number;
+  nombre: string;
+  apellido: string;
+  ci: string;
+  tipo: string;
+}
+
 const ResulCI = () => {
   const [ci, setCi] = useState('');
-  const [cliente, setCliente] = useState<any>(null);
+  const [cliente, setCliente] = useState<Cliente | null>(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -13,8 +21,8 @@ const ResulCI = () => {
       setError('');
       const res = await fetch('https://backendproyectoparqueoumss.onrender.com/api/cliente/activos');
       const data = await res.json();
-      const clientes = data.data;
-      const encontrado = clientes.find((c: any) => c.ci === ci);
+      const clientes: Cliente[] = data.data;
+      const encontrado = clientes.find((c) => c.ci === ci);
 
       if (encontrado) {
         setCliente(encontrado);
@@ -28,11 +36,16 @@ const ResulCI = () => {
     }
   };
 
-  const getNombreCompleto = (cliente: any): string => {
+  const getNombreCompleto = (cliente: Cliente): string => {
     return `${cliente.nombre ?? ''} ${cliente.apellido ?? ''}`.trim();
   };
 
   const irAVistaUsuario = () => {
+    if (!cliente) {
+      console.error("No se ha seleccionado un cliente válido");
+      return;
+    }
+
     navigate('/cobros/Formulario', { state: { cliente } });
   };
 

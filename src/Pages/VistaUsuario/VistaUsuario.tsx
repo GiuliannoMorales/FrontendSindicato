@@ -23,9 +23,9 @@ interface Tarifa {
   monto: number;
 }
 
-const VistaUsuario = () => {
+const VistaUsuario: React.FC = () => {
   const location = useLocation();
-  const cliente: Cliente | undefined = location.state?.cliente;
+  const cliente = location.state?.cliente as Cliente | undefined;
 
   const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
   const [tarifa, setTarifa] = useState<number>(0);
@@ -37,20 +37,24 @@ const VistaUsuario = () => {
   const idCajero = 'CAJERO_123'; // Simulado - reemplazar con ID real del cajero logueado
 
   if (!cliente) {
-    return <div>No se recibió información del cliente. Por favor vuelva a buscar el CI.</div>;
+    return <div>No se recibió información del cliente. Por favor, vuelva a buscar el CI.</div>;
   }
 
-  // Obtener vehículos y fecha de inicio de pago
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const resVehiculos = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/vehiculo/activos`);
+        const resVehiculos = await fetch('https://backendproyectoparqueoumss.onrender.com/api/vehiculo/activos');
         const dataVehiculos = await resVehiculos.json();
-        const vehiculosCliente = dataVehiculos.data.filter((v: Vehiculo) => v.idCliente === cliente.idCliente);
+
+        const vehiculosCliente: Vehiculo[] = dataVehiculos.data.filter(
+          (v: Vehiculo) => String(v.idCliente) === String(cliente.idCliente)
+        );
+
         setVehiculos(vehiculosCliente);
 
-        const resFecha = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo`);
+        const resFecha = await fetch('https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo');
         const dataFecha = await resFecha.json();
+
         setFechaInicioPago(dataFecha.data?.fecha || '');
       } catch (error) {
         console.error('Error al obtener vehículos o fecha:', error);
@@ -60,11 +64,10 @@ const VistaUsuario = () => {
     obtenerDatos();
   }, [cliente]);
 
-  // Obtener tarifa después de tener el vehículo
   useEffect(() => {
     const obtenerTarifa = async () => {
       try {
-        const resTarifa = await fetch(`https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente`);
+        const resTarifa = await fetch('https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente');
         const dataTarifa = await resTarifa.json();
 
         const tarifaFiltrada = dataTarifa.data.find(
@@ -150,9 +153,10 @@ const VistaUsuario = () => {
       }
 
       alert('Pago procesado exitosamente');
-    } catch (error: any) {
-      console.error(error);
-      alert(`Error: ${error.message}`);
+    } catch (error) {
+      const err = error as Error;
+      console.error(err);
+      alert(`Error: ${err.message}`);
     }
   };
 
@@ -164,78 +168,79 @@ const VistaUsuario = () => {
 
   const montoTotal = pagos.length * tarifa;
 
-  return (
-    <div>
-      <div>
-        <h1>REALIZAR COBRO</h1>
+ return (
+  <div>
+    <h1>REALIZAR COBRO</h1>
+
+    <div className="info-container">
+      <div className="info-left">
+        <ul className="info-list">
+          <li><span className="info-label">Nombre:</span> {cliente.nombre} {cliente.apellido}</li>
+          <li><span className="info-label">Tipo de Usuario:</span> {cliente.tipo}</li>
+        </ul>
       </div>
 
-      <div>
-        <div className="info-container">
-          <ul className="info-list">
-            <li><span className="info-label">Nombre:</span> {cliente.nombre} {cliente.apellido}</li>
-            <li><span className="info-label">Tipo de Usuario:</span> {cliente.tipo}</li>
-          </ul>
-
-          <ul className="info-list">
-            <li><span className="info-label">Tipo de Vehículo:</span> {vehiculos[0]?.tipo || 'Sin vehículo'}</li>
-          </ul>
-        </div>
-
-        <h3 className='res'>1. Cantidad de meses o años a pagar</h3>
-        <p>
-          Meses:
-          <button onClick={() => cambiarValor('meses', -1)} className='bot'>-</button>
-          <input type="number" value={meses} readOnly />
-          <button onClick={() => cambiarValor('meses', 1)} className='bot'>+</button>
-        </p>
-
-        <p>
-          Años:
-          <button onClick={() => cambiarValor('anios', -1)} className='bot'>-</button>
-          <input type="number" value={anios} readOnly />
-          <button onClick={() => cambiarValor('anios', 1)} className='bot'>+</button>
-        </p>
-
-        <h3 className='res'>2. Detalles del Pago</h3>
-
-        <div className="contenedor-pago">
-          <table>
-            <thead>
-              <tr className="titul">
-                <th>Vehículo</th>
-                <th>Mes</th>
-                <th>Tarifa</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pagos.map((pago, index) => (
-                <tr key={index}>
-                  <td>{pago.vehiculo}</td>
-                  <td>{pago.mes}</td>
-                  <td>{pago.tarifa}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="info-pago">
-            <p><strong>Monto Total:</strong> {montoTotal} Bs.</p>
-            <p><strong>Fecha de Inicio del Pago:</strong> {fechaInicioPago}</p>
-            <button className="boton" onClick={() => setMostrarModal(true)}>
-              CONFIRMAR COBRO
-            </button>
-          </div>
-        </div>
+      <div className="info-right">
+        <ul className="info-list">
+          <li><span className="info-label">Tipo de Vehículo:</span> {vehiculos[0]?.tipo || 'Sin vehículo'}</li>
+        </ul>
       </div>
-
-      <Modal
-        visible={mostrarModal}
-        onClose={() => setMostrarModal(false)}
-        onConfirm={confirmarCobro}
-      />
     </div>
-  );
+
+    <h3 className='res'>1. Cantidad de meses o años a pagar</h3>
+    <p>
+      Meses:
+      <button onClick={() => cambiarValor('meses', -1)} className='bot'>-</button>
+      <input type="number" value={meses} readOnly />
+      <button onClick={() => cambiarValor('meses', 1)} className='bot'>+</button>
+    </p>
+
+    <p>
+      Años:
+      <button onClick={() => cambiarValor('anios', -1)} className='bot'>-</button>
+      <input type="number" value={anios} readOnly />
+      <button onClick={() => cambiarValor('anios', 1)} className='bot'>+</button>
+    </p>
+
+    <h3 className='res'>2. Detalles del Pago</h3>
+
+    <div className="contenedor-pago">
+      <table>
+        <thead>
+          <tr className="titul">
+            <th>Vehículo</th>
+            <th>Mes</th>
+            <th>Tarifa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pagos.map((pago, index) => (
+            <tr key={index}>
+              <td>{pago.vehiculo}</td>
+              <td>{pago.mes}</td>
+              <td>{pago.tarifa}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="info-pago">
+        <p><strong>Monto Total:</strong> {montoTotal} Bs.</p>
+        <p><strong>Fecha de Inicio del Pago:</strong> {fechaInicioPago}</p>
+        <button className="boton" onClick={() => setMostrarModal(true)}>
+          CONFIRMAR COBRO
+        </button>
+      </div>
+    </div>
+
+    <Modal
+      visible={mostrarModal}
+      onClose={() => setMostrarModal(false)}
+      onConfirm={confirmarCobro}
+    />
+  </div>
+);
+
 };
 
 export default VistaUsuario;
