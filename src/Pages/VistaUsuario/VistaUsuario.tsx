@@ -63,7 +63,15 @@ const VistaUsuario: React.FC = () => {
         setVehiculos(vehiculosCliente);
 
         const resFecha = await fetch(
-          "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo"
+          "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              idCajero: "55555555-5555-5555-5555-555555555555",
+              idParqueo: vehiculos[0].idParqueo,
+            }),
+            headers: { "Content-Type": "application/json" },
+          }
         );
         const dataFecha = await resFecha.json();
 
@@ -79,18 +87,14 @@ const VistaUsuario: React.FC = () => {
   useEffect(() => {
     const obtenerTarifa = async () => {
       try {
+        console.log("tipo cliente", cliente.tipo);
         const resTarifa = await fetch(
           `https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente?tipoCliente=${cliente.tipo}&tipoVehiculo=${vehiculos[0].tipo}`
         );
         const dataTarifa = await resTarifa.json();
-
-        const tarifaFiltrada = dataTarifa.data.find(
-          (t: Tarifa) =>
-            t.tipoCliente.toLowerCase() === cliente.tipo.toLowerCase() &&
-            t.tipoVehiculo.toLowerCase() === vehiculos[0]?.tipo.toLowerCase()
-        );
-
-        setTarifa(tarifaFiltrada?.monto || 0);
+       
+        console.log(dataTarifa.data)
+        setTarifa(dataTarifa.data.monto);
       } catch (error) {
         console.error("Error al obtener tarifa:", error);
       }
@@ -252,7 +256,7 @@ const VistaUsuario: React.FC = () => {
               <tr key={index}>
                 <td>{pago.vehiculo}</td>
                 <td>{pago.mes}</td>
-                <td>{pago.tarifa}</td>
+                <td>{tarifa}</td>
               </tr>
             ))}
           </tbody>

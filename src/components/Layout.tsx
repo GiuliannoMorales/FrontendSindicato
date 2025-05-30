@@ -86,17 +86,17 @@ export default function Layout() {
                 alt="Cobros"
                 className="sidebar__icon"
               />
-               <NavLink to="/tarifas/historial" className="sidebar__item-link">
+               <NavLink to="/cobros/realizarCobros" className="sidebar__item-link">
                  Realizar Cobros
                 </NavLink>
               </li>
-              <li className={`sidebar__item ${location.pathname === '/cobros/historial' ? 'sidebar__item-active' : ''}`}>
+              <li className={`sidebar__item ${location.pathname === '/cobros/realizarCobros' ? 'sidebar__item-active' : ''}`}>
               <img
                 src="/src/assets/icons/Time Machine.svg"
                 alt="Cobros"
                 className="sidebar__icon"
               />
-                 <NavLink to="/tarifas/historial" className="sidebar__item-link">
+                 <NavLink to="/cobros/realizarCobros" className="sidebar__item-link">
                   Ver Historial
                 </NavLink>
               </li>
