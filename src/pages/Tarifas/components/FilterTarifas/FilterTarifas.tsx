@@ -33,7 +33,6 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
     setError: setFormError,
     clearErrors,
     formState: { errors },
-    control,
   } = useForm<FiltrosForm>({
     defaultValues: {
       tipoVehiculo: "",
