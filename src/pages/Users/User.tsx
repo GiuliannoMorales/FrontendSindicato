@@ -152,6 +152,7 @@ const User = () => {
             !nroCelular.trim() ||
             !tipo.trim() ||
             !password.trim() ||
+            !userPhoto ||
             (userType !== "Docente a tiempo horario" && !assignedSpace) ||
             vehiculos.length === 0
         ) {
