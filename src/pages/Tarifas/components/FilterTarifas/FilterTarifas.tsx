@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   filtrarTarifas,
@@ -7,6 +7,7 @@ import {
 import type { Tarifa } from "../../models/TarifasModel";
 import "./FilterTarifas.css";
 import TarifasTable from "../TarifasTable/TarifasTable";
+import { getCurrentDate } from "../../../../utils/formatDate";
 
 interface FilterTarifasProps {
   initialData: Tarifa[];
@@ -24,7 +25,16 @@ interface FiltrosForm {
 }
 
 const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
-  const { register, handleSubmit, reset } = useForm<FiltrosForm>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setError: setFormError,
+    clearErrors,
+    formState: { errors },
+    control,
+  } = useForm<FiltrosForm>({
     defaultValues: {
       tipoVehiculo: "",
       tipoCliente: "",
@@ -38,7 +48,12 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
 
   const [filteredData, setFilteredData] = useState<Tarifa[]>(initialData);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorApi, setErrorApi] = useState<string | null>(null);
+
+  const montoMin = watch("montoMin");
+  const montoMax = watch("montoMax");
+  const fechaInicio = watch("fechaInicio");
+  const fechaFin = watch("fechaFin");
 
   // Obtener valores únicos de los datos iniciales
   const vehiculosUnicos = Array.from(
@@ -54,8 +69,16 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
   ).filter(Boolean);
 
   const onSubmit = async (formData: FiltrosForm) => {
+    if (
+      formData.montoMin &&
+      formData.montoMax &&
+      parseFloat(formData.montoMax) < parseFloat(formData.montoMin)
+    ) {
+      return;
+    }
+
     setIsLoading(true);
-    setError(null);
+    setErrorApi(null);
 
     try {
       const filtros: FiltroTarifas = {
@@ -79,7 +102,9 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
       }
     } catch (err) {
       console.error("Error filtering data:", err);
-      setError("Error al aplicar los filtros. Por favor intente nuevamente.");
+      setErrorApi(
+        "Error al aplicar los filtros. Por favor intente nuevamente."
+      );
       setFilteredData(initialData);
     } finally {
       setIsLoading(false);
@@ -89,8 +114,29 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
   const limpiarFiltros = () => {
     reset();
     setFilteredData(initialData);
-    setError(null);
+    setErrorApi(null);
   };
+
+  useEffect(() => {
+    // Validación de montos
+    if (montoMin && montoMax && parseFloat(montoMax) < parseFloat(montoMin)) {
+      setFormError("montoMax", {
+        type: "manual",
+        message: "El monto máximo no puede ser menor al mínimo",
+      });
+    } else {
+      clearErrors("montoMax");
+    }
+
+    if (fechaInicio && fechaFin && new Date(fechaFin) < new Date(fechaInicio)) {
+      setFormError("fechaFin", {
+        type: "manual",
+        message: "La fecha final no puede ser anterior a la inicial",
+      });
+    } else {
+      clearErrors("fechaFin");
+    }
+  }, [montoMin, montoMax, fechaInicio, fechaFin, setFormError, clearErrors]);
 
   return (
     <div className="filtros-tarifas-container">
@@ -140,14 +186,43 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
           <div className="filtros-tarifas__rango">
             <input
               type="date"
-              {...register("fechaInicio")}
-              className="filtros-tarifas__input"
+              {...register("fechaInicio", {
+                validate: (value) => {
+                  if (
+                    fechaFin &&
+                    value &&
+                    new Date(fechaFin) < new Date(value)
+                  ) {
+                    return "La fecha inicial no puede ser posterior a la final";
+                  }
+                  return true;
+                },
+              })}
+              className={`filtros-tarifas__input ${
+                errors.fechaInicio ? "input-error" : ""
+              }`}
+              max={fechaFin || undefined || getCurrentDate()}
             />
             <span className="filtros-tarifas__separador">a</span>
             <input
               type="date"
-              {...register("fechaFin")}
-              className="filtros-tarifas__input"
+              {...register("fechaFin", {
+                validate: (value) => {
+                  if (
+                    fechaInicio &&
+                    value &&
+                    new Date(value) < new Date(fechaInicio)
+                  ) {
+                    return "La fecha final no puede ser anterior a la inicial";
+                  }
+                  return true;
+                },
+              })}
+              className={`filtros-tarifas__input ${
+                errors.fechaFin ? "input-error" : ""
+              }`}
+              min={fechaInicio || undefined}
+              max={getCurrentDate()}
             />
           </div>
 
@@ -157,23 +232,70 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
           <div className="filtros-tarifas__rango">
             <input
               type="number"
-              {...register("montoMin")}
+              {...register("montoMin", {
+                min: {
+                  value: 0,
+                  message: "El monto mínimo no puede ser negativo",
+                },
+                valueAsNumber: true,
+              })}
               placeholder="Mínimo"
-              className="filtros-tarifas__input"
+              className={`filtros-tarifas__input ${
+                errors.montoMax ? "input-error" : ""
+              }`}
               step="0.01"
               min="0"
+              onKeyDown={(e) => {
+                // Previene la entrada de caracteres no numéricos
+                if (["e", "E", "+", "-"].includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <span className="filtros-tarifas__separador">a</span>
             <input
               type="number"
-              {...register("montoMax")}
+              {...register("montoMax", {
+                min: {
+                  value: 0,
+                  message: "El monto máximo no puede ser negativo",
+                },
+                validate: (value) => {
+                  if (
+                    montoMin &&
+                    value &&
+                    parseFloat(value) < parseFloat(montoMin)
+                  ) {
+                    return "El monto máximo no puede ser menor al mínimo";
+                  }
+                  return true;
+                },
+                valueAsNumber: true,
+              })}
               placeholder="Máximo"
-              className="filtros-tarifas__input"
+              className={`filtros-tarifas__input ${
+                errors.montoMax ? "input-error" : ""
+              }`}
               step="0.01"
               min="0"
+              onKeyDown={(e) => {
+                if (["e", "E", "+", "-"].includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </div>
         </div>
+        {(errors.fechaInicio || errors.fechaFin) && (
+          <span className="errorFilter-message">
+            {errors.fechaInicio?.message || errors.fechaFin?.message}
+          </span>
+        )}
+        {(errors.montoMin || errors.montoMax) && (
+          <span className="errorFilter-message">
+            {errors.montoMin?.message || errors.montoMax?.message}
+          </span>
+        )}
 
         <div className="filtros-tarifas__boton-container">
           <button
@@ -187,14 +309,14 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
           <button
             type="submit"
             className="filtros-tarifas__boton"
-            disabled={isLoading}
+            disabled={isLoading || Object.keys(errors).length > 0}
           >
             {isLoading ? "Filtrando..." : "Filtrar"}
           </button>
         </div>
       </form>
 
-      {error && <div className="filtros-tarifas__error">{error}</div>}
+      {errorApi && <div className="filtros-tarifas__error">{errorApi}</div>}
 
       <TarifasTable data={filteredData} fullView={true} />
     </div>
