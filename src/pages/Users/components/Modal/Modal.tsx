@@ -19,6 +19,11 @@ interface GeneralErrorModalProps {
     onClose: () => void;
 }
 
+interface VehicleModalProps {
+    message: string;
+    onClose: () => void;
+}
+
 const CancelModal: React.FC<CancelModalProps> = ({ onClose, onConfirm }) => (
     <div className="modal-overlay">
         <div className="modal-content">
@@ -66,4 +71,17 @@ const GeneralErrorModal: React.FC<GeneralErrorModalProps> = ({ message, onClose 
     );
 };
 
-export { CancelModal, ErrorModal, SuccessModal, GeneralErrorModal };
+const VehicleModal: React.FC<VehicleModalProps> = ({ message, onClose }) => {
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <p>{message}</p>
+                <div className="modal-buttons">
+                    <button onClick={onClose} className="confirm"> Cerrar </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export { CancelModal, ErrorModal, SuccessModal, GeneralErrorModal, VehicleModal };

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegistrarVehiculo.css";
 import { guardarVehiculo } from "../../bd/vehiculosBD";
+import { VehicleModal } from "../Users/components/Modal/Modal";
 
 const RegistrarVehiculo = () => {
     const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const RegistrarVehiculo = () => {
 
     const [delanteraPreview, setDelanteraPreview] = useState<string | null>(null);
     const [traseraPreview, setTraseraPreview] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const delanteraRef = useRef<HTMLInputElement>(null);
     const traseraRef = useRef<HTMLInputElement>(null);
@@ -60,7 +62,8 @@ const RegistrarVehiculo = () => {
             console.log("Vehículo guardado exitosamente en VehiculosDB");
             navigate("/registrar/usuario");
         } catch (error) {
-            console.log("Error al guardar el vehículo");
+            const errorStr = String(error);
+            setErrorMessage(errorStr);
         }
     };
 
@@ -156,6 +159,10 @@ const RegistrarVehiculo = () => {
                 <button type="button" className="registrarVehiculo__cancel-button" onClick={() => navigate("/registrar/usuario")}>CANCELAR</button>
                 <button type="button" className="registrarVehiculo__submit-button" onClick={handleSave}>GUARDAR</button>
             </div>
+
+            {errorMessage && (
+                <VehicleModal message={errorMessage} onClose={() => setErrorMessage(null)} />
+            )}
         </section>
     );
 };
