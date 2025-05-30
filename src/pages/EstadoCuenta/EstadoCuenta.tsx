@@ -15,6 +15,7 @@ const EstadoCuenta: React.FC = () => {
   const [saldoPendiente, setSaldoPendiente] = useState<number>(0);
   const [ultimaActualizacion, setUltimaActualizacion] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [errorFiltro, setErrorFiltro] = useState<string>("");
 
   const [estado, setEstado] = useState<string>("");
   const [fechaDe, setFechaDe] = useState<string>("");
@@ -131,6 +132,20 @@ const EstadoCuenta: React.FC = () => {
       });
   }, [placaSeleccionada]);
 
+  useEffect(() => {
+    if (fechaDe && fechaA) {
+      if (new Date(fechaA) < new Date(fechaDe)) {
+        setErrorFiltro(
+          "La fecha final no pueed ser anterior a la fecha inicial.",
+        );
+      } else {
+        setErrorFiltro("");
+      }
+    } else {
+      setErrorFiltro("");
+    }
+  }, [fechaDe, fechaA]);
+
   const datosFiltrados = Array.isArray(detallesMes)
     ? detallesMes.filter((d) => {
       const estadoOk = estado === "" ||
@@ -238,6 +253,11 @@ const EstadoCuenta: React.FC = () => {
           </button>
         </div>
       </section>
+      {errorFiltro && (
+        <div className="error">
+          {errorFiltro}
+        </div>
+      )}
 
       <div className="contenedorTabla">
         <table className="tablaEstado">
