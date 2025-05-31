@@ -50,9 +50,14 @@ export const guardarVehiculo = async (vehiculo: {
         console.log("Vehículo guardado en VehiculosDB");
         resolve(true);
       };
-      addRequest.onerror = () => {
-        console.error("Error al guardar el vehículo");
-        reject("Error al guardar el vehículo");
+      addRequest.onerror = (event) => {
+        const error = (event.target as IDBRequest).error;
+        if (error?.name === "ConstraintError") {
+          reject("Ya existe un vehículo añadido con esa placa.");
+        } else {
+          console.error("Error desconocido al guardar el vehículo:", error);
+          reject("Error al guardar el vehículo.");
+        }
       };
     };
 

@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./User.css";
-import {
-    clearVehiculos,
-    deleteVehiculoById,
-    getAllVehiculos,
-} from "./services/vehiculosService";
+import { clearVehiculos, deleteVehiculoById, getAllVehiculos, } from "./services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
+import { CancelModal, ErrorModal, GeneralErrorModal, SuccessModal } from "./components/Modal/Modal";
 import api from "../../api/axios";
 
 const User = () => {
@@ -18,11 +15,50 @@ const User = () => {
     const [assignedSpace, setAssignedSpace] = useState<string | null>(null);
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+    const [generalError, setGeneralError] = useState<string | null>(null);
+    const [showGeneralErrorModal, setShowGeneralErrorModal] = useState(false);
     const navigate = useNavigate();
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const vehicleEditRef = useRef<HTMLInputElement>(null);
+    const isInitialMount = useRef(true);
+
+    const [formData, setFormData] = useState({
+        ci: "",
+        nombre: "",
+        apellido: "",
+        correo: "",
+        nroCelular: "",
+        tipo: "",
+        password: "",
+    });
+    // Restaura datos guardados al montar el componente
+    useEffect(() => {
+        const savedFormData = sessionStorage.getItem("formData");
+        const savedUserPhoto = sessionStorage.getItem("userPhoto");
+        const savedUserType = sessionStorage.getItem("userType");
+        const savedAssignedSpace = sessionStorage.getItem("assignedSpace");
+
+        if (savedFormData) setFormData(JSON.parse(savedFormData));
+        if (savedUserPhoto) setUserPhoto(savedUserPhoto || null);
+        if (savedUserType) setUserType(savedUserType);
+        if (savedAssignedSpace) setAssignedSpace(savedAssignedSpace || null);
+    }, []);
+
+    // Guardar datos al cambiar el estado del formulario
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
+        sessionStorage.setItem("formData", JSON.stringify(formData));
+        sessionStorage.setItem("userPhoto", userPhoto || "");
+        sessionStorage.setItem("userType", userType);
+        sessionStorage.setItem("assignedSpace", assignedSpace || "");
+    }, [formData, userPhoto, userType, assignedSpace]);
 
     const handleAssignedSpaceChange = (space: string | null) => {
         setAssignedSpace(space);
@@ -75,8 +111,10 @@ const User = () => {
             password: "",
         });
         setUserPhoto(null);
+        setUserType("");
         setVehiculos([]);
         setAssignedSpace(null);
+        setFormErrors({});
 
         try {
             await clearVehiculos();
@@ -93,16 +131,6 @@ const User = () => {
             console.error("Error al eliminar vehículo:", error);
         }
     };
-
-    const [formData, setFormData] = useState({
-        ci: "",
-        nombre: "",
-        apellido: "",
-        correo: "",
-        nroCelular: "",
-        tipo: "",
-        password: "",
-    });
 
     const handleFormChange = (field: string, value: string) => {
         setFormData((prevData) => ({
@@ -149,6 +177,7 @@ const User = () => {
             !nroCelular.trim() ||
             !tipo.trim() ||
             !password.trim() ||
+            !userPhoto ||
             (userType !== "Docente a tiempo horario" && !assignedSpace) ||
             vehiculos.length === 0
         ) {
@@ -177,6 +206,7 @@ const User = () => {
             console.log("Usuario registrado:", response.data);
             await clearVehiculos();
             await resetForm();
+            setShowSuccessModal(true);
 
         } catch (error: any) {
             if (error.response) {
@@ -188,10 +218,14 @@ const User = () => {
                     error.response.data.errors.forEach((err: any) => {
                         const field = err.field ? err.field.replace("cliente.", "") : "unknown";
                         errors[field] = err.message || "Error desconocido";
+                        if (!err.field) {
+                            setGeneralError(err.message || "Error desconocido");
+                            setShowGeneralErrorModal(true);
+                        }
                         console.error(`Campo: ${err.field}, Mensaje: ${err.message}`);
                     });
                     setFormErrors(errors);
-                }else {
+                } else {
                     setShowErrorModal(true);
                 }
             } else {
@@ -258,38 +292,20 @@ const User = () => {
             </div>
 
             {showCancelModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <p>¿Estás seguro de cancelar?</p>
-                        <div className="modal-buttons">
-                            <button onClick={closeModal} className="cancel">
-                                No
-                            </button>
-                            <button onClick={confirmCancel} className="confirm">
-                                Sí
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <CancelModal onClose={closeModal} onConfirm={confirmCancel} />
             )}
 
             {showErrorModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <p>
-                            Ocurrió un error al guardar los datos. Por favor,
-                            intente nuevamente.
-                        </p>
-                        <div className="modal-buttons">
-                            <button
-                                onClick={() => setShowErrorModal(false)}
-                                className="confirm"
-                            >
-                                Aceptar
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ErrorModal onClose={() => setShowErrorModal(false)} />
+            )}
+
+            {showSuccessModal && (
+                <SuccessModal onClose={() => setShowSuccessModal(false)} />
+            )
+            }
+
+            {showGeneralErrorModal && generalError && (
+                <GeneralErrorModal message={generalError} onClose={() => setShowGeneralErrorModal(false)} />
             )}
         </section>
     );

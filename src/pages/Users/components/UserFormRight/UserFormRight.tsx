@@ -1,22 +1,10 @@
-import React, { useEffect, useState, type RefObject } from "react";
+import React, { useEffect, useState } from "react";
 import { EditIcon } from "../../../../assets/icons/EditIcon";
 import { TrashIcon } from "../../../../assets/icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
 import "./UserFormRight.css";
 import api from "../../../../api/axios";
-
-interface UserFormRightProps {
-    userPhotoPreview: string | null;
-    userPhotoRef: RefObject<HTMLInputElement | null>;
-    handleUserPhotoClick: () => void;
-    handleUserPhotoChange: (base64: string) => void;
-    vehiculos: any[];
-    vehicleEditRef: RefObject<HTMLInputElement | null>;
-    handleDeleteVehicle: (id: number) => void;
-    userType: string;
-    assignedSpace: string | null;
-    onAssignedSpaceChange: (space: string | null) => void;
-}
+import type { UserFormRightProps } from "../../models/UserModel";
 
 const UserFormRight: React.FC<UserFormRightProps> = ({
     userPhotoPreview,
