@@ -111,6 +111,7 @@ const User = () => {
             password: "",
         });
         setUserPhoto(null);
+        setUserType("");
         setVehiculos([]);
         setAssignedSpace(null);
         setFormErrors({});
