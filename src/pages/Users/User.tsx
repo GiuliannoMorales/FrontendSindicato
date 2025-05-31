@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./User.css";
-import {
-    clearVehiculos,
-    deleteVehiculoById,
-    getAllVehiculos,
-} from "./services/vehiculosService";
+import { clearVehiculos, deleteVehiculoById, getAllVehiculos, } from "./services/vehiculosService";
 import UserFormLeft from "./components/UserFormLeft/UserFormLeft";
 import UserFormRight from "./components/UserFormRight/UserFormRight";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +23,7 @@ const User = () => {
 
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const vehicleEditRef = useRef<HTMLInputElement>(null);
+    const isInitialMount = useRef(true);
 
     const [formData, setFormData] = useState({
         ci: "",
@@ -37,6 +34,31 @@ const User = () => {
         tipo: "",
         password: "",
     });
+    // Restaura datos guardados al montar el componente
+    useEffect(() => {
+        const savedFormData = sessionStorage.getItem("formData");
+        const savedUserPhoto = sessionStorage.getItem("userPhoto");
+        const savedUserType = sessionStorage.getItem("userType");
+        const savedAssignedSpace = sessionStorage.getItem("assignedSpace");
+
+        if (savedFormData) setFormData(JSON.parse(savedFormData));
+        if (savedUserPhoto) setUserPhoto(savedUserPhoto || null);
+        if (savedUserType) setUserType(savedUserType);
+        if (savedAssignedSpace) setAssignedSpace(savedAssignedSpace || null);
+    }, []);
+
+    // Guardar datos al cambiar el estado del formulario
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
+        sessionStorage.setItem("formData", JSON.stringify(formData));
+        sessionStorage.setItem("userPhoto", userPhoto || "");
+        sessionStorage.setItem("userType", userType);
+        sessionStorage.setItem("assignedSpace", assignedSpace || "");
+    }, [formData, userPhoto, userType, assignedSpace]);
 
     const handleAssignedSpaceChange = (space: string | null) => {
         setAssignedSpace(space);
@@ -91,7 +113,7 @@ const User = () => {
         setUserPhoto(null);
         setVehiculos([]);
         setAssignedSpace(null);
-        setFormErrors;
+        setFormErrors({});
 
         try {
             await clearVehiculos();
