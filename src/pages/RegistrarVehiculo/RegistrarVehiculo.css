@@ -121,8 +121,15 @@
     color: white;
 }
 
-/* Parte responsive */
+.registrarVehiculo__input-group .vehicle__error-message {
+    position: absolute;
+    left: 575px;
+    margin-top: 58px;
+    color: red;
+    font-size: 12px;
+}
 
+/* Parte responsive */
 @media (max-width: 768px) {
     .registrarVehiculo__form {
         flex-direction: column;
@@ -148,5 +155,12 @@
     .registrarVehiculo__photo-preview {
         width: 120px;
         height: 120px;
+    }
+
+    .registrarVehiculo__input-group .vehicle__error-message {
+        left: 270px;
+        margin-top: 58px;
+        color: red;
+        font-size: 12px;
     }
 }

@@ -38,6 +38,10 @@ const RegistrarVehiculo = () => {
     };
 
     const handleSave = async () => {
+        if (!/^\d{3,4}[A-Z]{3}$/.test(formData.placa)) {
+            setErrorMessage("Formato inválido en la placa. Debe tener 3 o 4 números seguidos de 3 letras mayúsculas.");
+            return;
+        }
         if (
             !formData.tipo ||
             !formData.placa ||
@@ -88,12 +92,14 @@ const RegistrarVehiculo = () => {
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Placa: <span className="registrarVehiculo__required">*</span></label>
-                            <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} maxLength={10}
-                                title="La placa no debe superar los 10 caracteres" required />
+                            <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} maxLength={10} required />
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Marca: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="marca" value={formData.marca} onChange={handleInputChange} required />
+                            {formData.marca !== "" && !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.marca) && (
+                                <p className="vehicle__error-message">Formato inválido.</p>
+                            )}
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Modelo: <span className="registrarVehiculo__required">*</span></label>
@@ -102,6 +108,9 @@ const RegistrarVehiculo = () => {
                         <div className="registrarVehiculo__input-group">
                             <label>Color: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="color" value={formData.color} onChange={handleInputChange} required />
+                            {formData.color !== "" && !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.color) && (
+                                <p className="vehicle__error-message">Formato inválido.</p>
+                            )}
                         </div>
                     </fieldset>
                 </div>
