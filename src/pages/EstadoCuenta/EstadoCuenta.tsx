@@ -266,7 +266,7 @@ const EstadoCuenta: React.FC = () => {
               <th>Mes / Año</th>
               <th>Estado</th>
               <th>Monto</th>
-              <th>Fecha Pago</th>
+              <th>Fecha Pago (Y-m-d)</th>
             </tr>
           </thead>
           <tbody>
@@ -282,9 +282,29 @@ const EstadoCuenta: React.FC = () => {
                 datosFiltrados.map((fila) => (
                   <tr key={fila.periodo}>
                     <td className="colLinea">{fila.periodo}</td>
-                    <td className="colLinea">{fila.estado}</td>
+                    <td
+                      className={`colLinea ${
+                        fila.estado === "Pagado"
+                          ? "estado-pagado"
+                          : fila.estado === "Pendiente"
+                          ? "estado-pendiente"
+                          : ""
+                      }`}
+                    >
+                      {fila.estado}
+                    </td>
                     <td className="center">{fila.monto}</td>
-                    <td className="center">{fila.fechaPago}</td>
+                    <td
+                      className={`center ${
+                        !fila.fechaPago || fila.fechaPago.trim() === ""
+                          ? "fecha-vacia"
+                          : ""
+                      }`}
+                    >
+                      {fila.fechaPago && fila.fechaPago.trim() !== ""
+                        ? fila.fechaPago.split(" ")[0]
+                        : "Sin pago"}
+                    </td>
                   </tr>
                 ))
               )}
