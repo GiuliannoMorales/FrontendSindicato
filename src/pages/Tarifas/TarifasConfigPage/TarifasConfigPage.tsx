@@ -2,7 +2,7 @@ import { useForm, type FieldError } from "react-hook-form";
 import TarifasTable from "../components/TarifasTable/TarifasTable";
 import "./TarifasConfigPage.css";
 import toast, { Toaster } from "react-hot-toast";
-import { createTarifa, getTarifasHistorial } from "../services/tarifas.service";
+import { createTarifa, getLastTarifas } from "../services/tarifas.service";
 import { useEffect, useState } from "react";
 import type { Tarifa } from "../models/TarifasModel";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -59,26 +59,34 @@ const TarifasPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
-    console.log("Datos del formulario:", data);
     try {
-      const response = await createTarifa({
+      const nuevaTarifa = await createTarifa({
         ...data,
         idAdministrador: "11111111-1111-1111-1111-111111111111",
       });
-      setTarifas([
+
+      setTarifas((prev) => [
         {
-          tipoCliente: response.data.tipoCliente,
-          tipoVehiculo: response.data.tipoVehiculo,
-          monto: response.data.monto,
-          fechaInicio: response.data.fechaInicio,
-          nombreCompleto: response.data.nombreCompleto,
+          tipoCliente: nuevaTarifa.tipoCliente,
+          tipoVehiculo: nuevaTarifa.tipoVehiculo,
+          monto: nuevaTarifa.monto,
+          fechaInicio: nuevaTarifa.fechaInicio,
+          nombreCompleto: nuevaTarifa.nombreCompleto,
         },
-        ...tarifas,
+        ...prev,
       ]);
+
       reset();
-      toast.success("Tarifa actualizada correctamente.");
+      toast.success("Tarifa creada correctamente.");
     } catch (error) {
-      toast.error("Ocurrio un error!");
+      console.error("Error al crear tarifa:", error);
+
+      // Mostrar mensaje de error específico
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Error desconocido al crear tarifa");
+      }
     }
   };
 
@@ -89,7 +97,7 @@ const TarifasPage = () => {
 
   const fetchTarifas = async () => {
     try {
-      const response = await getTarifasHistorial();
+      const response = await getLastTarifas();
       setTarifas(response.data?.slice(0, 5) || []);
     } catch (error) {
       console.error("error", error);
@@ -198,7 +206,20 @@ const TarifasPage = () => {
           GUARDAR
         </button>
       </div>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          success: {
+            style: {
+              background: "#E7F6E6",
+            },
+          },
+          error: {
+            style: {
+              background: "#FDB3BC",
+            },
+          },
+        }}
+      />
     </section>
   );
 };

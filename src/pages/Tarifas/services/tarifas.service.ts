@@ -2,6 +2,8 @@ import type { AxiosPromise } from "axios"
 import api from "../../../api/axios"
 // import type { BackendResponse } from "../../../types/backendResponse"
 import type { NewTarifa, Tarifa } from "../models/TarifasModel"
+import type { ErrorResponse } from "../../../types/backendResponse";
+import axios from "axios";
 
 export interface FiltroTarifas {
   tipoVehiculo?: string;
@@ -13,14 +15,20 @@ export interface FiltroTarifas {
   modificadoPor?: string;
 }
 
-export const createTarifa = (tarifaData : NewTarifa) : AxiosPromise<Tarifa> => {
-    try {
-        return api.post('tarifa', tarifaData)
-    } catch (error) {
-        console.error('error al crear tarifas', error)
-        throw error
+export const createTarifa = async (tarifaData: NewTarifa): Promise<Tarifa> => {
+  try {
+    const response = await api.post<Tarifa>('tarifa', tarifaData);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Extraer el mensaje de error del backend
+      const errorData = error.response.data as ErrorResponse;
+      const errorMessage = errorData.errors?.[0]?.message || errorData.message || "Error al crear tarifa";
+      throw new Error(errorMessage);
     }
-}
+    throw new Error("Error desconocido al crear tarifa");
+  }
+};
 
 export const getTarifasHistorial = async (): AxiosPromise<Array<Tarifa>> => {
   try {
@@ -45,3 +53,7 @@ export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<Tarifa[]> =
 
   return api.get(`/historial-tarifas/filtrar?${params.toString()}`);
 };
+
+export const getLastTarifas = () : AxiosPromise<Tarifa[]> => {
+  return api.get('/tarifa/vigentes')
+}
