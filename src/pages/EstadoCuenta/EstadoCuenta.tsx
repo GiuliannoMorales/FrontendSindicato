@@ -266,7 +266,7 @@ const EstadoCuenta: React.FC = () => {
               <th>Mes / Año</th>
               <th>Estado</th>
               <th>Monto</th>
-              <th>Fecha Pago (Y-m-d)</th>
+              <th title="Fecha Pago (Año-mes-dia)">Fecha Pago</th>
             </tr>
           </thead>
           <tbody>
