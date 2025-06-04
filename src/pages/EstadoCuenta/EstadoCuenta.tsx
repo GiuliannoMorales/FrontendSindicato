@@ -25,6 +25,11 @@ const EstadoCuenta: React.FC = () => {
   const [inputUsuario, setInputUsuario] = useState<string>("");
 
   useEffect(() => {
+    if (!inputUsuario) {
+      setVehiculos([]);
+      setError(null);
+      return;
+    }
     api.post<VehiculosResponse>(
       `reporte/cliente/vehiculo`,
       { id: inputUsuario },
@@ -130,13 +135,13 @@ const EstadoCuenta: React.FC = () => {
         setUltimaActualizacion("");
         setError(msg);
       });
-  }, [placaSeleccionada]);
+  }, [placaSeleccionada, inputUsuario]);
 
   useEffect(() => {
     if (fechaDe && fechaA) {
       if (new Date(fechaA) < new Date(fechaDe)) {
         setErrorFiltro(
-          "La fecha final no pueed ser anterior a la fecha inicial.",
+          "La fecha final no puede ser anterior a la fecha inicial.",
         );
       } else {
         setErrorFiltro("");
