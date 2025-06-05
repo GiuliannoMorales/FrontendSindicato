@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import "./VistaUsuario.css";
+import axios from "axios";
 
 interface Cliente {
   idCliente: string;
@@ -15,12 +16,7 @@ interface Vehiculo {
   tipo: string;
   placa: string;
   idCliente: string;
-}
-
-interface Tarifa {
-  tipoCliente: string;
-  tipoVehiculo: string;
-  monto: number;
+  idParqueo?: string;
 }
 
 const VistaUsuario: React.FC = () => {
@@ -34,7 +30,7 @@ const VistaUsuario: React.FC = () => {
   const [anios, setAnios] = useState<number>(0);
   const [mostrarModal, setMostrarModal] = useState<boolean>(false);
 
-  const idCajero = "CAJERO_123"; // Simulado - reemplazar con ID real del cajero logueado
+  const idCajero = "CAJERO_123";
 
   if (!cliente) {
     return (
@@ -47,35 +43,29 @@ const VistaUsuario: React.FC = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const resVehiculos = await fetch(
+        const resVehiculos = await axios.post(
           "https://backendproyectoparqueoumss.onrender.com/api/vehiculo/activos",
-          {
-            method: "POST",
-            body: JSON.stringify({ id: cliente.id }),
-            headers: { "Content-Type": "application/json" },
-          }
+          { id: cliente.id },
+          { headers: { "Content-Type": "application/json" } }
         );
-        const dataVehiculos = await resVehiculos.json();
-        const vehiculosCliente: Vehiculo[] = dataVehiculos.data.filter(
+
+        const vehiculosCliente: Vehiculo[] = resVehiculos.data.data.filter(
           (v: Vehiculo) => String(v.idCliente) === String(cliente.idCliente)
         );
-
         setVehiculos(vehiculosCliente);
 
-        const resFecha = await fetch(
-          "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo",
-          {
-            method: "POST",
-            body: JSON.stringify({
+        if (vehiculosCliente.length > 0) {
+          const resFecha = await axios.post(
+            "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo",
+            {
               idCajero: "55555555-5555-5555-5555-555555555555",
-              idParqueo: vehiculos[0].idParqueo,
-            }),
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        const dataFecha = await resFecha.json();
+              idParqueo: vehiculosCliente[0].idParqueo,
+            },
+            { headers: { "Content-Type": "application/json" } }
+          );
 
-        setFechaInicioPago(dataFecha.data?.fecha || "");
+          setFechaInicioPago(resFecha.data.data?.fecha || "");
+        }
       } catch (error) {
         console.error("Error al obtener vehículos o fecha:", error);
       }
@@ -84,17 +74,21 @@ const VistaUsuario: React.FC = () => {
     obtenerDatos();
   }, [cliente]);
 
+
   useEffect(() => {
     const obtenerTarifa = async () => {
       try {
-        console.log("tipo cliente", cliente.tipo);
-        const resTarifa = await fetch(
-          `https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente?tipoCliente=${cliente.tipo}&tipoVehiculo=${vehiculos[0].tipo}`
+        const resTarifa = await axios.get(
+          `https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente`,
+          {
+            params: {
+              tipoCliente: cliente.tipo,
+              tipoVehiculo: vehiculos[0].tipo,
+            },
+          }
         );
-        const dataTarifa = await resTarifa.json();
-       
-        console.log(dataTarifa.data)
-        setTarifa(dataTarifa.data.monto);
+
+        setTarifa(resTarifa.data.data.monto);
       } catch (error) {
         console.error("Error al obtener tarifa:", error);
       }
@@ -105,25 +99,66 @@ const VistaUsuario: React.FC = () => {
     }
   }, [vehiculos, cliente]);
 
-  const cambiarValor = (tipo: "meses" | "anios", delta: number) => {
-    if (tipo === "meses") {
-      setMeses((prev) => Math.max(0, prev + delta));
-    } else {
-      setAnios((prev) => Math.max(0, prev + delta));
+  const obtenerMesesPermitidos = (): number => {
+    if (!fechaInicioPago) return 0;
+
+    const inicio = new Date(fechaInicioPago);
+    const ahora = new Date();
+    inicio.setHours(0, 0, 0, 0);
+    ahora.setHours(0, 0, 0, 0);
+
+    if (inicio >= new Date(ahora.getFullYear(), ahora.getMonth(), 1)) {
+      return 0;
     }
+
+    const diffMeses =
+      (ahora.getFullYear() - inicio.getFullYear()) * 12 +
+      (ahora.getMonth() - inicio.getMonth());
+
+    return diffMeses;
   };
 
+ const cambiarValor = (tipo: "meses" | "anios", delta: number) => {
+  const totalPermitido = obtenerMesesPermitidos();
+  const totalActual = meses + anios * 12;
+
+  console.log("Ejecutando cambiarValor", tipo, delta);
+  console.log("Total permitido:", totalPermitido);
+  console.log("Total actual:", totalActual);
+
+  if (tipo === "meses") {
+    const nuevoMeses = meses + delta;
+    const nuevoTotal = nuevoMeses + anios * 12;
+    if (nuevoMeses >= 0 && nuevoTotal <= totalPermitido) {
+      setMeses(nuevoMeses);
+    }
+  }
+
+  if (tipo === "anios") {
+    const nuevoAnios = anios + delta;
+    const nuevoTotal = meses + nuevoAnios * 12;
+    if (nuevoAnios >= 0 && nuevoTotal <= totalPermitido) {
+      setAnios(nuevoAnios);
+    }
+  }
+};
+
+
   const generarMesesPago = (): string[] => {
+    if (!fechaInicioPago || isNaN(new Date(fechaInicioPago).getTime())) return [];
+
     const fecha = new Date(fechaInicioPago);
-    const totalMeses = meses + anios * 12;
+    const totalSolicitado = meses + anios * 12;
+    const maxMeses = obtenerMesesPermitidos();
+    const totalFinal = Math.min(totalSolicitado, maxMeses);
     const resultado: string[] = [];
 
-    for (let i = 0; i < totalMeses; i++) {
+    for (let i = 0; i < totalFinal; i++) {
       const nuevaFecha = new Date(fecha);
       nuevaFecha.setMonth(fecha.getMonth() + i);
       const anio = nuevaFecha.getFullYear();
       const mes = String(nuevaFecha.getMonth() + 1).padStart(2, "0");
-      resultado.push(`${anio}-${mes}`);
+      resultado.push(`${anio}-${mes}-01`);
     }
 
     return resultado;
@@ -150,6 +185,8 @@ const VistaUsuario: React.FC = () => {
         return;
       }
 
+      const montoTotal = mesesPago.length * tarifa;
+
       const payload = {
         idCliente: cliente.idCliente,
         idVehiculo: vehiculos[0].idVehiculo,
@@ -158,36 +195,38 @@ const VistaUsuario: React.FC = () => {
         idCajero,
       };
 
-      const response = await fetch(
+      const response = await axios.post(
         "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
+        payload,
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Error al procesar el pago.");
-      }
-
       alert("Pago procesado exitosamente");
-    } catch (error) {
-      const err = error as Error;
-      console.error(err);
-      alert(`Error: ${err.message}`);
+    } catch (error: any) {
+      console.error(error);
+      alert(`Error: ${error.response?.data?.message || error.message}`);
     }
   };
 
-  const pagos = Array.from({ length: meses + anios * 12 }, (_, i) => ({
-    vehiculo: `${vehiculos[0]?.tipo} - ${vehiculos[0]?.placa}`,
-    mes: `Mes ${i + 1}`,
-    tarifa: `${tarifa} Bs.`,
-  }));
+  // ⬇️ Esto se recalcula cada render
+  const pagos = generarMesesPago().map((fechaCompleta) => {
+    const [anio, mes] = fechaCompleta.split("-");
+    const fechaValida = new Date(`${anio}-${mes}-01`);
+    const nombreMes = fechaValida.toLocaleString("es-ES", { month: "long" });
+
+    return {
+      vehiculo: `${vehiculos[0]?.tipo || ""} - ${vehiculos[0]?.placa || ""}`,
+      mes: `${nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - ${anio}`,
+      tarifa: `${tarifa} Bs.`,
+    };
+  });
 
   const montoTotal = pagos.length * tarifa;
+
+
+console.log("Render VistaUsuario");
+console.log("meses:", meses, "años:", anios);
+console.log("Pagos:", generarMesesPago());
 
   return (
     <div>
@@ -197,12 +236,10 @@ const VistaUsuario: React.FC = () => {
         <div className="info-left">
           <ul className="info-list">
             <li>
-              <span className="info-label">Nombre:</span> {cliente.nombre}{" "}
-              {cliente.apellido}
+              <span className="info-label">Nombre:</span> {cliente.nombre} {cliente.apellido}
             </li>
             <li>
-              <span className="info-label">Tipo de Usuario:</span>{" "}
-              {cliente.tipo}
+              <span className="info-label">Tipo de Usuario:</span> {cliente.tipo}
             </li>
           </ul>
         </div>
@@ -217,28 +254,25 @@ const VistaUsuario: React.FC = () => {
         </div>
       </div>
 
-      <h3 className="res">1. Cantidad de meses o años a pagar</h3>
-      <p>
-        Meses:
-        <button onClick={() => cambiarValor("meses", -1)} className="bot">
-          -
-        </button>
-        <input type="number" value={meses} readOnly />
-        <button onClick={() => cambiarValor("meses", 1)} className="bot">
-          +
-        </button>
-      </p>
+     <h3 className="res">1. Cantidad de meses o años a pagar</h3>
+<p>
+  Meses:
+  <span className="contador">
+    <button onClick={() => cambiarValor("meses", -1)} className="bot">-</button>
+    <input type="number" value={meses} readOnly />
+    <button onClick={() => cambiarValor("meses", 1)} className="bot">+</button>
+  </span>
+</p>
 
-      <p>
-        Años:
-        <button onClick={() => cambiarValor("anios", -1)} className="bot">
-          -
-        </button>
-        <input type="number" value={anios} readOnly />
-        <button onClick={() => cambiarValor("anios", 1)} className="bot">
-          +
-        </button>
-      </p>
+<p>
+  Años:
+  <span className="contador">
+    <button onClick={() => cambiarValor("anios", -1)} className="bot">-</button>
+    <input type="number" value={anios} readOnly />
+    <button onClick={() => cambiarValor("anios", 1)} className="bot">+</button>
+  </span>
+</p>
+
 
       <h3 className="res">2. Detalles del Pago</h3>
 
@@ -256,7 +290,7 @@ const VistaUsuario: React.FC = () => {
               <tr key={index}>
                 <td>{pago.vehiculo}</td>
                 <td>{pago.mes}</td>
-                <td>{tarifa}</td>
+                <td>{pago.tarifa}</td>
               </tr>
             ))}
           </tbody>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./cobrosEfectivo.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 type Cliente = {
   id: string;
@@ -22,13 +23,12 @@ const CobrosEfectivo: React.FC = () => {
   useEffect(() => {
     const obtenerClientes = async () => {
       try {
-        const res = await fetch(
+        const res = await axios.get(
           "https://backendproyectoparqueoumss.onrender.com/api/cliente/activos"
         );
-        const data = await res.json();
 
-        if (Array.isArray(data.data)) {
-          setClientes(data.data);
+        if (Array.isArray(res.data.data)) {
+          setClientes(res.data.data);
         } else {
           console.error('La respuesta no contiene un array de clientes en "data"');
         }
@@ -40,21 +40,21 @@ const CobrosEfectivo: React.FC = () => {
     obtenerClientes();
   }, []);
 
-  useEffect(() => {
-    let filtrados: Cliente[] = [];
+ useEffect(() => {
+  let filtrados: Cliente[] = [];
 
-    if (busquedaNombre) {
-      filtrados = clientes.filter((cliente) =>
-        `${cliente.nombre} ${cliente.apellido}`.toLowerCase().includes(busquedaNombre.toLowerCase())
-      );
-    } else if (busquedaCi) {
-      filtrados = clientes.filter((cliente) =>
-        cliente.ci.toLowerCase().includes(busquedaCi.toLowerCase())
-      );
-    }
+  if (busquedaNombre) {
+    filtrados = clientes.filter((cliente) =>
+      `${cliente.nombre} ${cliente.apellido}`.toLowerCase().startsWith(busquedaNombre.toLowerCase())
+    );
+  } else if (busquedaCi) {
+    filtrados = clientes.filter((cliente) =>
+      cliente.ci.toLowerCase().startsWith(busquedaCi.toLowerCase())
+    );
+  }
 
-    setResultados(filtrados);
-  }, [busquedaNombre, busquedaCi, clientes]);
+  setResultados(filtrados);
+}, [busquedaNombre, busquedaCi, clientes]);
 
   return (
     <div className="contenido">
@@ -115,8 +115,8 @@ const CobrosEfectivo: React.FC = () => {
             <div className="tarjeta-usuario" style={{ cursor: "pointer" }}>
               <table className="tabla">
                 <tbody>
-                  {resultados.map((cliente) => (
-                    <tr key={cliente.id} onClick={()=> {navigate('/cobros/Formulario', { state: { cliente } });}}>
+                  {Array.from(new Map(resultados.map(c => [c.ci, c])).values()).map((cliente) => (
+                    <tr key={cliente.id} onClick={() => navigate('/cobros/ResulCI', { state: { cliente } })}>
                       <td className="icono-usuario">
                         <img
                           src="/icons/user.png"

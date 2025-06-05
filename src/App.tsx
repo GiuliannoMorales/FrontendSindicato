@@ -21,7 +21,7 @@ const App: React.FC = () => {
           <Route path="/tarifas/historial" element={<TarifasHistoPage />} />
           <Route path="/tarifas/configuracion" element={<TarifasPage />} />
           <Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
-          <Route path="/cobros/ResultadoCI" element={<ResulCI />} />
+             <Route path="/cobros/ResulCI" element={<ResulCI />} />
           <Route path="/cobros/Formulario" element={<VistaUsuario />} />
         </Route>
       </Routes>

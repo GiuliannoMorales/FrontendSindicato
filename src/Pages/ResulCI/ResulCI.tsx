@@ -1,99 +1,45 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './ResulCI.css';
-
+// ResulCI.tsx
+import React from "react";
+import "./ResulCI.css";
+import { useLocation } from "react-router-dom";
 interface Cliente {
-  id: number;
+  idCliente: string;
   nombre: string;
   apellido: string;
-  ci: string;
   tipo: string;
 }
 
-const ResulCI = () => {
-  const [ci, setCi] = useState('');
-  const [cliente, setCliente] = useState<Cliente | null>(null);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+const ResulCI: React.FC = () => {
+  const location = useLocation();
+  const cliente = location.state?.cliente as Cliente | undefined;
 
-  const buscarCliente = async () => {
-    try {
-      setError('');
-      const res = await fetch('https://backendproyectoparqueoumss.onrender.com/api/cliente/activos');
-      const data = await res.json();
-      const clientes: Cliente[] = data.data;
-      const encontrado = clientes.find((c) => c.ci === ci);
-
-      if (encontrado) {
-        setCliente(encontrado);
-      } else {
-        setCliente(null);
-        setError('Cliente no encontrado');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Error al buscar cliente');
-    }
-  };
-
-  const getNombreCompleto = (cliente: Cliente): string => {
-    return `${cliente.nombre ?? ''} ${cliente.apellido ?? ''}`.trim();
-  };
-
-  const irAVistaUsuario = () => {
-    if (!cliente) {
-      console.error("No se ha seleccionado un cliente válido");
-      return;
-    }
-
-    navigate('/cobros/Formulario', { state: { cliente } });
-  };
+  if (!cliente) {
+        return <p>No se ha proporcionado un cliente.</p>;
+  }
 
   return (
-    <div className='contenido'>
-      <div className='titulo'>
+<div  className="contenido">
+<div className="titulo">
         <h1>REALIZAR COBRO</h1>
       </div>
-
-      <div className='buscar-contenido'>
-        <label htmlFor='BuscadorCI'>Buscar por C.I: </label>
-        <div className='input-con-icono'>
-          <input
-            type='text'
-            className='BuscadorCI'
-            id='BuscadorCI'
-            placeholder='Buscar...'
-            value={ci}
-            onChange={e => setCi(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && buscarCliente()}
-          />
-          <img src='/src/assets/icons/Search.svg' alt="Buscar" className="icono-lupa" />
-        </div>
+      
+ <div className="resulci-container">
+      <div className="resulci-datos">
+        <h2>{cliente.nombre.toUpperCase()} {cliente.apellido.toUpperCase()}</h2>
+        <p className="resulci-rol">{cliente.tipo}</p>
       </div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {cliente && (
-        <div className='resultado'>
-          <p className='res'>Resultado(s):</p>
-          <div className='tarjeta-usuario' onClick={irAVistaUsuario} style={{ cursor: 'pointer' }}>
-            <table className='tabla'>
-              <tbody>
-                <tr>
-                  <td className='icono-usuario'>
-                    <img src='/icons/user.png' alt='Usuario' className='imagen-usuario' />
-                  </td>
-                  <td>
-                    <div><b>{getNombreCompleto(cliente)}</b></div>
-                    <div><small>{cliente.tipo}</small></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      <div className="resulci-select">
+        <label htmlFor="vehiculo">Selecciona un vehículo:</label>
+        <select id="vehiculo">
+          <option>Seleccione un vehículo</option>
+        </select>
+      </div>
     </div>
+
+</div>
+
+   
   );
 };
 

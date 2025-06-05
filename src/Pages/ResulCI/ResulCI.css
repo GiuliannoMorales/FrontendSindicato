@@ -1,83 +1,65 @@
-.contenido {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* ResulCI.css */
+.resulci-container {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 0 auto;
   text-align: center;
-  padding: 20px;
 }
 
-.titulo h1 {
-  margin-bottom: 50px;
-  font-size: 45px;
-  color: #0c3c60;
+.resulci-titulo {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: black
+}
+
+.resulci-datos h2 {
+  font-size: 20px;
+  margin: 10px 0;
+  color: black
+}
+
+.resulci-rol {
+  color: #888;
+  font-style: italic;
+}
+
+.resulci-select {
+  margin-top: 30px;
+  text-align: left;
 }
 
 .buscar-contenido {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
   gap: 10px;
-  flex-wrap: nowrap;
-  white-space: nowrap; /* Fuerza que todo esté en una línea */
+  width: 100%;
+  max-width: 500px;
+}
+.resulci-select label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-.input-con-icono {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.BuscadorCI {
-  padding: 8px 12px;
+.resulci-select select {
+  width: 100%;
+  padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
-  font-size: 16px;
-  width: 200px;
-  min-width: 200px;
 }
-
-.icono-lupa {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+.titulo h1 {
+  margin-bottom: 50px;
+  font-size: 45px;
+  color:#3a4a5b
 }
-
-.icono-lupa:hover {
-  transform: scale(1.1);
-}
-
-.res {
-  text-align: left;
-  width: 100%;
-  margin-left: 0;
-  padding-left: 5px;
-}
-
-.resultado {
-  margin-top: 20px;
-}
-
-.tarjeta-usuario {
-  border: 1px solid #ccc;
-  padding: 12px 20px;
-  border-radius: 10px;
-  display: inline-block;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  background-color: #fff;
-}
-
-.tabla {
-  border-collapse: collapse;
-}
-
-.icono-usuario {
-  padding-right: 15px;
-}
-
-.imagen-usuario {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+.contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center; 
 }
