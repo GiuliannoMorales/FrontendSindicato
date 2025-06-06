@@ -148,14 +148,14 @@ export default function Layout() {
                 </li>
                 <li
                   className={`sidebar__item ${
-                    location.pathname === "/ver/usuario"
+                    location.pathname === "/ver/usuarios"
                       ? "sidebar__item-active"
                       : ""
                   }`}
                 >
                   <UserIcon />
                   <NavLink
-                    to={"/ver/usuario"}
+                    to={"/ver/usuarios"}
                     className={"sidebar__item-link"}
                   >
                     Ver Usuarios

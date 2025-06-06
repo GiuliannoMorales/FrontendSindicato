@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/axios";
-import "../EstadoCuenta/EstadoCuenta.css";
+import "./EstadoCuenta.css";
 import type {
   DetalleMes,
   EstadoCuentaResponse,
