@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./InternalUserPage.css"
 import EyeIcon from "../../assets/icons/EyeIcon";
 import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
@@ -6,6 +6,30 @@ import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
 const InternalUser = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+    const [userPhoto, setUserPhoto] = useState<string | null>(null);
+    const userPhotoRef = useRef<HTMLInputElement | null>(null);
+
+    const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result as string;
+            const base64WithoutPrefix = base64String.split(",")[1] || "";
+            handleUserPhotoChange(base64WithoutPrefix);
+        };
+        reader.readAsDataURL(file);
+    };
+    
+    const handleUserPhotoClick = () => userPhotoRef.current?.click();
+    const handleUserPhotoChange = (base64: string) => {
+        const base64WithoutPrefix = base64.replace(
+            /^data:image\/[a-zA-Z]+;base64,/,
+            "",
+        );
+        setUserPhoto(base64WithoutPrefix);
+    };
 
     return (
         <section className="internal-user">
@@ -91,6 +115,36 @@ const InternalUser = () => {
                 </div>
 
                 <div className="internal-user__form-right">
+                    <div className="internal-user__photo">
+                        <label className="internal-user__label">
+                            Foto Usuario: <span className="required">*</span>
+                        </label>
+                        <div className="user__upload-box">
+                            {userPhoto ? (
+                                <img
+                                    src={`data:image/jpeg;base64,${userPhoto}`}
+                                    alt="Foto de usuario"
+                                    onClick={handleUserPhotoClick}
+                                    className="internal-user__photo-preview"
+                                />
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={handleUserPhotoClick}
+                                    className="internal-user__upload-button"
+                                >
+                                    Subir Foto
+                                </button>
+                            )}
+                            <input
+                                type="file"
+                                ref={userPhotoRef}
+                                onChange={onUserPhotoChange}
+                                style={{ display: "none" }}
+                                accept="image/*"
+                            />
+                        </div>
+                    </div>
 
                 </div>
             </form>
