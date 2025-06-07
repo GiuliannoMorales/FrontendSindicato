@@ -35,7 +35,7 @@
     font-weight: 500;
     margin-bottom: 12px;
     font-size: 20px;
-    margin-left: -50px;
+    margin-left: -60px;
 }
 
 .internal-user__label {
@@ -72,6 +72,33 @@
     gap: 100px;
     margin-top: -5px;
     padding-bottom: 20px;
+}
+
+/*password and toggle-eye*/
+.internal-user__password{
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  height: 32px;
+}
+
+.internal-user__toggle-eye {
+  position: absolute;
+  right: 40px;
+  top: 45%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #555;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .internal-user__cancel-button,

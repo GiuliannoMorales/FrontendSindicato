@@ -1,6 +1,11 @@
+import { useState } from "react";
 import "./InternalUserPage.css"
+import EyeIcon from "../../assets/icons/EyeIcon";
+import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
 
 const InternalUser = () => {
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
     return (
         <section className="internal-user">
@@ -42,6 +47,45 @@ const InternalUser = () => {
                                 <span className="required">*</span>
                             </label>
                             <input type="text" className="internal-user__input" required />
+                        </div>
+                    </fieldset>
+
+                    <fieldset className="internal-user__fieldset">
+                        <legend className="internal-user__legend">• Datos Cuenta:</legend>
+                        <div className="internal-user__field">
+                            <label className="internal-user__label">
+                                Tipo Usuario: <span className="required">*</span>
+                            </label>
+                            <select
+                                required
+                                className="internal-user__select"
+                            >
+                                <option value="">Seleccione</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Cajero">Cajero</option>
+                            </select>
+                        </div>
+
+                        <div className="internal-user__field">
+                            <label className="internal-user__label">
+                                Contraseña: <span className="required">*</span>
+                            </label>
+                            <div className="internal-user__password">
+                                <input
+                                    type={passwordVisible ? "text" : "password"}
+                                    required
+                                    placeholder="Ingrese su contraseña"
+                                    className="internal-user__input"
+                                />
+                                <button
+                                    type="button"
+                                    className="internal-user__toggle-eye"
+                                    onClick={togglePasswordVisibility}
+                                    aria-label="Mostrar/Ocultar contraseña"
+                                >
+                                    {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
+                                </button>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
