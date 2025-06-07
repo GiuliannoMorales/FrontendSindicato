@@ -10,6 +10,8 @@ import VistaUsuario from './pages/VistaUsuario/VistaUsuario';
 import TarifasHistoPage from './pages/Tarifas/TarifasHistoPage/TarifasHistoPage';
 import TarifasPage from './pages/Tarifas/TarifasConfigPage/TarifasConfigPage';
 import Layout from './components/Layout';
+import VisualizarDatos from './pages/VisualizarDatos/VisualizarDatos';
+import VisualizarVehiculo from './pages/VisualizarVehiculo/VisualizarVehiculo';
 
 const App: React.FC = () => {
   return (
@@ -21,8 +23,10 @@ const App: React.FC = () => {
           <Route path="/tarifas/historial" element={<TarifasHistoPage />} />
           <Route path="/tarifas/configuracion" element={<TarifasPage />} />
           <Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
-             <Route path="/cobros/ResulCI" element={<ResulCI />} />
+          <Route path="/cobros/ResulCI" element={<ResulCI />} />
           <Route path="/cobros/Formulario" element={<VistaUsuario />} />
+          <Route path="/DatosVehiculo" element={<VisualizarVehiculo/>} />
+          <Route path="/Datos" element={<VisualizarDatos />} />
         </Route>
       </Routes>
     </Router>

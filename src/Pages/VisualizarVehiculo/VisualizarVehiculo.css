@@ -1,0 +1,125 @@
+/* VisualizarDatos.css */
+
+.container {
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+h2 {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.form-section {
+  flex: 2;
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  position: relative;
+}
+
+.section-title::before {
+  content: "•";
+  position: absolute;
+  left: -0.8rem; 
+  color: black;
+  font-size: 1.2rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.image-section {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-section img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.vehicles {
+  font-size: 0.9rem;
+  color: #333;
+  text-align: left;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.vehicles .form-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-row label {
+  width: 160px;
+  font-weight: bold;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row input[type="password"] {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.back-button {
+  margin-top: 1.5rem;
+  background-color: rgba(7, 37, 67, 1);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #00a3cc;
+}
+label::after {
+  content: ' *';
+  color: red;
+}
