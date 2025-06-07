@@ -21,7 +21,7 @@ const InternalUser = () => {
         };
         reader.readAsDataURL(file);
     };
-    
+
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
     const handleUserPhotoChange = (base64: string) => {
         const base64WithoutPrefix = base64.replace(
@@ -144,6 +144,13 @@ const InternalUser = () => {
                                 accept="image/*"
                             />
                         </div>
+                    </div>
+
+                    <div className="internal-user__field">
+                        <label className="internal-user__label">Observaciones:
+                            <span className="required">*</span>
+                        </label>
+                        <textarea className="internal-user__textarea" required></textarea>
                     </div>
 
                 </div>
