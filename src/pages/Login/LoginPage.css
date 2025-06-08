@@ -1,0 +1,23 @@
+.login__form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #072543;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 1rem;
+}
+
+.login__title{
+    color: white;
+    text-align: center;
+}
+
+.login__button{
+    background: #EDEDED;
+    color: #072543;
+    border: none;
+    font-weight: 700;
+    max-width: fit-content;
+}
