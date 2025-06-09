@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import "./cobrosEfectivo.css";
 import { useNavigate } from "react-router-dom";

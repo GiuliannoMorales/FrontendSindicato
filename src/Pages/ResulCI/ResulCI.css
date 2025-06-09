@@ -1,65 +1,132 @@
-/* ResulCI.css */
-.resulci-container {
-  background-color: #f9f9f9;
-  padding: 30px;
-  border-radius: 10px;
-  max-width: 600px;
+.container {
+  max-width: 750px;
   margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: white;
+}
+
+.title {
   text-align: center;
-}
-
-.resulci-titulo {
-  font-size: 24px;
+  color: #004080;
   margin-bottom: 20px;
-  color: black
 }
 
-.resulci-datos h2 {
-  font-size: 20px;
-  margin: 10px 0;
-  color: black
-}
-
-.resulci-rol {
-  color: #888;
-  font-style: italic;
-}
-
-.resulci-select {
-  margin-top: 30px;
-  text-align: left;
-}
-
-.buscar-contenido {
+.info {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 10px;
-  gap: 10px;
-  width: 100%;
-  max-width: 500px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 16px;
+  margin-bottom: 30px;
 }
-.resulci-select label {
-  display: block;
-  margin-bottom: 8px;
+
+.info p {
+  margin: 5px 0;
   font-weight: bold;
 }
 
-.resulci-select select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
+.section {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #000;
+}
+
+.input-group {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.input-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input-control input {
+  width: 40px;
+  height: 32px;
+  text-align: center;
+  padding: 5px;
   border: 1px solid #ccc;
+  border-radius: 4px;
 }
-.titulo h1 {
-  margin-bottom: 50px;
-  font-size: 45px;
-  color:#3a4a5b
+
+.input-control button {
+  width: 32px;
+  height: 32px;
+  font-weight: bold;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 4px;
 }
-.contenido {
+
+.input-control button:hover {
+  background-color: #eee;
+}
+
+.payment-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.payment-table {
+  width: 70%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.payment-table th,
+.payment-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.payment-table th {
+  background-color: rgba(123, 148, 170, 0.9);
+  font-weight: bold;
+}
+
+.payment-summary-box {
+  width: 30%;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
-  text-align: center; 
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.payment-summary {
+  font-size: 16px;
+}
+
+.payment-summary p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.confirm-button {
+  padding: 12px 20px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+.confirm-button:hover {
+  background-color: #c9302c;
 }
