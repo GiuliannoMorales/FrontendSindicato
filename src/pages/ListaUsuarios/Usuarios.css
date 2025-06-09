@@ -12,15 +12,127 @@ h2 {
 .control {
 	margin-bottom: 1rem;
 	text-align: center;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	gap: 0;
 }
 
 .buscador {
 	margin: 0 0 0 2rem;
-	padding: 0 0.5rem;
+	padding: 0 0.5rem 0 2rem;
 	height: 2rem;
 	border: 1px solid #b4bbc5;
 	border-radius: 6px;
 	background-color: var(--fondo);
+	background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="gray" stroke-width="2" fill="none"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="gray" stroke-width="2" stroke-linecap="round"/></svg>');
+	background-repeat: no-repeat;
+	background-size: 1.2rem 1.2rem;
+	background-position: 0.5rem center;
+}
+
+.btnFiltro {
+	cursor: pointer;
+	padding: 0.5rem 1.2rem;
+	font-size: 1rem;
+	font-weight: 500;
+	margin-top: 0.2rem;
+}
+
+.modalFiltroBackdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.modalFiltro {
+	background: #fff;
+	border-radius: 10px;
+	padding: 1.5rem 2rem;
+	min-width: 340px;
+	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
+	border: 1.5px solid #444;
+	position: relative;
+}
+
+.modalFiltroTitulo {
+	font-size: 1.2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 0.5rem;
+}
+
+.modalChecks {
+	display: flex;
+	gap: 2rem;
+	justify-content: center;
+	margin-top: 1rem;
+}
+
+.filtroCheckbox {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	font-size: 1rem;
+	cursor: pointer;
+	user-select: none;
+}
+
+.filtroCheckbox input {
+	margin: 0 1rem;
+}
+
+.filtroMeses {
+	display: block;
+	align-items: center;
+	margin-left: 2rem;
+}
+
+.btnMes {
+	background: none;
+	color: var(--txtCuerpo);
+	width: 10px;
+	cursor: pointer;
+	padding: 0.5rem;
+	margin: 0.5em;
+	border: none;
+	font-size: 1rem;
+}
+
+.inputMes {
+	width: 1.5rem;
+	justify-content: center;
+	text-align: center;
+	margin: 0.5rem;
+}
+
+.btnFiltrar {
+	background: #b23a48;
+	color: var(--fondo);
+	border: none;
+	border-radius: 6px;
+	padding: 0.5rem 3rem;
+	font-size: 1rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.btnReset {
+	background: #3c5468;
+	color: var(--fondo);
+	border: none;
+	border-radius: 7px;
+	padding: 0.5rem 1.1rem;
+	font-size: 1rem;
+	cursor: pointer;
+	font-weight: 500;
 }
 
 .lista {
@@ -36,17 +148,18 @@ h2 {
 	border-radius: 6px;
 	padding: 1rem;
 	gap: 1rem;
+	background: #3c5468;
 }
 
-.usrCard.administrativo {
-	background-color: var(--encabezado);
-}
-
-.usrCard.docente-tiempo-hora {
+.usrCard.activo {
 	background-color: #3c5468;
 }
 
-.usrCard.deshabilitado {
+.usrCard.bloqueado {
+	background-color: var(--encabezado);
+}
+
+.usrCard.inactivo {
 	opacity: 0.5;
 	filter: grayscale(1);
 	pointer-events: none;

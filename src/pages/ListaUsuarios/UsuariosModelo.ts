@@ -5,5 +5,6 @@ export interface Usuario {
 	ci: string;
 	rol: string;
 	imagenUrl?: string;
-	habilitado: boolean;
+	activo: boolean;
+	bloqueado: boolean;
 }

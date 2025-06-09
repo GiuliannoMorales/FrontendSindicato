@@ -158,7 +158,7 @@ export default function Layout() {
                     to={"/ver/usuarios"}
                     className={"sidebar__item-link"}
                   >
-                    Ver Usuarios
+                    Lista Usuarios
                   </NavLink>
                 </li>
               </div>
