@@ -1,7 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import './VisualizarVehiculo.css';
 
 const VisualizarVehiculo = () => {
+  const { id, idParqueo } = useParams();
+  const [vehiculo, setVehiculo] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchVehiculo = async () => {
+      try {
+        const res = await axios.get(`https://backendproyectoparqueoumss.onrender.com/api/usuario/${id}`);
+        const usuario = Array.isArray(res.data) ? res.data[0] : res.data;
+        console.log('Usuario recibido:', usuario);
+      console.log('ID Parqueo desde URL:', idParqueo);
+
+        const vehiculoEncontrado = usuario.vehiculos.find((v: any) => String(v.idParqueo) === String(idParqueo));
+        console.log('Vehículo encontrado:', vehiculoEncontrado);
+        if (vehiculoEncontrado) {
+          setVehiculo(vehiculoEncontrado);
+        } else {
+          console.warn('Vehículo no encontrado.');
+        }
+      } catch (err) {
+        console.error('Error al obtener datos del vehículo:', err);
+      }
+    };
+
+    if (id && idParqueo) fetchVehiculo();
+  }, [id, idParqueo]);
+
+  if (!vehiculo) return <div>Cargando datos del vehículo...</div>;
+
   return (
     <div className="container">
       <h2>Vehículo</h2>
@@ -9,39 +39,35 @@ const VisualizarVehiculo = () => {
         <div className="form-section">
           <form>
             <div className="form-row">
-              <label htmlFor="ci">Tipo Vehículo.:</label>
-              <input id="ci" type="text" value="automovil" readOnly />
+              <label>Tipo Vehículo:</label>
+              <input type="text" value={vehiculo.tipo || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="nombres">Placa:</label>
-              <input id="nombres" type="text" value="M123213" readOnly />
+              <label>Placa:</label>
+              <input type="text" value={vehiculo.placa || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="apellidos">Marca:</label>
-              <input id="apellidos" type="text" value="ROMERO " readOnly />
+              <label>Marca:</label>
+              <input type="text" value={vehiculo.marca || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="correo">Modelo:</label>
-              <input id="apellidos" type="text" value="ROMERO " readOnly />
-            </div>
-            <div className="form-row">
-              <label htmlFor="telefono">Color:</label>
-              <input id="apellidos" type="text" value="ROMERO " readOnly />
+              <label>Modelo:</label>
+              <input type="text" value={vehiculo.modelo || ''} readOnly />
             </div>
           </form>
         </div>
         <div className="image-section">
-            <div className="form-row">
-             <label htmlFor="telefono">Foto Vehículo Delantera:</label>
-              <img src="foto-perfil.png"/>
-            </div>
           <div className="form-row">
-             <label htmlFor="telefono">Foto Vehículo Trasera:</label>
-              <img src="foto-perfil.png" />
-            </div>
+            <label>Foto Vehículo Delantera:</label>
+            <img src={`data:image/png;base64,${vehiculo.fotoDelantera}`} alt="Delantera" />
+          </div>
+          <div className="form-row">
+            <label>Foto Vehículo Trasera:</label>
+            <img src={`data:image/png;base64,${vehiculo.fotoTrasera}`} alt="Trasera" />
+          </div>
         </div>
       </div>
-      <button className="back-button">Atrás</button>
+      <button className="back-button" onClick={() => window.history.back()}>Atrás</button>
     </div>
   );
 };

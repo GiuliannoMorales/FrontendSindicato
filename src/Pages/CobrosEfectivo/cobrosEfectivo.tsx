@@ -117,7 +117,7 @@ const CobrosEfectivo: React.FC = () => {
               <table className="tabla">
                 <tbody>
                   {Array.from(new Map(resultados.map(c => [c.ci, c])).values()).map((cliente) => (
-                    <tr key={cliente.id} onClick={() => navigate('/cobros/ResulCI', { state: { cliente } })}>
+                    <tr key={cliente.id} onClick={() => navigate(`/Datos/${cliente.id}`)}>
                       <td className="icono-usuario">
                         <img
                           src="/icons/user.png"
