@@ -12,6 +12,7 @@ import { UserAddIcon } from "../assets/icons/UserAddIcon";
 import { UserIcon } from "../assets/icons/UserIcon";
 import { PayIcon } from "../assets/icons/PayIcon";
 import { CoinInHandIcon } from "../assets/icons/CoinInHand";
+import { PeopleAdmiIcon } from "../assets/icons/PeopleAdmiIcon";
 
 // interface LayoutProps {
 //   children: ReactNode;
@@ -85,11 +86,10 @@ export default function Layout() {
             ? (
               <div>
                 <li
-                  className={`sidebar__item ${
-                    location.pathname === "/tarifas/configuracion"
+                  className={`sidebar__item ${location.pathname === "/tarifas/configuracion"
                       ? "sidebar__item-active"
                       : ""
-                  }`}
+                    }`}
                 >
                   <SettingsIcon />
                   <NavLink
@@ -100,11 +100,10 @@ export default function Layout() {
                   </NavLink>
                 </li>
                 <li
-                  className={`sidebar__item ${
-                    location.pathname === "/tarifas/historial"
+                  className={`sidebar__item ${location.pathname === "/tarifas/historial"
                       ? "sidebar__item-active"
                       : ""
-                  }`}
+                    }`}
                 >
                   <CashInHandIcon />
                   <NavLink
@@ -132,11 +131,10 @@ export default function Layout() {
             ? (
               <div>
                 <li
-                  className={`sidebar__item ${
-                    location.pathname === "/registrar/usuario"
+                  className={`sidebar__item ${location.pathname === "/registrar/usuario"
                       ? "sidebar__item-active"
                       : ""
-                  }`}
+                    }`}
                 >
                   <UserAddIcon />
                   <NavLink
@@ -147,11 +145,24 @@ export default function Layout() {
                   </NavLink>
                 </li>
                 <li
-                  className={`sidebar__item ${
-                    location.pathname === "/ver/usuarios"
+                  className={`sidebar__item ${location.pathname === "/registrar/usuario-interno"
                       ? "sidebar__item-active"
                       : ""
-                  }`}
+                    }`}
+                >
+                  <PeopleAdmiIcon />
+                  <NavLink
+                    to={"/registrar/usuario-interno"}
+                    className={"sidebar__item-link"}
+                  >
+                    Crear Usuario Interno
+                  </NavLink>
+                </li>
+                <li
+                  className={`sidebar__item ${location.pathname === "/ver/usuarios"
+                      ? "sidebar__item-active"
+                      : ""
+                    }`}
                 >
                   <UserIcon />
                   <NavLink
@@ -179,11 +190,10 @@ export default function Layout() {
             ? (
               <div>
                 <li
-                  className={`sidebar__item ${
-                    location.pathname === "/cuenta/estado"
+                  className={`sidebar__item ${location.pathname === "/cuenta/estado"
                       ? "sidebar__item-active"
                       : ""
-                  }`}
+                    }`}
                 >
                   <CoinInHandIcon />
                   <NavLink

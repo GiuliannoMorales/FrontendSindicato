@@ -10,6 +10,7 @@ import User from "./pages/Users/User";
 import Usuarios from "./pages/ListaUsuarios/Usuarios";
 import RegistrarVehiculo from "./pages/RegistrarVehiculo/RegistrarVehiculo";
 import Layout from "./components/Layout";
+import InternalUser from "./pages/InternalUsers/InternalUserPage";
 
 const App: React.FC = () => {
 	return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
 					<Route path="/registrar/usuario" element={<User />} />
 					<Route path="/ver/usuarios" element={<Usuarios />} />
 					<Route path="/registrar/vehiculo" element={<RegistrarVehiculo />} />
+					<Route path="/registrar/usuario-interno" element={<InternalUser />} />
 				</Route>
 			</Routes>
 		</Router>
