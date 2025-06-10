@@ -135,6 +135,39 @@ h2 {
 	font-weight: 500;
 }
 
+.indicadorEstados {
+	display: flex;
+	justify-content: center;
+	gap: 3rem;
+	margin: 1.2rem 0 1.5rem 0;
+}
+
+.indicadorItem {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1rem;
+}
+
+.estadoEsfera {
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 50%;
+}
+
+.estadoEsfera.activo {
+	background: #3c5468;
+}
+
+.estadoEsfera.inactivo {
+	background: #b4bbc5;
+}
+
+.estadoEsfera.bloqueado {
+	background: var(--encabezado);
+}
+
 .lista {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
@@ -160,9 +193,7 @@ h2 {
 }
 
 .usrCard.inactivo {
-	opacity: 0.5;
-	filter: grayscale(1);
-	pointer-events: none;
+	background-color: #b4bbc5;
 }
 
 .usrImg {

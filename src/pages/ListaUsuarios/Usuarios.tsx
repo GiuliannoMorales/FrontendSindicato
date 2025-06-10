@@ -12,8 +12,7 @@ const mockUsuarios: Usuario[] = [
     ci: "111111",
     rol: "Administrativo",
     imagenUrl: "",
-    bloqueado: false,
-    activo: true,
+    estado: "activo",
   },
   {
     id: 2,
@@ -22,8 +21,7 @@ const mockUsuarios: Usuario[] = [
     ci: "222222",
     rol: "Docente Tiempo Hora",
     imagenUrl: "",
-    bloqueado: true,
-    activo: false,
+    estado: "bloqueado",
   },
   {
     id: 3,
@@ -32,8 +30,7 @@ const mockUsuarios: Usuario[] = [
     ci: "333333",
     rol: "Administrativo",
     imagenUrl: "",
-    bloqueado: true,
-    activo: true,
+    estado: "bloqueado",
   },
   {
     id: 4,
@@ -42,8 +39,7 @@ const mockUsuarios: Usuario[] = [
     ci: "444444",
     rol: "Docente Tiempo Exclusivo",
     imagenUrl: "",
-    bloqueado: false,
-    activo: true,
+    estado: "activo",
   },
   {
     id: 5,
@@ -52,8 +48,7 @@ const mockUsuarios: Usuario[] = [
     ci: "555555",
     rol: "Administrativo",
     imagenUrl: "",
-    bloqueado: true,
-    activo: true,
+    estado: "bloqueado",
   },
   {
     id: 6,
@@ -62,8 +57,7 @@ const mockUsuarios: Usuario[] = [
     ci: "666666",
     rol: "Administrativo",
     imagenUrl: "",
-    bloqueado: false,
-    activo: false,
+    estado: "inactivo",
   },
 ];
 
@@ -101,11 +95,10 @@ const Usuarios: React.FC = () => {
     const coincideRol = filtroRoles.length === 0 || filtroRoles.includes(u.rol);
 
     const coincideTipo = filtroTipos.length === 0 ||
-      (filtroTipos.includes("activos") && u.activo) ||
-      (filtroTipos.includes("inactivos") && !u.activo) ||
-      (filtroTipos.includes("bloqueados") && u.bloqueado);
+      (filtroTipos.includes("activos") && u.estado === "activo") ||
+      (filtroTipos.includes("inactivos") && u.estado === "inactivo") ||
+      (filtroTipos.includes("bloqueados") && u.estado === "bloqueado");
 
-    // Aquí puedes agregar el filtro de meses si tienes esa lógica
     return coincideBusqueda && coincideRol && coincideTipo;
   });
 
@@ -240,15 +233,21 @@ const Usuarios: React.FC = () => {
           </div>
         </div>
       )}
+      <div className="indicadorEstados">
+        <span className="indicadorItem">
+          <span className="estadoEsfera activo"></span> Activo
+        </span>
+        <span className="indicadorItem">
+          <span className="estadoEsfera inactivo"></span> Inactivo
+        </span>
+        <span className="indicadorItem">
+          <span className="estadoEsfera bloqueado"></span> Bloqueado
+        </span>
+      </div>
       <div className="lista">
         {usuariosFiltrados.map((usuario) => (
           <div
-            className={`usrCard ` +
-              (usuario.bloqueado
-                ? "bloqueado"
-                : usuario.activo
-                ? "activo"
-                : "inactivo")}
+            className={`usrCard ${usuario.estado}`}
             key={usuario.id}
           >
             <img
