@@ -4,10 +4,18 @@ import EyeIcon from "../../assets/icons/EyeIcon";
 import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
 
 const InternalUser = () => {
+    const [ci, setCi] = useState("");
+    const [nombre, setNombre] = useState("");
+    const [apellido, setApellido] = useState("");
+    const [correo, setCorreo] = useState("");
+    const [telefono, setTelefono] = useState("");
+    const [userType, setUserType] = useState("");
+    const [password, setPassword] = useState("");
+    const [observations, setObservations] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const [userPhoto, setUserPhoto] = useState<string | null>(null);
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
+    const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
     const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -31,6 +39,22 @@ const InternalUser = () => {
         setUserPhoto(base64WithoutPrefix);
     };
 
+    const handleRegister = (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = {
+            ci,
+            nombre,
+            apellido,
+            correo,
+            telefono,
+            userType,
+            password,
+            observations,
+            foto: userPhoto,
+        }
+        console.log("Datos a enviar:", formData);
+    }
+
     return (
         <section className="internal-user">
             <h2 className="internal-user__title">REGISTRAR USUARIO INTERNO</h2>
@@ -42,35 +66,35 @@ const InternalUser = () => {
                             <label className="internal-user__label">C.I.:
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" required />
+                            <input type="text" className="internal-user__input" value={ci} onChange={(e) => setCi(e.target.value)} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Nombre(s):
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" required />
+                            <input type="text" className="internal-user__input" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Apellido(s):
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" required />
+                            <input type="text" className="internal-user__input" value={apellido} onChange={(e) => setApellido(e.target.value)} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Correo Electrónico:
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" required />
+                            <input type="text" className="internal-user__input" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Teléfono:
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" required />
+                            <input type="text" className="internal-user__input" value={telefono} onChange={(e) => setTelefono(e.target.value)} required />
                         </div>
                     </fieldset>
 
@@ -81,8 +105,7 @@ const InternalUser = () => {
                                 Tipo Usuario: <span className="required">*</span>
                             </label>
                             <select
-                                required
-                                className="internal-user__select"
+                                className="internal-user__select" value={userType} onChange={(e) => setUserType(e.target.value)} required
                             >
                                 <option value="">Seleccione</option>
                                 <option value="Administrador">Administrador</option>
@@ -97,9 +120,11 @@ const InternalUser = () => {
                             <div className="internal-user__password">
                                 <input
                                     type={passwordVisible ? "text" : "password"}
-                                    required
                                     placeholder="Ingrese su contraseña"
                                     className="internal-user__input"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
                                 />
                                 <button
                                     type="button"
@@ -142,6 +167,7 @@ const InternalUser = () => {
                                 onChange={onUserPhotoChange}
                                 style={{ display: "none" }}
                                 accept="image/*"
+                                required
                             />
                         </div>
                     </div>
@@ -150,9 +176,8 @@ const InternalUser = () => {
                         <label className="internal-user__label">Observaciones:
                             <span className="required">*</span>
                         </label>
-                        <textarea className="internal-user__textarea" required></textarea>
+                        <textarea className="internal-user__textarea" value={observations} onChange={(e) => setObservations(e.target.value)} required></textarea>
                     </div>
-
                 </div>
             </form>
 
@@ -167,7 +192,7 @@ const InternalUser = () => {
                 <button
                     type="submit"
                     className="internal-user__submit-button"
-                // onClick={handleRegister}
+                    onClick={handleRegister}
                 >
                     REGISTRAR
                 </button>
