@@ -182,6 +182,7 @@ h2 {
 	padding: 1rem;
 	gap: 1rem;
 	background: #3c5468;
+	position: relative;
 }
 
 .usrCard.activo {
@@ -224,6 +225,51 @@ h2 {
 .usrEmpty {
 	text-align: center;
 	margin-top: 2rem;
+}
+
+.usrMenuWrapper {
+	position: absolute;
+	top: 0.2em;
+	right: 0.3em;
+	z-index: 2;
+}
+
+.usrMenuBtn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	font-size: 1.3em;
+	color: var(--fondo);
+	line-height: 1;
+}
+
+.usrMenuDots {
+	font-size: 1.5em;
+	user-select: none;
+}
+
+.usrMenuDropdown {
+	position: absolute;
+	top: 1.3em;
+	right: 1em;
+	background: var(--fondo);
+	border-radius: 6px;
+	min-width: 160px;
+	overflow: hidden;
+	border: 1px solid #8a7c7c;
+	text-align: center;
+}
+
+.usrMenuItem {
+	padding: 0.7em 1.2em;
+	cursor: pointer;
+	font-size: 1em;
+	transition: background 0.15s;
+}
+
+.usrMenuItem:hover {
+	background: #8d81818e;
 }
 
 @media (min-width: 2000px) {

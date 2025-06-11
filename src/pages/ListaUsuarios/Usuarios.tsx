@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Usuarios.css";
 import type { Usuario } from "./UsuariosModelo.ts";
 import { FilterIcon } from "../../assets/icons/FilterIcon.tsx";
+import { UserMenu } from "./components/UserMenu.tsx";
 
 const mockUsuarios: Usuario[] = [
   {
@@ -129,6 +130,16 @@ const Usuarios: React.FC = () => {
     setMostrarFiltro(false);
   };
 
+  const handleChangeEstado = (
+    //api.put("/usuarios").then((res) => ...)
+    id: number,
+    nuevoEstado: "activo" | "inactivo" | "bloqueado",
+  ) => {
+    setUsuarios((prev) =>
+      prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
+    );
+  };
+
   return (
     <div className="container">
       <h2>LISTA DE USUARIOS REGISTRADOS</h2>
@@ -250,6 +261,7 @@ const Usuarios: React.FC = () => {
             className={`usrCard ${usuario.estado}`}
             key={usuario.id}
           >
+            <UserMenu usuario={usuario} onChangeEstado={handleChangeEstado} />
             <img
               className="usrImg"
               src={usuario.imagenUrl || "/userPlaceholder.svg"}
