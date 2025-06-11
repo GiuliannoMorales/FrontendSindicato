@@ -4,7 +4,11 @@ import api from "../../api/axios";
 export const login = createAsyncThunk(
   "auth/signIn",
   async (credentials: { username: string; password: string }) => {
-    const response = await api.post("/auth/signIn", credentials);
-    return response.data; // { accessToken, ... }
+    try {
+      const response = await api.post("/auth/signIn", credentials);
+      return response.data; // { accessToken, ... }
+    } catch (error) {
+      console.log(error);
+    }
   }
 );

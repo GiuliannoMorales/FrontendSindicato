@@ -6,6 +6,7 @@ import { createTarifa, getLastTarifas } from "../services/tarifas.service";
 import { useEffect, useState } from "react";
 import type { Tarifa } from "../models/TarifasModel";
 import { NavLink, useNavigate } from "react-router-dom";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const MONTO_MAX_TARIFA = 200;
 
@@ -57,10 +58,11 @@ const TarifasPage = () => {
     reset,
   } = useForm();
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
 
   const onSubmit = async (data: any) => {
     try {
-      const nuevaTarifa = await createTarifa({
+      const nuevaTarifa = await createTarifa(axiosPrivate, {
         ...data,
         idAdministrador: "11111111-1111-1111-1111-111111111111",
       });
@@ -97,7 +99,7 @@ const TarifasPage = () => {
 
   const fetchTarifas = async () => {
     try {
-      const response = await getLastTarifas();
+      const response = await getLastTarifas(axiosPrivate);
       setTarifas(response.data?.slice(0, 5) || []);
     } catch (error) {
       console.error("error", error);

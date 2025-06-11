@@ -1,4 +1,4 @@
-import type { AxiosPromise } from "axios"
+import type { AxiosInstance, AxiosPromise } from "axios";
 import api from "../../../api/axios"
 // import type { BackendResponse } from "../../../types/backendResponse"
 import type { NewTarifa, Tarifa } from "../models/TarifasModel"
@@ -15,7 +15,10 @@ export interface FiltroTarifas {
   modificadoPor?: string;
 }
 
-export const createTarifa = async (tarifaData: NewTarifa): Promise<Tarifa> => {
+export const createTarifa = async (
+  api: AxiosInstance,
+  tarifaData: NewTarifa
+): Promise<Tarifa> => {
   try {
     const response = await api.post<Tarifa>('tarifa', tarifaData);
     return response.data;
@@ -30,7 +33,7 @@ export const createTarifa = async (tarifaData: NewTarifa): Promise<Tarifa> => {
   }
 };
 
-export const getTarifasHistorial = async (): AxiosPromise<Array<Tarifa>> => {
+export const getTarifasHistorial = async (api: AxiosInstance,): AxiosPromise<Array<Tarifa>> => {
   try {
     const response = await api.get('historial-tarifas');
     console.log("Respuesta del servicio:", response);
@@ -54,6 +57,6 @@ export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<Tarifa[]> =
   return api.get(`/historial-tarifas/filtrar?${params.toString()}`);
 };
 
-export const getLastTarifas = () : AxiosPromise<Tarifa[]> => {
+export const getLastTarifas = (api: AxiosInstance) : AxiosPromise<Tarifa[]> => {
   return api.get('/tarifa/vigentes')
 }

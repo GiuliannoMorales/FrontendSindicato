@@ -25,12 +25,16 @@ const authSlice = createSlice({
     },
     logOut: (state) => {
       state.accessToken = null;
-    },
+      state.refreshToken = null;
+      state.roles = [];
+},
+
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.roles = action.payload.roles || [];
     });
   },
 });
