@@ -8,7 +8,7 @@ import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type InternalA
 const useAxiosPrivate = () => {
   const dispatch = useAppDispatch();
   const accessToken = useAppSelector((state) => state.auth.accessToken);
-  const user = useAppSelector((state) => state.auth.user);
+  const roles = useAppSelector((state) => state.auth.roles)
 
   useEffect(() => {
     const requestIntercept = api.interceptors.request.use(
@@ -34,8 +34,9 @@ const useAxiosPrivate = () => {
           try {
             const refreshResponse = await api.get("/auth/refresh");
             const newAccessToken = refreshResponse.data.accessToken;
+            const newRoles = refreshResponse.data.roles;
 
-            dispatch(setCredentials({ accessToken: newAccessToken, user }));
+            dispatch(setCredentials({ accessToken: newAccessToken, roles: newRoles}));
             if (prevRequest.headers) {
               prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
             }
@@ -55,7 +56,7 @@ const useAxiosPrivate = () => {
       api.interceptors.request.eject(requestIntercept);
       api.interceptors.response.eject(responseIntercept);
     };
-  }, [accessToken, user, dispatch]);
+  }, [accessToken, dispatch, roles]);
 
   return api;
 };
