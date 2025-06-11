@@ -272,6 +272,55 @@ h2 {
 	background: #8d81818e;
 }
 
+.modalConfirmBackdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 2000;
+}
+
+.modalConfirmMsg {
+	background: var(--fondo);
+	border-radius: 10px;
+	padding: 1.5rem 1rem;
+	width: 300px;
+	border: 1.5px solid #464646;
+	position: relative;
+	text-align: center;
+}
+
+.modalConfirmBtns {
+	margin-top: 1rem;
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.modalConfirmBtn {
+	color: var(--fondo);
+	border: none;
+	border-radius: 6px;
+	width: 100px;
+	padding: 0.5rem 1.1rem;
+	font-size: 1rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.modalConfirmBtn.btnNo {
+	background: #3c5468;
+}
+
+.modalConfirmBtn.btnSi {
+	background: #b23a48;
+}
+
 @media (min-width: 2000px) {
 	.lista {
 		grid-template-columns: repeat(5, 1fr);

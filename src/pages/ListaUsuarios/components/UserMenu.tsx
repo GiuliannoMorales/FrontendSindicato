@@ -9,6 +9,12 @@ export const UserMenu: React.FC<{
   ) => void;
 }> = ({ usuario, onChangeEstado }) => {
   const [open, setOpen] = useState(false);
+  const [confirmarBloqueo, setConfirmarBloqueo] = useState(false);
+
+  const handleBloquear = () => {
+    setConfirmarBloqueo(true);
+    setOpen(false);
+  };
 
   const opciones = [
     {
@@ -31,7 +37,7 @@ export const UserMenu: React.FC<{
     ...(usuario.estado !== "bloqueado"
       ? [{
         label: "Bloquear usuario",
-        action: () => onChangeEstado(usuario.id, "bloqueado"),
+        action: handleBloquear,
       }]
       : []),
   ];
@@ -58,6 +64,36 @@ export const UserMenu: React.FC<{
               {op.label}
             </div>
           ))}
+        </div>
+      )}
+      {confirmarBloqueo && (
+        <div
+          className="modalConfirmBackdrop"
+          onClick={() => setConfirmarBloqueo(false)}
+        >
+          <div className="modalConfirmMsg" onClick={(e) => e.stopPropagation()}>
+            <div>
+              ¿Está seguro de bloquear al usuario<br />
+              <b>{usuario.nombre} {usuario.apellido}</b>?
+            </div>
+            <div className="modalConfirmBtns">
+              <button
+                className="modalConfirmBtn btnNo"
+                onClick={() => setConfirmarBloqueo(false)}
+              >
+                NO
+              </button>
+              <button
+                className="modalConfirmBtn btnSi"
+                onClick={() => {
+                  onChangeEstado(usuario.id, "bloqueado");
+                  setConfirmarBloqueo(false);
+                }}
+              >
+                SI
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
