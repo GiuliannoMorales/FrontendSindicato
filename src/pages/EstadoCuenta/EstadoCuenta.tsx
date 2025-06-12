@@ -231,7 +231,7 @@ const EstadoCuenta: React.FC = () => {
               type="date"
               name="filtroFechaDe"
               id="filtroFechaDe"
-              className={`${fechaDe === "" ? "defaultFiltro" : ""}`}
+              className={`${fechaDe === "" ? "defaultFiltro" : ""} estado-cuenta__input`}
               value={fechaDe}
               onChange={(e) => setFechaDe(e.target.value)}
             />
@@ -240,7 +240,7 @@ const EstadoCuenta: React.FC = () => {
               type="date"
               name="filtroFechaA"
               id="filtroFechaA"
-              className={`${fechaA === "" ? "defaultFiltro" : ""}`}
+              className={`${fechaA === "" ? "defaultFiltro" : ""} estado-cuenta__input`}
               value={fechaA}
               onChange={(e) => setFechaA(e.target.value)}
             />
