@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import "./InternalUserPage.css"
 import EyeIcon from "../../assets/icons/EyeIcon";
 import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
-import api from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const InternalUser = () => {
     const [ci, setCi] = useState("");
@@ -17,18 +17,17 @@ const InternalUser = () => {
     const [userPhoto, setUserPhoto] = useState<string | null>(null);
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+    const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         const fetchUserData = async () => {
             if (ci.trim().length < 7) return;
 
             try {
-                const token = localStorage.getItem("token");
-                const response = await api.get(`/usuario/check-ci/${ci}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+
+                const response = await axiosPrivate.get(`/usuario/check-ci/${ci}`);
+                console.log("Respuesta API:", response);
+
                 const data = response.data;
 
                 if (data.status === "success" && data.data) {
@@ -38,8 +37,8 @@ const InternalUser = () => {
                     setApellido(user.apellido || "");
                     setCorreo(user.correo || "");
                     setTelefono(user.telefono || "");
-                    setUserType(""); 
-                    setObservations(""); 
+                    setUserType("");
+                    setObservations("");
                     setUserPhoto(user.foto || null);
                 } else {
                     setNombre("");
