@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./InternalUserPage.css"
 import EyeIcon from "../../assets/icons/EyeIcon";
 import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
+import api from "../../api/axios";
 
 const InternalUser = () => {
     const [ci, setCi] = useState("");
@@ -16,6 +17,49 @@ const InternalUser = () => {
     const [userPhoto, setUserPhoto] = useState<string | null>(null);
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (ci.trim().length < 7) return;
+
+            try {
+                const token = localStorage.getItem("token");
+                const response = await api.get(`/usuario/check-ci/${ci}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = response.data;
+
+                if (data.status === "success" && data.data) {
+                    const user = data.data;
+
+                    setNombre(user.nombre || "");
+                    setApellido(user.apellido || "");
+                    setCorreo(user.correo || "");
+                    setTelefono(user.telefono || "");
+                    setUserType(""); 
+                    setObservations(""); 
+                    setUserPhoto(user.foto || null);
+                } else {
+                    setNombre("");
+                    setApellido("");
+                    setCorreo("");
+                    setTelefono("");
+                    setUserPhoto(null);
+                }
+            } catch (error) {
+                console.error("Error al buscar CI:", error);
+                setNombre("");
+                setApellido("");
+                setCorreo("");
+                setTelefono("");
+                setUserPhoto(null);
+            }
+        };
+
+        fetchUserData();
+    }, [ci]);
 
     const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
