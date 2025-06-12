@@ -3,7 +3,6 @@ import "jspdf-autotable";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-// Convertir número a letras con formato tipo "CIEN 00/100 Bolivianos"
 const unidades = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE"];
 const decenas = ["", "", "VEINTE", "TREINTA", "CUARENTA", "CINCUENTA", "SESENTA", "SETENTA", "OCHENTA", "NOVENTA"];
 const especiales: { [key: number]: string } = {
@@ -42,27 +41,21 @@ const GenerarReciboPDF = ({
 }) => {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "letter" });
 
-  // Encabezado
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
   doc.text("RECIBO", 105, 20, { align: "center" });
   doc.setFontSize(12);
   doc.text("SITUMSS", 105, 28, { align: "center" });
 
-  // Nº de recibo (encima y fuera del cuadro)
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
-  doc.text(`Nº ${numeroTransaccion}`, 150, 16); // alineado al cuadro pequeño
+  doc.text(`Nº ${numeroTransaccion}`, 150, 16);
 
-  // Cuadro más pequeño
-  doc.rect(150, 20, 35, 12); // x, y, ancho, alto
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text("Bs.-", 153, 30); // alineado con el nuevo cuadro
+  doc.rect(150, 20, 35, 10);
+  doc.text("Bs.-", 153, 27);
   doc.setFont("helvetica", "normal");
-  doc.text(monto.toFixed(2), 170, 30);
+  doc.text(monto.toFixed(2), 170, 27);
 
-  // Datos del recibo
   let y = 60;
   const etiqueta = (label: string, value: string) => {
     doc.setFont("helvetica", "bold");
@@ -74,26 +67,28 @@ const GenerarReciboPDF = ({
 
   etiqueta("Recibí de", nombreCliente.toUpperCase());
   etiqueta("La suma de", numeroALetras(monto));
-  
+
   doc.setFont("helvetica", "bold");
   doc.text("Por concepto de:", 20, y);
   y += 8;
   doc.setFont("helvetica", "normal");
 
   mesesPagados.forEach((mes) => {
+    if (y > 260) {
+      doc.addPage();
+      y = 20;
+    }
     const texto = format(new Date(mes), "MMMM 'de' yyyy", { locale: es });
     doc.text(`Pago por uso de parqueo correspondiente al mes de ${texto}`, 25, y);
     y += 7;
   });
 
-  // Fecha centrada
   const fechaActual = format(new Date(), "d 'de' MMMM 'de' yyyy", { locale: es });
   doc.setFont("helvetica", "normal");
   doc.text(`Cochabamba, ${fechaActual}`, 105, y + 15, { align: "center" });
 
-  // Firmas
-  doc.line(30, 240, 90, 240); // izquierda
-  doc.line(130, 240, 190, 240); // derecha
+  doc.line(30, 240, 90, 240);
+  doc.line(130, 240, 190, 240);
   doc.text("RECIBÍ CONFORME", 40, 245);
   doc.text("ENTREGUÉ CONFORME", 140, 245);
 

@@ -219,14 +219,14 @@ const VistaUsuario: React.FC = () => {
 
         <div className="info-pago">
           <p><strong>Monto Total:</strong> {montoTotal} Bs.</p>
-          <p>
-            <strong>Fecha de Inicio del Pago:</strong>{" "}
-            {(() => {
-              if (!fechaInicioPago) return "";
-              const [year, month, day] = fechaInicioPago.split("-");
-              return `${day}/${month}/${year}`;
-            })()}
-          </p>
+         <p>
+          <strong>Fecha de Inicio del Pago:</strong>{" "}
+          {(() => {
+            if (!mesesPago.length) return "";
+            const [year, month, day] = mesesPago[0].split("-");
+            return `${day}/${month}/${year}`;
+          })()}
+        </p>
           <button className="boton" onClick={() => setMostrarModal(true)}>
             CONFIRMAR COBRO
           </button>
