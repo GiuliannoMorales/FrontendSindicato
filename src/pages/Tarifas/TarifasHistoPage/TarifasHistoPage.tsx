@@ -3,16 +3,18 @@ import FilterTarifas from "../components/FilterTarifas/FilterTarifas";
 import "./TarifasHistoPage.css";
 import type { Tarifa } from "../models/TarifasModel";
 import { getTarifasHistorial } from "../services/tarifas.service";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const TarifasHistoPage = () => {
   const [tarifas, setTarifas] = useState<Array<Tarifa>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const axiosPrivate = useAxiosPrivate()
 
   const fetchTarifas = async () => {
     try {
       setLoading(true);
-      const response = await getTarifasHistorial();
+      const response = await getTarifasHistorial(axiosPrivate);
       if (response.data) {
         setTarifas(response.data);
       } else {

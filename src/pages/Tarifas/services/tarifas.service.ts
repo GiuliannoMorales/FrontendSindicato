@@ -1,5 +1,4 @@
 import type { AxiosInstance, AxiosPromise } from "axios";
-import api from "../../../api/axios"
 // import type { BackendResponse } from "../../../types/backendResponse"
 import type { NewTarifa, Tarifa } from "../models/TarifasModel"
 import type { ErrorResponse } from "../../../types/backendResponse";
@@ -44,7 +43,7 @@ export const getTarifasHistorial = async (api: AxiosInstance,): AxiosPromise<Arr
   }
 }
 
-export const filtrarTarifas = (filtros: FiltroTarifas): AxiosPromise<Tarifa[]> => {
+export const filtrarTarifas = (filtros: FiltroTarifas, api: AxiosInstance): AxiosPromise<Tarifa[]> => {
   // Construir query params eliminando los undefined/empty
   const params = new URLSearchParams();
   
