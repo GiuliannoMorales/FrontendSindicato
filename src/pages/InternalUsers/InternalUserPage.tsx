@@ -18,6 +18,7 @@ const InternalUser = () => {
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const axiosPrivate = useAxiosPrivate();
+    const [isEditMode, setIsEditMode] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -30,22 +31,25 @@ const InternalUser = () => {
 
                 const data = response.data;
 
-                if (data.status === "success" && data.data) {
-                    const user = data.data;
-
-                    setNombre(user.nombre || "");
-                    setApellido(user.apellido || "");
-                    setCorreo(user.correo || "");
-                    setTelefono(user.telefono || "");
-                    setUserType("");
-                    setObservations("");
-                    setUserPhoto(user.foto || null);
-                } else {
+                if (data.status === "success" && data.data?.exists === false) {
                     setNombre("");
                     setApellido("");
                     setCorreo("");
                     setTelefono("");
+                    setUserType("");
+                    setObservations("");
                     setUserPhoto(null);
+                    setIsEditMode(false);
+                } else if (data.status === "success" && data.data) {
+                    const user = data.data;
+
+                    setNombre(user.nombre);
+                    setApellido(user.apellido);
+                    setCorreo(user.correo);
+                    setTelefono(user.telefono);
+                    setUserPhoto(user.foto);
+                    setPassword("")
+                    setIsEditMode(true);
                 }
             } catch (error) {
                 console.error("Error al buscar CI:", error);
@@ -84,19 +88,23 @@ const InternalUser = () => {
 
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
-        const formData = {
+        const formData: any = {
             ci,
             nombre,
             apellido,
             correo,
             telefono,
             userType,
-            password,
             observations,
             foto: userPhoto,
+        };
+
+        if (password.trim() !== "") {
+            formData.password = password;
         }
+
         console.log("Datos a enviar:", formData);
-    }
+    };
 
     return (
         <section className="internal-user">
@@ -109,35 +117,35 @@ const InternalUser = () => {
                             <label className="internal-user__label">C.I.:
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" value={ci} onChange={(e) => setCi(e.target.value)} required />
+                            <input type="text" className="internal-user__input" value={ci} onChange={(e) => setCi(e.target.value)} disabled={isEditMode} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Nombre(s):
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+                            <input type="text" className="internal-user__input" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={isEditMode} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Apellido(s):
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" value={apellido} onChange={(e) => setApellido(e.target.value)} required />
+                            <input type="text" className="internal-user__input" value={apellido} onChange={(e) => setApellido(e.target.value)} disabled={isEditMode} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Correo Electrónico:
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
+                            <input type="text" className="internal-user__input" value={correo} onChange={(e) => setCorreo(e.target.value)} disabled={isEditMode} required />
                         </div>
 
                         <div className="internal-user__field">
                             <label className="internal-user__label">Teléfono:
                                 <span className="required">*</span>
                             </label>
-                            <input type="text" className="internal-user__input" value={telefono} onChange={(e) => setTelefono(e.target.value)} required />
+                            <input type="text" className="internal-user__input" value={telefono} onChange={(e) => setTelefono(e.target.value)} disabled={isEditMode} required />
                         </div>
                     </fieldset>
 
@@ -167,6 +175,7 @@ const InternalUser = () => {
                                     className="internal-user__input"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    disabled={isEditMode}
                                     required
                                 />
                                 <button
@@ -210,6 +219,7 @@ const InternalUser = () => {
                                 onChange={onUserPhotoChange}
                                 style={{ display: "none" }}
                                 accept="image/*"
+                                disabled={isEditMode}
                                 required
                             />
                         </div>
