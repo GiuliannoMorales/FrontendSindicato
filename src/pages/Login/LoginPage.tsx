@@ -23,12 +23,15 @@ const LoginPage = () => {
 
   const onTogglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  const onSubmit = async  (data: any) => {
+  const onSubmit = async (data: any) => {
     try {
-      console.log("login", data);
-      await dispatch(login(data)).unwrap();
-      reset();
-      navigate("/");
+      const resultAction = await dispatch(login(data));
+      if (login.fulfilled.match(resultAction)) {
+        reset();
+        navigate("/");
+      } else {
+        setErrorMsgBack("Credenciales inválidas");
+      }
     } catch (error: any) {
       console.error("LoginError", error);
       setErrorMsgBack(error.data.errors[0].message);
