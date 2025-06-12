@@ -23,13 +23,16 @@ const ROLES = {
 const App: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        {/* public routes */}
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/unauthorized" element={<Unauthorized />}></Route>
+      {/* public routes */}
+      <Route path="/login" element={<LoginPage />}></Route>
+      <Route path="/unauthorized" element={<Unauthorized />}></Route>
 
+      <Route path="/" element={<Layout />}>
         {/* protected routes  */}
-        <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]}/>}>
+        <Route index element={<Inicio />}></Route>
+
+        {/* protected routes for the admin */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
           <Route path="/cuenta/estado" element={<EstadoCuenta />} />
           <Route path="/tarifas/historial" element={<TarifasHistoPage />} />
           <Route path="/tarifas/configuracion" element={<TarifasPage />} />
@@ -37,7 +40,16 @@ const App: React.FC = () => {
           <Route path="/ver/usuarios" element={<Usuarios />} />
           <Route path="/registrar/vehiculo" element={<RegistrarVehiculo />} />
         </Route>
-        <Route index element={<Inicio />}></Route>
+
+        {/* protected routes for the cashier */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.CAJERO]} />}>
+        
+        </Route>
+
+        {/* protected routes for the client */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.CLIENTE]} />}>
+        
+        </Route>
       </Route>
     </Routes>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentRoles } from "../features/auth/authSlice";
 import { useAppDispatch } from "../app/hooks";
@@ -8,13 +8,17 @@ import { useNavigate } from "react-router-dom";
 const Inicio: React.FC = () => {
   const roles = useSelector(selectCurrentRoles);
   const dispatch = useAppDispatch();
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-  dispatch(logOut());
-  navigate("/login");
-};
+    dispatch(logOut());
+    navigate("/login");
+  };
 
+  useEffect(() => {
+    console.log("roles", roles);
+  }, [roles]);
+  
   return (
     <>
       <h2>Inicio</h2>

@@ -6,7 +6,7 @@ export const login = createAsyncThunk(
   async (credentials: { username: string; password: string }) => {
     try {
       const response = await api.post("/auth/signIn", credentials);
-      return response.data; // { accessToken, ... }
+      return response.data;
     } catch (error) {
       console.log(error);
     }

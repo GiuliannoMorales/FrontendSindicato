@@ -59,6 +59,7 @@ const useAxiosPrivate = () => {
       }
     );
 
+    console.log("Interceptor montado")
     return () => {
       api.interceptors.request.eject(requestIntercept);
       api.interceptors.response.eject(responseIntercept);
