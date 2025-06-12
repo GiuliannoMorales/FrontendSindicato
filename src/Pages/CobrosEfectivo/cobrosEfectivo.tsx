@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./cobrosEfectivo.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 
 type Cliente = {
   id: string;
@@ -24,10 +24,10 @@ const CobrosEfectivo: React.FC = () => {
   useEffect(() => {
     const obtenerClientes = async () => {
       try {
-        const res = await axios.get(
-          "https://backendproyectoparqueoumss.onrender.com/api/cliente/activos"
+        const res = await api.get(
+          "/cliente/activos"
         );
-
+        console.log(res.data)
         if (Array.isArray(res.data.data)) {
           setClientes(res.data.data);
         } else {
@@ -117,7 +117,7 @@ const CobrosEfectivo: React.FC = () => {
               <table className="tabla">
                 <tbody>
                   {Array.from(new Map(resultados.map(c => [c.ci, c])).values()).map((cliente) => (
-                    <tr key={cliente.id} onClick={() => navigate(`/Datos/${cliente.id}`)}>
+                   <tr key={cliente.id} onClick={() => navigate('/cobros/Formulario', { state: { cliente } })}>
                       <td className="icono-usuario">
                         <img
                           src="/icons/user.png"

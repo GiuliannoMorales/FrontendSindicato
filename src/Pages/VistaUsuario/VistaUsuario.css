@@ -4,6 +4,7 @@ h1 {
   text-align: center;
   font-size: 24px;
   margin-bottom: 20px;
+  color: #004080;
 }
 
 /* Controles de selección */
@@ -17,11 +18,53 @@ button {
   cursor: pointer;
 }
 
-input[type="number"] {
-  width: 50px;
-  text-align: center;
+.contador {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 0;
+  overflow: hidden;
+  margin-left: 10px;
 }
 
+.contador input[type="number"] {
+  width: 40px;
+  text-align: center;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  appearance: textfield;
+}
+.linea-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.contador .bot {
+  background-color: #d3dce6;
+  border: none;
+  padding: 6px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.control-horizontal {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px; /* Espacio entre el control de meses y años */
+  align-items: center;
+  margin-bottom: 20px;
+}
 /* Estilo de tabla de detalles de pago */
 .contenedor-pago {
   display: flex;

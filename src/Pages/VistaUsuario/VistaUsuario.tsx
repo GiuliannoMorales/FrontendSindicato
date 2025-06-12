@@ -1,29 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import "./VistaUsuario.css";
-import axios from "axios";
+import api from "../../api/axios";
 
 interface Cliente {
-  idCliente: string;
+  id: string;
   nombre: string;
   apellido: string;
   tipo: string;
 }
 
-interface Vehiculo {
-  idVehiculo: string;
-  tipo: string;
-  placa: string;
-  idCliente: string;
-  idParqueo?: string;
-}
 
 const VistaUsuario: React.FC = () => {
   const location = useLocation();
-  const cliente = location.state?.cliente as Cliente | undefined;
-
-  const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
+  const cliente = location.state?.cliente as Cliente;
   const [tarifa, setTarifa] = useState<number>(0);
   const [fechaInicioPago, setFechaInicioPago] = useState<string>("");
   const [meses, setMeses] = useState<number>(0);
@@ -41,63 +32,46 @@ const VistaUsuario: React.FC = () => {
   }
 
   useEffect(() => {
-    const obtenerDatos = async () => {
-      try {
-        const resVehiculos = await axios.post(
-          "https://backendproyectoparqueoumss.onrender.com/api/vehiculo/activos",
-          { id: cliente.id },
-          { headers: { "Content-Type": "application/json" } }
-        );
-
-        const vehiculosCliente: Vehiculo[] = resVehiculos.data.data.filter(
-          (v: Vehiculo) => String(v.idCliente) === String(cliente.idCliente)
-        );
-        setVehiculos(vehiculosCliente);
-
-        if (vehiculosCliente.length > 0) {
-          const resFecha = await axios.post(
-            "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo/fecha-correspondiente-pago-parqueo",
-            {
-              idCajero: "55555555-5555-5555-5555-555555555555",
-              idParqueo: vehiculosCliente[0].idParqueo,
-            },
-            { headers: { "Content-Type": "application/json" } }
-          );
-
-          setFechaInicioPago(resFecha.data.data?.fecha || "");
+  const obtenerDatos = async () => {
+    try {
+      const resFecha = await api.post(
+        `/pago-parqueo/fecha-correspondiente-pago-parqueo`,
+        {
+          idCliente: cliente.id,
         }
-      } catch (error) {
-        console.error("Error al obtener vehículos o fecha:", error);
-      }
-    };
+      );
 
-    obtenerDatos();
-  }, [cliente]);
-
-
-  useEffect(() => {
-    const obtenerTarifa = async () => {
-      try {
-        const resTarifa = await axios.get(
-          `https://backendproyectoparqueoumss.onrender.com/api/tarifa/vigente`,
-          {
-            params: {
-              tipoCliente: cliente.tipo,
-              tipoVehiculo: vehiculos[0].tipo,
-            },
-          }
-        );
-
-        setTarifa(resTarifa.data.data.monto);
-      } catch (error) {
-        console.error("Error al obtener tarifa:", error);
-      }
-    };
-
-    if (vehiculos.length > 0) {
-      obtenerTarifa();
+console.log(resFecha)
+      setFechaInicioPago(resFecha.data.data || "");
+    } catch (error) {
+      console.error("Error al obtener la fecha de inicio de pago:", error);
     }
-  }, [vehiculos, cliente]);
+  };
+  console.log(cliente.id)
+  if (cliente?.id) {
+    obtenerDatos();
+  }
+}, [cliente]);
+
+useEffect(() => {
+  const obtenerTarifa = async () => {
+    try {
+      const resTarifa = await api.get(`/tarifa/vigente`, {
+        params: {
+          tipoCliente: cliente.tipo,
+          tipoVehiculo: "Auto",
+        },
+      });
+      setTarifa(resTarifa.data.data.monto);
+    } catch (error) {
+      console.error("Error al obtener tarifa:", error);
+    }
+  };
+
+  if (cliente?.tipo) {
+    obtenerTarifa(); 
+  }
+}, [cliente]);
 
   const obtenerMesesPermitidos = (): number => {
     if (!fechaInicioPago) return 0;
@@ -118,31 +92,26 @@ const VistaUsuario: React.FC = () => {
     return diffMeses;
   };
 
- const cambiarValor = (tipo: "meses" | "anios", delta: number) => {
-  const totalPermitido = obtenerMesesPermitidos();
-  const totalActual = meses + anios * 12;
+  const cambiarValor = (tipo: "meses" | "anios", delta: number) => {
+    const totalPermitido = obtenerMesesPermitidos();
+    const totalActual = meses + anios * 12;
 
-  console.log("Ejecutando cambiarValor", tipo, delta);
-  console.log("Total permitido:", totalPermitido);
-  console.log("Total actual:", totalActual);
+    let nuevoMeses = meses;
+    let nuevoAnios = anios;
 
-  if (tipo === "meses") {
-    const nuevoMeses = meses + delta;
-    const nuevoTotal = nuevoMeses + anios * 12;
-    if (nuevoMeses >= 0 && nuevoTotal <= totalPermitido) {
-      setMeses(nuevoMeses);
+    if (tipo === "meses") {
+      nuevoMeses += delta;
+    } else {
+      nuevoAnios += delta;
     }
-  }
 
-  if (tipo === "anios") {
-    const nuevoAnios = anios + delta;
-    const nuevoTotal = meses + nuevoAnios * 12;
-    if (nuevoAnios >= 0 && nuevoTotal <= totalPermitido) {
+    const nuevoTotal = nuevoMeses + nuevoAnios * 12;
+
+    if (nuevoMeses >= 0 && nuevoAnios >= 0 && (totalPermitido === 0 || nuevoTotal <= totalPermitido)) {
+      setMeses(nuevoMeses);
       setAnios(nuevoAnios);
     }
-  }
-};
-
+  };
 
   const generarMesesPago = (): string[] => {
     if (!fechaInicioPago || isNaN(new Date(fechaInicioPago).getTime())) return [];
@@ -164,39 +133,32 @@ const VistaUsuario: React.FC = () => {
     return resultado;
   };
 
+  const mesesPago = useMemo(() => generarMesesPago(), [meses, anios, fechaInicioPago]);
+  const montoTotal = mesesPago.length * tarifa;
+
   const confirmarCobro = async () => {
     setMostrarModal(false);
 
     try {
-      if (cliente.idCliente === idCajero) {
+      if (cliente.id === idCajero) {
         alert("El cajero no puede cobrarse a sí mismo.");
         return;
       }
-
-      if (!vehiculos[0]) {
-        alert("No se ha seleccionado un vehículo válido.");
-        return;
-      }
-
-      const mesesPago = generarMesesPago();
 
       if (mesesPago.length === 0) {
         alert("Debe seleccionar al menos un mes o año para pagar.");
         return;
       }
 
-      const montoTotal = mesesPago.length * tarifa;
-
       const payload = {
-        idCliente: cliente.idCliente,
-        idVehiculo: vehiculos[0].idVehiculo,
+        idCliente: cliente.id,
         meses: mesesPago,
         monto: montoTotal,
         idCajero,
       };
 
-      const response = await axios.post(
-        "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo",
+      const response = await api.post(
+        "/pago-parqueo",
         payload,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -207,26 +169,6 @@ const VistaUsuario: React.FC = () => {
       alert(`Error: ${error.response?.data?.message || error.message}`);
     }
   };
-
-  // ⬇️ Esto se recalcula cada render
-  const pagos = generarMesesPago().map((fechaCompleta) => {
-    const [anio, mes] = fechaCompleta.split("-");
-    const fechaValida = new Date(`${anio}-${mes}-01`);
-    const nombreMes = fechaValida.toLocaleString("es-ES", { month: "long" });
-
-    return {
-      vehiculo: `${vehiculos[0]?.tipo || ""} - ${vehiculos[0]?.placa || ""}`,
-      mes: `${nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - ${anio}`,
-      tarifa: `${tarifa} Bs.`,
-    };
-  });
-
-  const montoTotal = pagos.length * tarifa;
-
-
-console.log("Render VistaUsuario");
-console.log("meses:", meses, "años:", anios);
-console.log("Pagos:", generarMesesPago());
 
   return (
     <div>
@@ -243,56 +185,51 @@ console.log("Pagos:", generarMesesPago());
             </li>
           </ul>
         </div>
-
-        <div className="info-right">
-          <ul className="info-list">
-            <li>
-              <span className="info-label">Tipo de Vehículo:</span>{" "}
-              {vehiculos[0]?.tipo || "Sin vehículo"}
-            </li>
-          </ul>
-        </div>
       </div>
 
-     <h3 className="res">1. Cantidad de meses o años a pagar</h3>
-<p>
-  Meses:
-  <span className="contador">
-    <button onClick={() => cambiarValor("meses", -1)} className="bot">-</button>
-    <input type="number" value={meses} readOnly />
-    <button onClick={() => cambiarValor("meses", 1)} className="bot">+</button>
-  </span>
-</p>
+            <h3 className="res">1. Cantidad de meses o años a pagar</h3>
+        <div className="control-horizontal">
+          <div className="linea-control">
+            <label>Meses:</label>
+            <span className="contador">
+              <button onClick={() => cambiarValor("meses", -1)} className="bot">-</button>
+              <input type="number" value={meses} readOnly />
+              <button onClick={() => cambiarValor("meses", 1)} className="bot">+</button>
+            </span>
+          </div>
 
-<p>
-  Años:
-  <span className="contador">
-    <button onClick={() => cambiarValor("anios", -1)} className="bot">-</button>
-    <input type="number" value={anios} readOnly />
-    <button onClick={() => cambiarValor("anios", 1)} className="bot">+</button>
-  </span>
-</p>
-
-
+          <div className="linea-control">
+            <label>Años:</label>
+            <span className="contador">
+              <button onClick={() => cambiarValor("anios", -1)} className="bot">-</button>
+              <input type="number" value={anios} readOnly />
+              <button onClick={() => cambiarValor("anios", 1)} className="bot">+</button>
+            </span>
+          </div>
+        </div>
       <h3 className="res">2. Detalles del Pago</h3>
 
       <div className="contenedor-pago">
         <table>
           <thead>
             <tr className="titul">
-              <th>Vehículo</th>
               <th>Mes</th>
               <th>Tarifa</th>
             </tr>
           </thead>
           <tbody>
-            {pagos.map((pago, index) => (
-              <tr key={index}>
-                <td>{pago.vehiculo}</td>
-                <td>{pago.mes}</td>
-                <td>{pago.tarifa}</td>
-              </tr>
-            ))}
+            {mesesPago.map((fechaCompleta, index) => {
+              const [anio, mes] = fechaCompleta.split("-");
+              const fechaValida = new Date(`${anio}-${mes}-01`);
+              const nombreMes = fechaValida.toLocaleString("es-ES", { month: "long" });
+
+              return (
+                <tr key={index}>
+                  <td>{nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}</td>
+                  <td>{tarifa} Bs.</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 

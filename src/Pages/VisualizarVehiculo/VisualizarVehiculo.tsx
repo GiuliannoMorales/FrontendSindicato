@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from "../../api/axios";
 import './VisualizarVehiculo.css';
 
 const VisualizarVehiculo = () => {
@@ -10,7 +10,7 @@ const VisualizarVehiculo = () => {
   useEffect(() => {
     const fetchVehiculo = async () => {
       try {
-        const res = await axios.get(`https://backendproyectoparqueoumss.onrender.com/api/usuario/${id}`);
+        const res = await api.get(`/usuario/${id}`);
         const usuario = Array.isArray(res.data) ? res.data[0] : res.data;
         console.log('Usuario recibido:', usuario);
       console.log('ID Parqueo desde URL:', idParqueo);

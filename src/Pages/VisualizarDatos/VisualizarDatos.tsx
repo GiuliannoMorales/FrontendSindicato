@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'; 
-import axios from 'axios';
+import api from "../../api/axios";
 import './VisualizarDatos.css';
 
 const VisualizarDatos = () => {
@@ -11,8 +11,8 @@ const VisualizarDatos = () => {
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
-        const response = await axios.get(
-          `https://backendproyectoparqueoumss.onrender.com/api/usuario/${id}`
+        const response = await api.get(
+          `/usuario/${id}`
         );
 
         if (Array.isArray(response.data) && response.data.length > 0) {

@@ -9,6 +9,7 @@
 .titulo h1 {
   margin-bottom: 50px;
   font-size: 45px;
+  color: #004080;
 }
 
 .buscar-contenido {
@@ -52,3 +53,4 @@
   height: 16px;
   pointer-events: none;
 }
+

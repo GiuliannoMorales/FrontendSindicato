@@ -65,6 +65,7 @@ const ResultCI = () => {
               },
             }
           );
+          console.log("Vehículos recuperados:", resVehiculos.data);
           setTarifa(resTarifa.data.monto || 0);
         }
       } catch (err) {
@@ -75,10 +76,15 @@ const ResultCI = () => {
     fetchDatos();
   }, [cliente, navigate]);
 
-  useEffect(() => {
+  const actualizarFechasPago = (nuevoMeses: number, nuevoAnios: number) => {
+    const totalMeses = nuevoMeses + nuevoAnios * 12;
+    if (totalMeses > 48) return; // Máximo 4 años
+
+    setMeses(nuevoMeses);
+    setAnios(nuevoAnios);
+
     if (!fechaInicioPago || tarifa === 0) return;
 
-    const totalMeses = meses + anios * 12;
     const nuevasFechas: Date[] = [];
     const inicio = new Date(fechaInicioPago.anio, fechaInicioPago.mes - 1);
 
@@ -89,18 +95,46 @@ const ResultCI = () => {
     }
 
     setFechasPago(nuevasFechas);
-  }, [meses, anios, fechaInicioPago, tarifa]);
+  };
 
-  const sumarMeses = () => setMeses((prev) => prev + 1);
-  const restarMeses = () => setMeses((prev) => Math.max(0, prev - 1));
-  const sumarAnios = () => setAnios((prev) => prev + 1);
-  const restarAnios = () => setAnios((prev) => Math.max(0, prev - 1));
+  const sumarMeses = () => actualizarFechasPago(meses + 1, anios);
+  const restarMeses = () => actualizarFechasPago(Math.max(0, meses - 1), anios);
+  const sumarAnios = () => actualizarFechasPago(meses, anios + 1);
+  const restarAnios = () => actualizarFechasPago(meses, Math.max(0, anios - 1));
 
   const formatearFecha = (fecha: Date) =>
     fecha.toLocaleDateString("es-BO", {
       month: "long",
       year: "numeric",
     });
+
+  const confirmarCobro = async () => {
+    if (!cliente || vehiculos.length === 0 || fechasPago.length === 0) {
+      alert("Faltan datos para realizar el cobro.");
+      return;
+    }
+
+    const payload = {
+      idCliente: cliente.id,
+      idVehiculo: vehiculos[0].id,
+      fechas: fechasPago.map((fecha) => fecha.toISOString().split("T")[0]),
+    };
+
+    try {
+      await axios.post(
+        "https://backendproyectoparqueoumss.onrender.com/api/pago-parqueo",
+        payload
+      );
+      alert("Cobro realizado exitosamente.");
+      navigate("/cobros");
+    } catch (err: any) {
+      console.error("Error al realizar el cobro:", err);
+      alert(
+        err?.response?.data?.message ||
+          "Ocurrió un error al intentar realizar el cobro."
+      );
+    }
+  };
 
   return (
     <div className="container">
@@ -123,13 +157,13 @@ const ResultCI = () => {
         <h3>1. Cantidad de meses o años a pagar</h3>
         <div className="input-group centered">
           <div className="input-control">
-            <label>Meses: *</label>
+            <label>Meses:</label>
             <button onClick={restarMeses}>-</button>
             <input type="text" value={meses} readOnly />
             <button onClick={sumarMeses}>+</button>
           </div>
           <div className="input-control">
-            <label>Años: *</label>
+            <label>Años:</label>
             <button onClick={restarAnios}>-</button>
             <input type="text" value={anios} readOnly />
             <button onClick={sumarAnios}>+</button>
@@ -144,7 +178,7 @@ const ResultCI = () => {
             <thead>
               <tr>
                 <th>Vehículo</th>
-                <th>Meses</th>
+                <th>Mes</th>
                 <th>Tarifa</th>
               </tr>
             </thead>
@@ -173,7 +207,9 @@ const ResultCI = () => {
                 })}
               </p>
             </div>
-            <button className="confirm-button">CONFIRMAR COBRO</button>
+            <button className="confirm-button" onClick={confirmarCobro}>
+              CONFIRMAR COBRO
+            </button>
           </div>
         </div>
       </div>
