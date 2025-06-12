@@ -3,8 +3,8 @@ import { EditIcon } from "../../../../assets/icons/EditIcon";
 import { TrashIcon } from "../../../../assets/icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
 import "./UserFormRight.css";
-import api from "../../../../api/axios";
 import type { UserFormRightProps } from "../../models/UserModel";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 
 const UserFormRight: React.FC<UserFormRightProps> = ({
     userPhotoPreview,
@@ -20,9 +20,10 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
 }) => {
     const navigate = useNavigate();
     const [espacios, setEspacios] = useState([]);
+      const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
-        api.get("/parqueo/espacios-disponibles")
+        axiosPrivate.get("/parqueo/espacios-disponibles")
             .then((response) => {
                 setEspacios(response.data.data);
             })
