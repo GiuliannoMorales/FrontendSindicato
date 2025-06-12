@@ -201,19 +201,19 @@ const VistaUsuario: React.FC = () => {
               <th>Tarifa</th>
             </tr>
           </thead>
-          <tbody>
-            {mesesPago.map((fechaCompleta, index) => {
-              const [anio, mes] = fechaCompleta.split("-");
-              const fechaValida = new Date(`${anio}-${mes}-01`);
-              const nombreMes = fechaValida.toLocaleString("es-ES", { month: "long" });
+         <tbody>
+          {mesesPago.map((fechaCompleta, index) => {
+            const [anio, mes] = fechaCompleta.split("-");
+            const fechaValida = new Date(parseInt(anio), parseInt(mes) - 1, 1);
+            const nombreMes = fechaValida.toLocaleString("es-ES", { month: "long" });
 
-              return (
-                <tr key={index}>
-                  <td>{nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}</td>
-                  <td>{tarifa} Bs.</td>
-                </tr>
-              );
-            })}
+            return (
+              <tr key={index}>
+                <td>{nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}</td>
+                <td>{tarifa} Bs.</td>
+              </tr>
+            );
+          })}
           </tbody>
         </table>
 
