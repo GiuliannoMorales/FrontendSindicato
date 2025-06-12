@@ -8,6 +8,7 @@ import type { Tarifa } from "../../models/TarifasModel";
 import "./FilterTarifas.css";
 import TarifasTable from "../TarifasTable/TarifasTable";
 import { getCurrentDate } from "../../../../utils/formatDate";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 
 interface FilterTarifasProps {
   initialData: Tarifa[];
@@ -25,6 +26,7 @@ interface FiltrosForm {
 }
 
 const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
+  const axiosPrivate = useAxiosPrivate()
   const {
     register,
     handleSubmit,
@@ -94,7 +96,7 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
         modificadoPor: formData.modificadoPor || undefined,
       };
 
-      const response = await filtrarTarifas(filtros);
+      const response = await filtrarTarifas(filtros, axiosPrivate);
 
       if (response.data) {
         setFilteredData(response.data);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api/axios";
 import "./EstadoCuenta.css";
 import type {
   DetalleMes,
@@ -7,8 +6,11 @@ import type {
   Vehiculo,
   VehiculosResponse,
 } from "./EstadoCuentaModelos";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const EstadoCuenta: React.FC = () => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
   const [placaSeleccionada, setPlacaSeleccionada] = useState<string>("");
   const [detallesMes, setDetallesMes] = useState<DetalleMes[]>([]);
@@ -30,16 +32,14 @@ const EstadoCuenta: React.FC = () => {
       setError(null);
       return;
     }
-    api.post<VehiculosResponse>(
-      `reporte/cliente/vehiculo`,
-      { id: inputUsuario },
-    )
+    axiosPrivate
+      .post<VehiculosResponse>(`reporte/cliente/vehiculo`, { id: inputUsuario })
       .then((res) => {
         if (res.data.status === "error") {
           let msg = res.data.message || "Error al cargar los vehiculos.";
           if (res.data.errors && res.data.errors.length > 0) {
-            msg = res.data.errors[0].details || res.data.errors[0].message ||
-              msg;
+            msg =
+              res.data.errors[0].details || res.data.errors[0].message || msg;
           }
           setError(msg);
           setVehiculos([]);
@@ -57,7 +57,7 @@ const EstadoCuenta: React.FC = () => {
         ) {
           setError(
             error.response.data.errors[0].details ||
-              "Error al cargar los vehiculos.",
+              "Error al cargar los vehiculos."
           );
         } else if (
           error.response &&
@@ -80,17 +80,19 @@ const EstadoCuenta: React.FC = () => {
       return;
     }
 
-    api.post<EstadoCuentaResponse>(
-      `reporte/cliente-vehiculo/estados-cuenta`,
-      { clienteId: inputUsuario, placa: placaSeleccionada },
-    )
+    axiosPrivate
+      .post<EstadoCuentaResponse>(`reporte/cliente-vehiculo/estados-cuenta`, {
+        clienteId: inputUsuario,
+        placa: placaSeleccionada,
+      })
       .then((res) => {
         if (res.data.status === "error") {
-          let msg = res.data.message ||
+          let msg =
+            res.data.message ||
             "Error al cargar el estado de cuenta del vehiculo.";
           if (res.data.errors && res.data.errors.length > 0) {
-            msg = res.data.errors[0].details || res.data.errors[0].message ||
-              msg;
+            msg =
+              res.data.errors[0].details || res.data.errors[0].message || msg;
           }
           setError(msg);
           setDetallesMes([]);
@@ -103,7 +105,7 @@ const EstadoCuenta: React.FC = () => {
         ) {
           const cuenta = res.data.data[0];
           setDetallesMes(
-            Array.isArray(cuenta.detallesMes) ? cuenta.detallesMes : [],
+            Array.isArray(cuenta.detallesMes) ? cuenta.detallesMes : []
           );
           setSaldoPendiente(cuenta.saldoTotalPendiente);
           setUltimaActualizacion(cuenta.ultimaActualizacion);
@@ -117,15 +119,15 @@ const EstadoCuenta: React.FC = () => {
       })
       .catch((error) => {
         let msg = "Error al cargar el estado de cuenta del vehiculo.";
-        if (
-          error.response &&
-          error.response.data
-        ) {
+        if (error.response && error.response.data) {
           if (
-            error.response.data.errors && error.response.data.errors.length > 0
+            error.response.data.errors &&
+            error.response.data.errors.length > 0
           ) {
-            msg = error.response.data.errors[0].details ||
-              error.response.data.errors[0].message || msg;
+            msg =
+              error.response.data.errors[0].details ||
+              error.response.data.errors[0].message ||
+              msg;
           } else if (error.response.data.message) {
             msg = error.response.data.message;
           }
@@ -141,7 +143,7 @@ const EstadoCuenta: React.FC = () => {
     if (fechaDe && fechaA) {
       if (new Date(fechaA) < new Date(fechaDe)) {
         setErrorFiltro(
-          "La fecha final no puede ser anterior a la fecha inicial.",
+          "La fecha final no puede ser anterior a la fecha inicial."
         );
       } else {
         setErrorFiltro("");
@@ -153,16 +155,16 @@ const EstadoCuenta: React.FC = () => {
 
   const datosFiltrados = Array.isArray(detallesMes)
     ? detallesMes.filter((d) => {
-      const estadoOk = estado === "" ||
-        d.estado.toLowerCase() === estado.toLowerCase();
-      let fechaOk = true;
-      if (d.fechaPago) {
-        const fechaPago = new Date(d.fechaPago.split(" ")[0]);
-        if (fechaDe && fechaPago < new Date(fechaDe)) fechaOk = false;
-        if (fechaA && fechaPago > new Date(fechaA)) fechaOk = false;
-      }
-      return estadoOk && fechaOk;
-    })
+        const estadoOk =
+          estado === "" || d.estado.toLowerCase() === estado.toLowerCase();
+        let fechaOk = true;
+        if (d.fechaPago) {
+          const fechaPago = new Date(d.fechaPago.split(" ")[0]);
+          if (fechaDe && fechaPago < new Date(fechaDe)) fechaOk = false;
+          if (fechaA && fechaPago > new Date(fechaA)) fechaOk = false;
+        }
+        return estadoOk && fechaOk;
+      })
     : [];
 
   return (
@@ -231,7 +233,9 @@ const EstadoCuenta: React.FC = () => {
               type="date"
               name="filtroFechaDe"
               id="filtroFechaDe"
-              className={`${fechaDe === "" ? "defaultFiltro" : ""}`}
+              className={`${
+                fechaDe === "" ? "defaultFiltro" : ""
+              } estado-cuenta__input`}
               value={fechaDe}
               onChange={(e) => setFechaDe(e.target.value)}
             />
@@ -240,7 +244,9 @@ const EstadoCuenta: React.FC = () => {
               type="date"
               name="filtroFechaA"
               id="filtroFechaA"
-              className={`${fechaA === "" ? "defaultFiltro" : ""}`}
+              className={`${
+                fechaA === "" ? "defaultFiltro" : ""
+              } estado-cuenta__input`}
               value={fechaA}
               onChange={(e) => setFechaA(e.target.value)}
             />
@@ -258,11 +264,7 @@ const EstadoCuenta: React.FC = () => {
           </button>
         </div>
       </section>
-      {errorFiltro && (
-        <div className="error">
-          {errorFiltro}
-        </div>
-      )}
+      {errorFiltro && <div className="error">{errorFiltro}</div>}
 
       <div className="contenedorTabla">
         <table className="tablaEstado">
@@ -275,44 +277,42 @@ const EstadoCuenta: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {datosFiltrados.length === 0
-              ? (
-                <tr>
-                  <td colSpan={4} style={{ textAlign: "center" }}>
-                    No hay registros para mostrar.
+            {datosFiltrados.length === 0 ? (
+              <tr>
+                <td colSpan={4} style={{ textAlign: "center" }}>
+                  No hay registros para mostrar.
+                </td>
+              </tr>
+            ) : (
+              datosFiltrados.map((fila) => (
+                <tr key={fila.periodo}>
+                  <td className="colLinea">{fila.periodo}</td>
+                  <td
+                    className={`colLinea ${
+                      fila.estado === "Pagado"
+                        ? "estado-pagado"
+                        : fila.estado === "Pendiente"
+                        ? "estado-pendiente"
+                        : ""
+                    }`}
+                  >
+                    {fila.estado}
+                  </td>
+                  <td className="center">{fila.monto}</td>
+                  <td
+                    className={`center ${
+                      !fila.fechaPago || fila.fechaPago.trim() === ""
+                        ? "fecha-vacia"
+                        : ""
+                    }`}
+                  >
+                    {fila.fechaPago && fila.fechaPago.trim() !== ""
+                      ? fila.fechaPago.split(" ")[0]
+                      : "Sin pago"}
                   </td>
                 </tr>
-              )
-              : (
-                datosFiltrados.map((fila) => (
-                  <tr key={fila.periodo}>
-                    <td className="colLinea">{fila.periodo}</td>
-                    <td
-                      className={`colLinea ${
-                        fila.estado === "Pagado"
-                          ? "estado-pagado"
-                          : fila.estado === "Pendiente"
-                          ? "estado-pendiente"
-                          : ""
-                      }`}
-                    >
-                      {fila.estado}
-                    </td>
-                    <td className="center">{fila.monto}</td>
-                    <td
-                      className={`center ${
-                        !fila.fechaPago || fila.fechaPago.trim() === ""
-                          ? "fecha-vacia"
-                          : ""
-                      }`}
-                    >
-                      {fila.fechaPago && fila.fechaPago.trim() !== ""
-                        ? fila.fechaPago.split(" ")[0]
-                        : "Sin pago"}
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))
+            )}
           </tbody>
         </table>
       </div>
