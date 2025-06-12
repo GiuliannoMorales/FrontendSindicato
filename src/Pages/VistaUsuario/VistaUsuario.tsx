@@ -3,12 +3,14 @@ import { useLocation } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import "./VistaUsuario.css";
 import api from "../../api/axios";
+import GenerarReciboPDF from "../GenerarReciboPDF/GenerarReciboPDF";
 
 interface Cliente {
   id: string;
   nombre: string;
   apellido: string;
   tipo: string;
+  tipoParqueo: string;
 }
 
 
@@ -20,80 +22,54 @@ const VistaUsuario: React.FC = () => {
   const [meses, setMeses] = useState<number>(0);
   const [anios, setAnios] = useState<number>(0);
   const [mostrarModal, setMostrarModal] = useState<boolean>(false);
+  const [mensajeModal, setMensajeModal] = useState<string>("");
+  const [mostrandoResultado, setMostrandoResultado] = useState<boolean>(false);
 
   const idCajero = "CAJERO_123";
 
   if (!cliente) {
-    return (
-      <div>
-        No se recibió información del cliente. Por favor, vuelva a buscar el CI.
-      </div>
-    );
+    return <div>No se recibió información del cliente. Por favor, vuelva a buscar el CI.</div>;
   }
 
   useEffect(() => {
-  const obtenerDatos = async () => {
-    try {
-      const resFecha = await api.post(
-        `/pago-parqueo/fecha-correspondiente-pago-parqueo`,
-        {
-          idCliente: cliente.id,
-        }
-      );
+    const obtenerDatos = async () => {
+      try {
+        const resFecha = await api.post(
+          `/pago-parqueo/fecha-correspondiente-pago-parqueo`,
+          { idCliente: cliente.id }
+        );
+        setFechaInicioPago(resFecha.data.data || "");
+      } catch (error) {
+        console.error("Error al obtener la fecha de inicio de pago:", error);
+      }
+    };
 
-console.log(resFecha)
-      setFechaInicioPago(resFecha.data.data || "");
-    } catch (error) {
-      console.error("Error al obtener la fecha de inicio de pago:", error);
+    if (cliente?.id) {
+      obtenerDatos();
     }
-  };
-  console.log(cliente.id)
-  if (cliente?.id) {
-    obtenerDatos();
-  }
-}, [cliente]);
+  }, [cliente]);
 
-useEffect(() => {
-  const obtenerTarifa = async () => {
-    try {
-      const resTarifa = await api.get(`/tarifa/vigente`, {
-        params: {
-          tipoCliente: cliente.tipo,
-          tipoVehiculo: "Auto",
-        },
-      });
-      setTarifa(resTarifa.data.data.monto);
-    } catch (error) {
-      console.error("Error al obtener tarifa:", error);
+  useEffect(() => {
+    const obtenerTarifa = async () => {
+      try {
+        const resTarifa = await api.get(`/tarifa/vigente`, {
+          params: {
+            tipoCliente: cliente.tipo,
+            tipoVehiculo: cliente.tipoParqueo,
+          },
+        });
+        setTarifa(resTarifa.data.data.monto);
+      } catch (error) {
+        console.error("Error al obtener tarifa:", error);
+      }
+    };
+
+    if (cliente?.tipo) {
+      obtenerTarifa();
     }
-  };
-
-  if (cliente?.tipo) {
-    obtenerTarifa(); 
-  }
-}, [cliente]);
-
-  const obtenerMesesPermitidos = (): number => {
-    if (!fechaInicioPago) return 0;
-
-    const inicio = new Date(fechaInicioPago);
-    const ahora = new Date();
-    inicio.setHours(0, 0, 0, 0);
-    ahora.setHours(0, 0, 0, 0);
-
-    if (inicio >= new Date(ahora.getFullYear(), ahora.getMonth(), 1)) {
-      return 0;
-    }
-
-    const diffMeses =
-      (ahora.getFullYear() - inicio.getFullYear()) * 12 +
-      (ahora.getMonth() - inicio.getMonth());
-
-    return diffMeses;
-  };
+  }, [cliente]);
 
   const cambiarValor = (tipo: "meses" | "anios", delta: number) => {
-    const totalPermitido = obtenerMesesPermitidos();
     const totalActual = meses + anios * 12;
 
     let nuevoMeses = meses;
@@ -107,24 +83,27 @@ useEffect(() => {
 
     const nuevoTotal = nuevoMeses + nuevoAnios * 12;
 
-    if (nuevoMeses >= 0 && nuevoAnios >= 0 && (totalPermitido === 0 || nuevoTotal <= totalPermitido)) {
+    if (nuevoMeses >= 0 && nuevoAnios >= 0 && nuevoTotal <= 36) {
       setMeses(nuevoMeses);
       setAnios(nuevoAnios);
     }
   };
 
   const generarMesesPago = (): string[] => {
-    if (!fechaInicioPago || isNaN(new Date(fechaInicioPago).getTime())) return [];
+    let baseFecha: Date;
 
-    const fecha = new Date(fechaInicioPago);
-    const totalSolicitado = meses + anios * 12;
-    const maxMeses = obtenerMesesPermitidos();
-    const totalFinal = Math.min(totalSolicitado, maxMeses);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fechaInicioPago)) {
+      const [anio, mes, dia] = fechaInicioPago.split("-").map(Number);
+      baseFecha = new Date(anio, mes - 1, 1);
+    } else {
+      baseFecha = new Date();
+    }
+
+    const totalSolicitado = Math.min(meses + anios * 12, 36);
     const resultado: string[] = [];
 
-    for (let i = 0; i < totalFinal; i++) {
-      const nuevaFecha = new Date(fecha);
-      nuevaFecha.setMonth(fecha.getMonth() + i);
+    for (let i = 0; i < totalSolicitado; i++) {
+      const nuevaFecha = new Date(baseFecha.getFullYear(), baseFecha.getMonth() + i, 1);
       const anio = nuevaFecha.getFullYear();
       const mes = String(nuevaFecha.getMonth() + 1).padStart(2, "0");
       resultado.push(`${anio}-${mes}-01`);
@@ -137,36 +116,41 @@ useEffect(() => {
   const montoTotal = mesesPago.length * tarifa;
 
   const confirmarCobro = async () => {
-    setMostrarModal(false);
-
     try {
       if (cliente.id === idCajero) {
-        alert("El cajero no puede cobrarse a sí mismo.");
+        setMensajeModal("El cajero no puede cobrarse a sí mismo.");
+        setMostrandoResultado(true);
         return;
       }
 
       if (mesesPago.length === 0) {
-        alert("Debe seleccionar al menos un mes o año para pagar.");
+        setMensajeModal("Debe seleccionar al menos un mes o año para pagar.");
+        setMostrandoResultado(true);
         return;
       }
 
       const payload = {
         idCliente: cliente.id,
         meses: mesesPago,
-        monto: montoTotal,
-        idCajero,
+        montoPagado: montoTotal,
       };
 
-      const response = await api.post(
-        "/pago-parqueo",
-        payload,
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      alert("Pago procesado exitosamente");
+      await api.post("/pago-parqueo", payload);
+      const numeroTransaccion = `PAGO-${new Date().getFullYear()}-${String(
+          Math.floor(Math.random() * 9999)
+        ).padStart(4, "0")}`;
+            GenerarReciboPDF({
+          nombreCliente: `${cliente.nombre} ${cliente.apellido}`,
+          monto: montoTotal,
+          mesesPagados: mesesPago,
+          numeroTransaccion,
+    }); 
+      setMensajeModal("Pago procesado exitosamente");
+      setMostrandoResultado(true);
     } catch (error: any) {
       console.error(error);
-      alert(`Error: ${error.response?.data?.message || error.message}`);
+      setMensajeModal(`Error: ${error.response?.data?.message || error.message}`);
+      setMostrandoResultado(true);
     }
   };
 
@@ -187,28 +171,28 @@ useEffect(() => {
         </div>
       </div>
 
-            <h3 className="res">1. Cantidad de meses o años a pagar</h3>
-        <div className="control-horizontal">
-          <div className="linea-control">
-            <label>Meses:</label>
-            <span className="contador">
-              <button onClick={() => cambiarValor("meses", -1)} className="bot">-</button>
-              <input type="number" value={meses} readOnly />
-              <button onClick={() => cambiarValor("meses", 1)} className="bot">+</button>
-            </span>
-          </div>
-
-          <div className="linea-control">
-            <label>Años:</label>
-            <span className="contador">
-              <button onClick={() => cambiarValor("anios", -1)} className="bot">-</button>
-              <input type="number" value={anios} readOnly />
-              <button onClick={() => cambiarValor("anios", 1)} className="bot">+</button>
-            </span>
-          </div>
+      <h3 className="res">1. Cantidad de meses o años a pagar</h3>
+      <div className="control-horizontal">
+        <div className="linea-control">
+          <label>Meses:</label>
+          <span className="contador">
+            <button onClick={() => cambiarValor("meses", -1)} className="bot">-</button>
+            <input type="number" value={meses} readOnly />
+            <button onClick={() => cambiarValor("meses", 1)} className="bot">+</button>
+          </span>
         </div>
-      <h3 className="res">2. Detalles del Pago</h3>
 
+        <div className="linea-control">
+          <label>Años:</label>
+          <span className="contador">
+            <button onClick={() => cambiarValor("anios", -1)} className="bot">-</button>
+            <input type="number" value={anios} readOnly />
+            <button onClick={() => cambiarValor("anios", 1)} className="bot">+</button>
+          </span>
+        </div>
+      </div>
+
+      <h3 className="res">2. Detalles del Pago</h3>
       <div className="contenedor-pago">
         <table>
           <thead>
@@ -234,11 +218,14 @@ useEffect(() => {
         </table>
 
         <div className="info-pago">
+          <p><strong>Monto Total:</strong> {montoTotal} Bs.</p>
           <p>
-            <strong>Monto Total:</strong> {montoTotal} Bs.
-          </p>
-          <p>
-            <strong>Fecha de Inicio del Pago:</strong> {fechaInicioPago}
+            <strong>Fecha de Inicio del Pago:</strong>{" "}
+            {(() => {
+              if (!fechaInicioPago) return "";
+              const [year, month, day] = fechaInicioPago.split("-");
+              return `${day}/${month}/${year}`;
+            })()}
           </p>
           <button className="boton" onClick={() => setMostrarModal(true)}>
             CONFIRMAR COBRO
@@ -248,8 +235,14 @@ useEffect(() => {
 
       <Modal
         visible={mostrarModal}
-        onClose={() => setMostrarModal(false)}
+        onClose={() => {
+          setMostrarModal(false);
+          setMostrandoResultado(false);
+          setMensajeModal("");
+        }}
         onConfirm={confirmarCobro}
+        mensajeFinal={mensajeModal}
+        mostrandoResultado={mostrandoResultado}
       />
     </div>
   );
