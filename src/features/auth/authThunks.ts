@@ -5,7 +5,7 @@ export const login = createAsyncThunk(
   "auth/signIn",
   async (credentials: { username: string; password: string }, thunkAPI) => {
     try {
-      const response = await api.post("/auth/signIn", credentials);
+      const response = await api.post("/auth/signIn", credentials, {withCredentials: true});
 
       return response.data;
     } catch (error: any) {
