@@ -18,19 +18,22 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm();
   const [errorMsgBack, setErrorMsgBack] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const onTogglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async  (data: any) => {
     try {
       console.log("login", data);
-      dispatch(login(data));
+      await dispatch(login(data)).unwrap();
       reset();
       navigate("/");
     } catch (error: any) {
       console.error("LoginError", error);
       setErrorMsgBack(error.data.errors[0].message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -75,8 +78,8 @@ const LoginPage = () => {
           </span>
         )}
         {errorMsgBack && <div className="login__error">{errorMsgBack}</div>}
-        <button type="submit" className="login__button">
-          Iniciar
+        <button type="submit" className="login__button" disabled={isLoading}>
+          {isLoading ? "Iniciando..." : "Iniciar"}
         </button>
       </form>
     </div>
