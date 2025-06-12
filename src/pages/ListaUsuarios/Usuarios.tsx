@@ -134,7 +134,15 @@ const Usuarios: React.FC = () => {
     //api.put("/usuarios").then((res) => ...)
     id: number,
     nuevoEstado: "activo" | "inactivo" | "bloqueado",
+    motivo?: string,
   ) => {
+    if (nuevoEstado === "activo") {
+      // api.post("/admin/activar", {usuarioId:id})
+      console.log({ usuarioId: id });
+    } else {
+      // api.post(`/admin/${nuevoEstado}`, {usuarioId: id, motivo})
+      console.log({ usuarioId: id, motivo });
+    }
     setUsuarios((prev) =>
       prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
     );

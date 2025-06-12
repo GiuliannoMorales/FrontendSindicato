@@ -6,14 +6,25 @@ export const UserMenu: React.FC<{
   onChangeEstado: (
     id: number,
     nuevoEstado: "activo" | "inactivo" | "bloqueado",
+    motivo?: string,
   ) => void;
 }> = ({ usuario, onChangeEstado }) => {
   const [open, setOpen] = useState(false);
-  const [confirmarBloqueo, setConfirmarBloqueo] = useState(false);
+  const [modalAccion, setModalAccion] = useState<
+    null | "bloqueado" | "inactivo"
+  >(null);
+  const [motivo, setMotivo] = useState("");
 
   const handleBloquear = () => {
-    setConfirmarBloqueo(true);
+    setModalAccion("bloqueado");
     setOpen(false);
+    setMotivo("");
+  };
+
+  const handleInactivar = () => {
+    setModalAccion("inactivo");
+    setOpen(false);
+    setMotivo("");
   };
 
   const opciones = [
@@ -31,7 +42,7 @@ export const UserMenu: React.FC<{
     ...(usuario.estado !== "inactivo"
       ? [{
         label: "Inactivar usuario",
-        action: () => onChangeEstado(usuario.id, "inactivo"),
+        action: handleInactivar,
       }]
       : []),
     ...(usuario.estado !== "bloqueado"
@@ -41,6 +52,12 @@ export const UserMenu: React.FC<{
       }]
       : []),
   ];
+
+  const modalMsg = modalAccion === "bloqueado"
+    ? "¿Está seguro de bloquear al usuario"
+    : "¿Está seguro de inactivar al usuario";
+
+  const modalBtn = modalAccion === "bloqueado" ? "Bloquear" : "Inactivar";
 
   return (
     <div className="usrMenuWrapper">
@@ -66,31 +83,41 @@ export const UserMenu: React.FC<{
           ))}
         </div>
       )}
-      {confirmarBloqueo && (
+      {modalAccion && (
         <div
           className="modalConfirmBackdrop"
-          onClick={() => setConfirmarBloqueo(false)}
+          onClick={() => setModalAccion(null)}
         >
           <div className="modalConfirmMsg" onClick={(e) => e.stopPropagation()}>
             <div>
-              ¿Está seguro de bloquear al usuario<br />
+              {modalMsg} <br />
               <b>{usuario.nombre} {usuario.apellido}</b>?
+            </div>
+            <div className="modalMotivo">
+              <textarea
+                className="inputMotivo"
+                placeholder="Motivo (obligatorio)"
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
+                rows={3}
+              />
             </div>
             <div className="modalConfirmBtns">
               <button
                 className="modalConfirmBtn btnNo"
-                onClick={() => setConfirmarBloqueo(false)}
+                onClick={() => setModalAccion(null)}
               >
-                NO
+                Cancelar
               </button>
               <button
                 className="modalConfirmBtn btnSi"
+                disabled={!motivo.trim()}
                 onClick={() => {
-                  onChangeEstado(usuario.id, "bloqueado");
-                  setConfirmarBloqueo(false);
+                  onChangeEstado(usuario.id, modalAccion, motivo.trim());
+                  setModalAccion(null);
                 }}
               >
-                SI
+                {modalBtn}
               </button>
             </div>
           </div>
