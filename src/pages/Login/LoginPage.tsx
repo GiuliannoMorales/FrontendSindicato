@@ -7,6 +7,7 @@ import EyeIcon from "../../assets/icons/EyeIcon";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../features/auth/authThunks";
 import LoginImage from "../../assets/images/Customer.png";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -25,9 +26,10 @@ const LoginPage = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const resultAction = await dispatch(login(data));
+      const resultAction = await dispatch(login(data)).unwrap();
       if (login.fulfilled.match(resultAction)) {
         reset();
+        console.log('currentToken guardado', selectCurrentToken)
         navigate("/");
       } else {
         setErrorMsgBack("Credenciales inválidas");
