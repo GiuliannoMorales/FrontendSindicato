@@ -47,7 +47,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: -2px;
+    margin-top: 5px;
     position: relative;
 }
 
@@ -163,4 +164,15 @@
 .internal-user__submit-button {
     background-color: #c44040;
     color: white;
+}
+
+/*error*/
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    margin-left: 165px;
+    text-align: justify;
 }

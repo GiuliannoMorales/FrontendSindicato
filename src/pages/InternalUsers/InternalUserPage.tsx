@@ -4,6 +4,7 @@ import TextInput from "./components/TextInput";
 import SelectInput from "./components/SelectInput";
 import PasswordInput from "./components/PasswordInput";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useFormHandlers } from "./utils/useFormHandlers";
 
 const InternalUser = () => {
     const [ci, setCi] = useState("");
@@ -20,6 +21,19 @@ const InternalUser = () => {
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const axiosPrivate = useAxiosPrivate();
     const [isEditMode, setIsEditMode] = useState(false);
+
+    const [errors, setErrors] = useState<Record<string, string | null>>({});
+
+    const { handleInputChange } = useFormHandlers(
+        isEditMode,
+        setCi,
+        setNombre,
+        setApellido,
+        setCorreo,
+        setTelefono,
+        setPassword,
+        setErrors
+    );
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -128,18 +142,23 @@ const InternalUser = () => {
         }
     };
 
-     return (
+    return (
         <section className="internal-user">
             <h2 className="internal-user__title">REGISTRAR USUARIO INTERNO</h2>
             <form className="internal-user__form">
                 <div className="internal-user__form-left">
                     <fieldset className="internal-user__fieldset">
                         <legend className="internal-user__legend">• Datos Personales:</legend>
-                        <TextInput label="C.I.:" value={ci} onChange={(e) => setCi(e.target.value)} disabled={isEditMode} required />
-                        <TextInput label="Nombre(s):" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={isEditMode} required />
-                        <TextInput label="Apellido(s):" value={apellido} onChange={(e) => setApellido(e.target.value)} disabled={isEditMode} required />
-                        <TextInput label="Correo Electrónico:" value={correo} onChange={(e) => setCorreo(e.target.value)} disabled={isEditMode} required />
-                        <TextInput label="Teléfono:" value={telefono} onChange={(e) => setTelefono(e.target.value)} disabled={isEditMode} required />
+                        <TextInput label="C.I.:" value={ci} onChange={(e) => handleInputChange("ci", e.target.value)} disabled={isEditMode} required />
+                            {errors.ci && <p className="error-message">{errors.ci}</p>}
+                        <TextInput label="Nombre(s):" value={nombre} onChange={(e) => handleInputChange("nombre", e.target.value)} disabled={isEditMode} required />
+                            {errors.nombre && <p className="error-message">{errors.nombre}</p>}
+                        <TextInput label="Apellido(s):" value={apellido} onChange={(e) => handleInputChange("apellido", e.target.value)} disabled={isEditMode} required />
+                            {errors.apellido && <p className="error-message">{errors.apellido}</p>}
+                        <TextInput label="Correo Electrónico:" value={correo} onChange={(e) => handleInputChange("correo", e.target.value)} disabled={isEditMode} required />
+                            {errors.correo && <p className="error-message">{errors.correo}</p>}
+                        <TextInput label="Teléfono:" value={telefono} onChange={(e) => handleInputChange("telefono", e.target.value)} disabled={isEditMode} required />
+                            {errors.telefono && <p className="error-message">{errors.telefono}</p>}
                     </fieldset>
 
                     <fieldset className="internal-user__fieldset">
@@ -153,11 +172,12 @@ const InternalUser = () => {
                         />
                         <PasswordInput
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => handleInputChange("password", e.target.value)}
                             visible={passwordVisible}
                             toggleVisible={togglePasswordVisibility}
                             disabled={isEditMode}
                         />
+                        {errors.password && <p className="error-message">{errors.password}</p>}
                     </fieldset>
                 </div>
 
