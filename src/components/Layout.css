@@ -98,6 +98,7 @@ header {
 }
 
 aside {
+	position: relative;
 	grid-area: menu;
 	background-color: var(--menuFondo);
 	color: var(--txtMenu);
@@ -127,6 +128,7 @@ main {
 	justify-content: space-between;
 	align-items: center;
 	padding-block: 6px;
+	cursor: pointer;
 }
 
 .sidebar__group-container {
@@ -142,6 +144,7 @@ main {
 	display: flex;
 	gap: 6px;
 	align-items: center;
+	cursor: pointer;
 }
 
 .sidebar__item-link {
@@ -153,6 +156,18 @@ main {
 	background-color: #6d88a5;
 	color: white;
 	border-radius: 2px 6px 6px 2px;
+}
+
+.sidebar__logout{
+	position: absolute;
+	top: 85%;
+	padding-left: 0;
+	min-width: 80%;
+}
+
+.sidebar__group-logout{
+	display: flex;
+	align-items: center;
 }
 
 @media (max-width: 1028px) {
@@ -209,6 +224,9 @@ main {
 		padding: 2rem 1rem 1rem 1rem;
 	}
 
+	.sidebar__logout{
+		top: 78%;
+	}
 	.sidebar.open {
 		transform: translateX(0);
 	}
