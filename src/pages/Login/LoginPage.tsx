@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../features/auth/authThunks";
 import LoginImage from "../../assets/images/Customer.png";
 import Header from "../../components/Header";
+// import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -26,13 +27,10 @@ const LoginPage = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const resultAction = await dispatch(login(data));
-      if (login.fulfilled.match(resultAction)) {
-        reset();
-        navigate("/");
-      } else {
-        setErrorMsgBack("Credenciales inválidas");
-      }
+      const resultAction = await dispatch(login(data)).unwrap();
+      reset();
+      console.log('currentToken guardado', resultAction)
+      navigate("/");
     } catch (error: any) {
       console.error("LoginError", error);
       setErrorMsgBack(error.data.errors[0].message);
