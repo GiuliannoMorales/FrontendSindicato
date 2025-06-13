@@ -3,7 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectCurrentToken, selectCurrentRoles } from "./authSlice";
 
 interface RequireAuthProps {
-  allowedRoles: string[];
+  allowedRoles?: string[];
 }
 
 const RequireAuth = ({ allowedRoles }: RequireAuthProps) => {
@@ -11,14 +11,15 @@ const RequireAuth = ({ allowedRoles }: RequireAuthProps) => {
   const roles = useAppSelector(selectCurrentRoles);
   const location = useLocation();
 
-  const hasRequiredRole = roles?.find((role) => allowedRoles.includes(role));
-
   if (!token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!hasRequiredRole) {
-    return <Navigate to="/unauthorized" replace />;
+  if (allowedRoles && allowedRoles.length > 0) {
+    const hasRequiredRole = roles?.some(role => allowedRoles.includes(role));
+    if (!hasRequiredRole) {
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
 
   return <Outlet />;

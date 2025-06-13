@@ -5,13 +5,11 @@ import type { RootState } from "../../app/store";
 
 interface AuthState {
   accessToken: string | null;
-  refreshToken: string | null
   roles: Array<string>
 }
 
 const initialState: AuthState = {
   accessToken: null,
-  refreshToken: null,
   roles: []
 };
 
@@ -21,11 +19,10 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
+      state.roles = action.payload.roles;
     },
     logOut: (state) => {
       state.accessToken = null;
-      state.refreshToken = null;
       state.roles = [];
 },
 
@@ -33,7 +30,6 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
       state.roles = action.payload.roles || [];
     });
   },

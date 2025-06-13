@@ -5,5 +5,5 @@ export interface Usuario {
 	ci: string;
 	rol: string;
 	imagenUrl?: string;
-	habilitado: boolean;
+	estado: 'activo' | 'inactivo' | 'bloqueado';
 }
