@@ -9,6 +9,7 @@ import TarifasPage from "./pages/Tarifas/TarifasConfigPage/TarifasConfigPage";
 import User from "./pages/Users/User";
 import Usuarios from "./pages/ListaUsuarios/Usuarios";
 import RegistrarVehiculo from "./pages/RegistrarVehiculo/RegistrarVehiculo";
+import InternalUser from "./pages/InternalUsers/InternalUserPage";
 import Layout from "./components/Layout";
 import LoginPage from "./pages/Login/LoginPage";
 import RequireAuth from "./features/auth/RequireAuth";
@@ -43,6 +44,7 @@ const App: React.FC = () => {
             <Route path="/registrar/usuario" element={<User />} />
             <Route path="/ver/usuarios" element={<Usuarios />} />
             <Route path="/registrar/vehiculo" element={<RegistrarVehiculo />} />
+            <Route path="/registrar/usuario-interno" element={<InternalUser />} />
           </Route>
 
           {/* protected routes for the cashier */}

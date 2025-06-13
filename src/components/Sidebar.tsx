@@ -9,6 +9,7 @@ import { UserAddIcon } from "../assets/icons/UserAddIcon";
 import { UserIcon } from "../assets/icons/UserIcon";
 import { PayIcon } from "../assets/icons/PayIcon";
 import { CoinInHandIcon } from "../assets/icons/CoinInHand";
+import { PeopleAdmiIcon } from "../assets/icons/PeopleAdmiIcon";
 import { useState } from "react";
 import "./Layout.css";
 import { LogUserIcon } from "../assets/icons/LogUserIcon";
@@ -127,6 +128,13 @@ export default function Sidebar({
                       Crear Usuario
                     </NavLink>
                   </li>
+              <li
+                className={`sidebar__item ${location.pathname === "/registrar/usuario-interno" ? "sidebar__item-active" : ""}`} >
+                <PeopleAdmiIcon />
+                <NavLink to={"/registrar/usuario-interno"} className={"sidebar__item-link"} >
+                  Crear Usuario Interno
+                </NavLink>
+              </li>
                   <li
                     className={`sidebar__item ${
                       location.pathname === "/ver/usuarios"
