@@ -1,5 +1,10 @@
 import { useState } from "react";
 import type { Usuario } from "../UsuariosModelo";
+import { useAppSelector } from "../../../app/hooks";
+import {
+  selectCurrentRoles,
+  selectCurrentToken,
+} from "../../../features/auth/authSlice";
 
 export const UserMenu: React.FC<{
   usuario: Usuario;
@@ -14,6 +19,12 @@ export const UserMenu: React.FC<{
     null | "Bloqueado" | "Inactivo"
   >(null);
   const [motivo, setMotivo] = useState("");
+
+  const roles = useAppSelector(selectCurrentRoles);
+  // const userId = useAppSelector((state) => state.auth.userId);
+  const isAdmin = roles.includes("ADMINISTRADOR");
+  // const isSelf = usuario.id === userId;
+  // const isTargetAdmin = usuario.roles?.includes("ADMINISTRADOR");
 
   const handleBloquear = () => {
     setModalAccion("Bloqueado");
@@ -33,23 +44,27 @@ export const UserMenu: React.FC<{
       //En lugar del alert iria a la vista del usuario
       action: () => alert(`Ver info de ${usuario.nombre}`),
     },
-    ...(usuario.estado !== "Activo"
-      ? [{
-        label: "Activar usuario",
-        action: () => onChangeEstado(usuario.id, "Activo"),
-      }]
-      : []),
-    ...(usuario.estado !== "Inactivo"
-      ? [{
-        label: "Inactivar usuario",
-        action: handleInactivar,
-      }]
-      : []),
-    ...(usuario.estado !== "Bloqueado"
-      ? [{
-        label: "Bloquear usuario",
-        action: handleBloquear,
-      }]
+    ...(isAdmin /*&& !isTargetAdmin && !isSelf*/
+      ? [
+        ...(usuario.estado !== "Activo"
+          ? [{
+            label: "Activar usuario",
+            action: () => onChangeEstado(usuario.id, "Activo"),
+          }]
+          : []),
+        ...(usuario.estado !== "Inactivo"
+          ? [{
+            label: "Inactivar usuario",
+            action: handleInactivar,
+          }]
+          : []),
+        ...(usuario.estado !== "Bloqueado"
+          ? [{
+            label: "Bloquear usuario",
+            action: handleBloquear,
+          }]
+          : []),
+      ]
       : []),
   ];
 
@@ -96,12 +111,19 @@ export const UserMenu: React.FC<{
             <div className="modalMotivo">
               <textarea
                 className="inputMotivo"
-                placeholder="Motivo (obligatorio)"
                 value={motivo}
                 onChange={(e) => setMotivo(e.target.value)}
+                minLength={20}
+                required
+                placeholder="Motivo (obligatorio minimo 20 caracteres)"
                 rows={3}
               />
             </div>
+            {motivo.length > 0 && motivo.length < 20 && (
+              <div style={{ color: "red" }}>
+                El motivo debe tener al menos 20 caracteres.
+              </div>
+            )}
             <div className="modalConfirmBtns">
               <button
                 className="modalConfirmBtn btnNo"
@@ -111,7 +133,7 @@ export const UserMenu: React.FC<{
               </button>
               <button
                 className="modalConfirmBtn btnSi"
-                disabled={!motivo.trim()}
+                disabled={motivo.length < 20}
                 onClick={() => {
                   onChangeEstado(usuario.id, modalAccion, motivo.trim());
                   setModalAccion(null);

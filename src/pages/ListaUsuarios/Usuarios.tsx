@@ -89,6 +89,7 @@ const Usuarios: React.FC = () => {
   const [filtroRoles, setFiltroRoles] = useState<string[]>([]);
   const [filtroTipos, setFiltroTipos] = useState<string[]>([]);
   const [filtroMeses, setFiltroMeses] = useState(1);
+  const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -155,18 +156,36 @@ const Usuarios: React.FC = () => {
     motivo?: string,
   ) => {
     try {
+      let res;
       if (nuevoEstado === "Activo") {
-        await axiosPrivate.post("/admin/activar", { usuariosId: id });
+        res = await axiosPrivate.post("/admin/activar", { usuarioId: id });
       } else if (nuevoEstado === "Bloqueado") {
-        await axiosPrivate.post("/admin/bloquear", { usuarioId: id, motivo });
+        res = await axiosPrivate.post("/admin/bloquear", {
+          usuarioId: id,
+          motivo,
+        });
       } else if (nuevoEstado === "Inactivo") {
-        await axiosPrivate.post("/admin/inactivar", { usuarioId: id, motivo });
+        res = await axiosPrivate.post("/admin/inactivar", {
+          usuarioId: id,
+          motivo,
+        });
       }
-      setUsuarios((prev) =>
-        prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
-      );
-    } catch (error) {
-      console.error("Error al cambiar estado del usuario", error);
+      if (res?.data.status === "success") {
+        setUsuarios((prev) =>
+          prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
+        );
+        setMensajeError(null);
+      } else {
+        setMensajeError(
+          res?.data.message || "Error al cambiar el estado del usuario.",
+        );
+      }
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        setMensajeError(error.response.data.message);
+      } else {
+        console.error("Error al cambiar estado del usuario.");
+      }
     }
   };
 
@@ -272,6 +291,11 @@ const Usuarios: React.FC = () => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {mensajeError && (
+        <div className="error">
+          {mensajeError}
         </div>
       )}
       <div className="indicadorEstados">
