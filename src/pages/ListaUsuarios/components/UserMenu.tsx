@@ -3,7 +3,7 @@ import type { Usuario } from "../UsuariosModelo";
 import { useAppSelector } from "../../../app/hooks";
 import {
   selectCurrentRoles,
-  selectCurrentToken,
+  // selectCurrentToken,
 } from "../../../features/auth/authSlice";
 
 export const UserMenu: React.FC<{
