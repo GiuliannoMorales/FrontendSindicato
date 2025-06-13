@@ -12,7 +12,8 @@ const usePersistLogin = () => {
     const verifyRefreshToken = async () => {
       try {
         const response = await api.get("/auth/refresh");
-        const { accessToken, roles } = response.data;
+        const { accessToken, roles } = response.data.data;
+        console.log('Refreshed token', response.data.data)
         dispatch(setCredentials({ accessToken, roles }));
       } catch (err) {
         console.error("No se pudo renovar el token:", err);
