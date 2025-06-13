@@ -1,9 +1,8 @@
 export interface Usuario {
-	id: number;
+	id: string;
 	nombre: string;
 	apellido: string;
-	ci: string;
 	rol: string;
 	imagenUrl?: string;
-	estado: 'activo' | 'inactivo' | 'bloqueado';
+	estado: 'Activo' | 'Inactivo' | 'Bloqueado';
 }

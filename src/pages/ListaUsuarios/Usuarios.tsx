@@ -1,66 +1,74 @@
 import React, { useEffect, useState } from "react";
-// import api from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.ts";
 import "./Usuarios.css";
 import type { Usuario } from "./UsuariosModelo.ts";
 import { FilterIcon } from "../../assets/icons/FilterIcon.tsx";
 import { UserMenu } from "./components/UserMenu.tsx";
 
-const mockUsuarios: Usuario[] = [
-  {
-    id: 1,
-    nombre: "JUAN MARTIN",
-    apellido: "MARTINES RAMIREZ",
-    ci: "111111",
-    rol: "Administrativo",
-    imagenUrl: "",
-    estado: "activo",
-  },
-  {
-    id: 2,
-    nombre: "MARGARITA",
-    apellido: "ROMERO LUCERO",
-    ci: "222222",
-    rol: "Docente Tiempo Hora",
-    imagenUrl: "",
-    estado: "bloqueado",
-  },
-  {
-    id: 3,
-    nombre: "RITHA JUANA",
-    apellido: "ROJAS ROJAS",
-    ci: "333333",
-    rol: "Administrativo",
-    imagenUrl: "",
-    estado: "bloqueado",
-  },
-  {
-    id: 4,
-    nombre: "ROSA",
-    apellido: "ROJA ESPINOZA",
-    ci: "444444",
-    rol: "Docente Tiempo Exclusivo",
-    imagenUrl: "",
-    estado: "activo",
-  },
-  {
-    id: 5,
-    nombre: "LUCAS PABLO",
-    apellido: "POZO",
-    ci: "555555",
-    rol: "Administrativo",
-    imagenUrl: "",
-    estado: "bloqueado",
-  },
-  {
-    id: 6,
-    nombre: "KEVIN",
-    apellido: "PEREZ RIOJA",
-    ci: "666666",
-    rol: "Administrativo",
-    imagenUrl: "",
-    estado: "inactivo",
-  },
-];
+// const mockUsuarios: Usuario[] = [
+//   {
+//     id: 1,
+//     nombre: "JUAN MARTIN",
+//     apellido: "MARTINES RAMIREZ",
+//     rol: "Administrativo",
+//     imagenUrl: "",
+//     estado: "Activo",
+//   },
+//   {
+//     id: 2,
+//     nombre: "MARGARITA",
+//     apellido: "ROMERO LUCERO",
+//     rol: "Docente Tiempo Hora",
+//     imagenUrl: "",
+//     estado: "Bloqueado",
+//   },
+//   {
+//     id: 3,
+//     nombre: "RITHA JUANA",
+//     apellido: "ROJAS ROJAS",
+//     rol: "Administrativo",
+//     imagenUrl: "",
+//     estado: "Bloqueado",
+//   },
+//   {
+//     id: 4,
+//     nombre: "ROSA",
+//     apellido: "ROJA ESPINOZA",
+//     rol: "Docente Tiempo Exclusivo",
+//     imagenUrl: "",
+//     estado: "Activo",
+//   },
+//   {
+//     id: 5,
+//     nombre: "LUCAS PABLO",
+//     apellido: "POZO",
+//     rol: "Administrativo",
+//     imagenUrl: "",
+//     estado: "Bloqueado",
+//   },
+//   {
+//     id: 6,
+//     nombre: "KEVIN",
+//     apellido: "PEREZ RIOJA",
+//     rol: "Administrativo",
+//     imagenUrl: "",
+//     estado: "Inactivo",
+//   },
+// ];
+
+const mapApiUsuario = (apiUsuario: any): Usuario => ({
+  id: apiUsuario.id,
+  nombre: apiUsuario.nombre,
+  apellido: apiUsuario.apellido,
+  rol: apiUsuario.tipoCliente
+    .replace("Docente a dedicación exclusiva", "Docente Tiempo Exclusivo")
+    .replace("Docente a tiempo hora", "Docente Tiempo Hora")
+    .replace("Administrativo", "Administrativo"),
+  imagenUrl: apiUsuario.foto
+    ? `data:image/png;base64,${apiUsuario.foto}`
+    : "/userPlaceholder.svg",
+  estado: apiUsuario.estadoParqueo,
+});
 
 const rolesDisponibles = [
   { label: "Administrativos", value: "Administrativo" },
@@ -69,9 +77,9 @@ const rolesDisponibles = [
 ];
 
 const tiposDisponibles = [
-  { label: "Usuarios activos", value: "activos" },
-  { label: "Usuarios inactivos", value: "inactivos" },
-  { label: "Usuarios bloqueados", value: "bloqueados" },
+  { label: "Usuarios activos", value: "Activos" },
+  { label: "Usuarios inactivos", value: "Inactivos" },
+  { label: "Usuarios bloqueados", value: "Bloqueados" },
 ];
 
 const Usuarios: React.FC = () => {
@@ -82,23 +90,34 @@ const Usuarios: React.FC = () => {
   const [filtroTipos, setFiltroTipos] = useState<string[]>([]);
   const [filtroMeses, setFiltroMeses] = useState(1);
 
+  const axiosPrivate = useAxiosPrivate();
+
   useEffect(() => {
-    setUsuarios(mockUsuarios);
-    // api.get("/usuarios").then((res) => setUsuarios(res.data));
-  }, []);
+    const fetchUsuarios = async () => {
+      try {
+        const res = await axiosPrivate.get("/usuario/vista", {
+          withCredentials: true,
+        });
+        const usuariosAdaptados = res.data.map(mapApiUsuario);
+        setUsuarios(usuariosAdaptados);
+      } catch (err) {
+        console.error("Error al obtener usuarios", err);
+      }
+    };
+    fetchUsuarios();
+  }, [axiosPrivate]);
 
   const usuariosFiltrados = usuarios.filter((u) => {
     const coincideBusqueda =
       u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.apellido.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.ci.includes(busqueda);
+      u.apellido.toLowerCase().includes(busqueda.toLowerCase());
 
     const coincideRol = filtroRoles.length === 0 || filtroRoles.includes(u.rol);
 
     const coincideTipo = filtroTipos.length === 0 ||
-      (filtroTipos.includes("activos") && u.estado === "activo") ||
-      (filtroTipos.includes("inactivos") && u.estado === "inactivo") ||
-      (filtroTipos.includes("bloqueados") && u.estado === "bloqueado");
+      (filtroTipos.includes("Activos") && u.estado === "Activo") ||
+      (filtroTipos.includes("Inactivos") && u.estado === "Inactivo") ||
+      (filtroTipos.includes("Bloqueados") && u.estado === "Bloqueado");
 
     return coincideBusqueda && coincideRol && coincideTipo;
   });
@@ -130,22 +149,25 @@ const Usuarios: React.FC = () => {
     setMostrarFiltro(false);
   };
 
-  const handleChangeEstado = (
-    //api.put("/usuarios").then((res) => ...)
-    id: number,
-    nuevoEstado: "activo" | "inactivo" | "bloqueado",
+  const handleChangeEstado = async (
+    id: string,
+    nuevoEstado: "Activo" | "Inactivo" | "Bloqueado",
     motivo?: string,
   ) => {
-    if (nuevoEstado === "activo") {
-      // api.post("/admin/activar", {usuarioId:id})
-      console.log({ usuarioId: id });
-    } else {
-      // api.post(`/admin/${nuevoEstado}`, {usuarioId: id, motivo})
-      console.log({ usuarioId: id, motivo });
+    try {
+      if (nuevoEstado === "Activo") {
+        await axiosPrivate.post("/admin/activar", { usuariosId: id });
+      } else if (nuevoEstado === "Bloqueado") {
+        await axiosPrivate.post("/admin/bloquear", { usuarioId: id, motivo });
+      } else if (nuevoEstado === "Inactivo") {
+        await axiosPrivate.post("/admin/inactivar", { usuarioId: id, motivo });
+      }
+      setUsuarios((prev) =>
+        prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
+      );
+    } catch (error) {
+      console.error("Error al cambiar estado del usuario", error);
     }
-    setUsuarios((prev) =>
-      prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
-    );
   };
 
   return (
