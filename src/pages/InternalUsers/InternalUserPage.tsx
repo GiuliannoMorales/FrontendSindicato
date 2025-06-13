@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import "./InternalUserPage.css"
-import EyeIcon from "../../assets/icons/EyeIcon";
-import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
+import TextInput from "./components/TextInput";
+import SelectInput from "./components/SelectInput";
+import PasswordInput from "./components/PasswordInput";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const InternalUser = () => {
@@ -12,7 +13,7 @@ const InternalUser = () => {
     const [telefono, setTelefono] = useState("");
     const [userType, setUserType] = useState("");
     const [password, setPassword] = useState("");
-    const [observations, setObservations] = useState("");
+    //const [observations, setObservations] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [userPhoto, setUserPhoto] = useState<string | null>(null);
     const userPhotoRef = useRef<HTMLInputElement | null>(null);
@@ -37,7 +38,7 @@ const InternalUser = () => {
                     setCorreo("");
                     setTelefono("");
                     setUserType("");
-                    setObservations("");
+                    //setObservations("");
                     setUserPhoto(null);
                     setIsEditMode(false);
                 } else if (data.status === "success" && data.data) {
@@ -127,96 +128,42 @@ const InternalUser = () => {
         }
     };
 
-    return (
+     return (
         <section className="internal-user">
             <h2 className="internal-user__title">REGISTRAR USUARIO INTERNO</h2>
             <form className="internal-user__form">
                 <div className="internal-user__form-left">
                     <fieldset className="internal-user__fieldset">
                         <legend className="internal-user__legend">• Datos Personales:</legend>
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">C.I.:
-                                <span className="required">*</span>
-                            </label>
-                            <input type="text" className="internal-user__input" value={ci} onChange={(e) => setCi(e.target.value)} disabled={isEditMode} required />
-                        </div>
-
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">Nombre(s):
-                                <span className="required">*</span>
-                            </label>
-                            <input type="text" className="internal-user__input" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={isEditMode} required />
-                        </div>
-
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">Apellido(s):
-                                <span className="required">*</span>
-                            </label>
-                            <input type="text" className="internal-user__input" value={apellido} onChange={(e) => setApellido(e.target.value)} disabled={isEditMode} required />
-                        </div>
-
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">Correo Electrónico:
-                                <span className="required">*</span>
-                            </label>
-                            <input type="text" className="internal-user__input" value={correo} onChange={(e) => setCorreo(e.target.value)} disabled={isEditMode} required />
-                        </div>
-
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">Teléfono:
-                                <span className="required">*</span>
-                            </label>
-                            <input type="text" className="internal-user__input" value={telefono} onChange={(e) => setTelefono(e.target.value)} disabled={isEditMode} required />
-                        </div>
+                        <TextInput label="C.I.:" value={ci} onChange={(e) => setCi(e.target.value)} disabled={isEditMode} required />
+                        <TextInput label="Nombre(s):" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={isEditMode} required />
+                        <TextInput label="Apellido(s):" value={apellido} onChange={(e) => setApellido(e.target.value)} disabled={isEditMode} required />
+                        <TextInput label="Correo Electrónico:" value={correo} onChange={(e) => setCorreo(e.target.value)} disabled={isEditMode} required />
+                        <TextInput label="Teléfono:" value={telefono} onChange={(e) => setTelefono(e.target.value)} disabled={isEditMode} required />
                     </fieldset>
 
                     <fieldset className="internal-user__fieldset">
                         <legend className="internal-user__legend">• Datos Cuenta:</legend>
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">
-                                Tipo Usuario: <span className="required">*</span>
-                            </label>
-                            <select
-                                className="internal-user__select" value={userType} onChange={(e) => setUserType(e.target.value)} required
-                            >
-                                <option value="">Seleccione</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Cajero">Cajero</option>
-                            </select>
-                        </div>
-
-                        <div className="internal-user__field">
-                            <label className="internal-user__label">
-                                Contraseña: <span className="required">*</span>
-                            </label>
-                            <div className="internal-user__password">
-                                <input
-                                    type={passwordVisible ? "text" : "password"}
-                                    placeholder="Ingrese su contraseña"
-                                    className="internal-user__input"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    disabled={isEditMode}
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    className="internal-user__toggle-eye"
-                                    onClick={togglePasswordVisibility}
-                                    aria-label="Mostrar/Ocultar contraseña"
-                                >
-                                    {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
-                                </button>
-                            </div>
-                        </div>
+                        <SelectInput
+                            label="Tipo Usuario:"
+                            value={userType}
+                            onChange={(e) => setUserType(e.target.value)}
+                            options={["Administrador", "Cajero"]}
+                            required
+                        />
+                        <PasswordInput
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            visible={passwordVisible}
+                            toggleVisible={togglePasswordVisibility}
+                            disabled={isEditMode}
+                        />
                     </fieldset>
                 </div>
 
                 <div className="internal-user__form-right">
                     <div className="internal-user__photo">
-                        <label className="internal-user__label">
-                            Foto Usuario: <span className="required">*</span>
-                        </label>
+                        <label className="internal-user__label">Foto Usuario: <span className="required">*</span></label>
                         <div className="user__upload-box">
                             {userPhoto ? (
                                 <img
@@ -226,11 +173,7 @@ const InternalUser = () => {
                                     className="internal-user__photo-preview"
                                 />
                             ) : (
-                                <button
-                                    type="button"
-                                    onClick={handleUserPhotoClick}
-                                    className="internal-user__upload-button"
-                                >
+                                <button type="button" onClick={handleUserPhotoClick} className="internal-user__upload-button">
                                     Subir Foto
                                 </button>
                             )}
@@ -245,32 +188,21 @@ const InternalUser = () => {
                             />
                         </div>
                     </div>
-
-                    <div className="internal-user__field">
-                        <label className="internal-user__label">Observaciones:
-                            <span className="required">*</span>
-                        </label>
-                        <textarea className="internal-user__textarea" value={observations} onChange={(e) => setObservations(e.target.value)} required></textarea>
-                    </div>
+                    {/* <div className="internal-user__field">
+                        <label className="internal-user__label">Observaciones: <span className="required">*</span></label>
+                        <textarea
+                            className="internal-user__textarea"
+                            value={observations}
+                            onChange={(e) => setObservations(e.target.value)}
+                            required
+                        ></textarea>
+                    </div> */}
+                </div>
+                <div className="internal-user__form-actions">
+                    <button type="button" className="internal-user__cancel-button">CANCELAR</button>
+                    <button type="submit" className="internal-user__submit-button" onClick={handleRegister} >REGISTRAR</button>
                 </div>
             </form>
-
-            <div className="internal-user__form-actions">
-                <button
-                    type="button"
-                    className="internal-user__cancel-button"
-                //onClick={handleCancelClick}
-                >
-                    CANCELAR
-                </button>
-                <button
-                    type="submit"
-                    className="internal-user__submit-button"
-                    onClick={handleRegister}
-                >
-                    REGISTRAR
-                </button>
-            </div>
         </section>
     );
 }
