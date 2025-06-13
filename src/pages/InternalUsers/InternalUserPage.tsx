@@ -5,6 +5,7 @@ import SelectInput from "./components/SelectInput";
 import PasswordInput from "./components/PasswordInput";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useFormHandlers } from "./utils/useFormHandlers";
+import { CancelModal, SuccessModal, ErrorModal, GeneralErrorModal } from "../Users/components/Modal/Modal";
 
 const InternalUser = () => {
     const [ci, setCi] = useState("");
@@ -21,6 +22,12 @@ const InternalUser = () => {
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const axiosPrivate = useAxiosPrivate();
     const [isEditMode, setIsEditMode] = useState(false);
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [showGeneralErrorModal, setShowGeneralErrorModal] = useState(false);
+    const [generalError, setGeneralError] = useState("");
+
 
     const [errors, setErrors] = useState<Record<string, string | null>>({});
 
@@ -34,6 +41,32 @@ const InternalUser = () => {
         setPassword,
         setErrors
     );
+
+    const clearFields = () => {
+        setCi("");
+        setNombre("");
+        setApellido("");
+        setCorreo("");
+        setTelefono("");
+        setUserType("");
+        setPassword("");
+        setUserPhoto(null);
+        setIsEditMode(false);
+        setErrors({});
+    };
+
+    const handleCancelClick = () => {
+        setShowCancelModal(true);
+    };
+
+    const confirmCancel = () => {
+        clearFields();
+        setShowCancelModal(false);
+    };
+
+    const closeCancelModal = () => {
+        setShowCancelModal(false);
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -104,20 +137,19 @@ const InternalUser = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!ci || !nombre || !apellido || !correo || !telefono || !userType || (!isEditMode && (!password || !userPhoto))) {
+            setGeneralError("Todos los campos son obligatorios.");
+            setShowGeneralErrorModal(true);
+            return;
+        }
+
         try {
-            if (isEditMode) {
-                const formData = {
-                    usuario: {
-                        ci,
-                    },
+            const formData = isEditMode
+                ? {
+                    usuario: { ci },
                     rol: userType.toUpperCase(),
-                };
-
-                console.log("Datos a enviar (usuario existente):", formData);
-                await axiosPrivate.post("/admin/registrar", formData);
-            } else {
-
-                const formData = {
+                }
+                : {
                     usuario: {
                         ci,
                         nombre,
@@ -130,15 +162,24 @@ const InternalUser = () => {
                     rol: userType.toUpperCase(),
                 };
 
-                console.log("Datos a enviar (nuevo usuario):", formData);
-                await axiosPrivate.post("/admin/registrar", formData);
-            }
+            await axiosPrivate.post("/admin/registrar", formData);
+            setShowSuccessModal(true);
+            clearFields();
 
-            alert("Usuario registrado correctamente.");
-
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al registrar usuario:", error);
-            alert("Hubo un error al registrar el usuario.");
+
+            const backendMessage =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                null;
+
+            if (backendMessage) {
+                setGeneralError(backendMessage);
+                setShowGeneralErrorModal(true);
+            } else {
+                setShowErrorModal(true);
+            }
         }
     };
 
@@ -150,15 +191,15 @@ const InternalUser = () => {
                     <fieldset className="internal-user__fieldset">
                         <legend className="internal-user__legend">• Datos Personales:</legend>
                         <TextInput label="C.I.:" value={ci} onChange={(e) => handleInputChange("ci", e.target.value)} disabled={isEditMode} required />
-                            {errors.ci && <p className="error-message">{errors.ci}</p>}
+                        {errors.ci && <p className="error-message">{errors.ci}</p>}
                         <TextInput label="Nombre(s):" value={nombre} onChange={(e) => handleInputChange("nombre", e.target.value)} disabled={isEditMode} required />
-                            {errors.nombre && <p className="error-message">{errors.nombre}</p>}
+                        {errors.nombre && <p className="error-message">{errors.nombre}</p>}
                         <TextInput label="Apellido(s):" value={apellido} onChange={(e) => handleInputChange("apellido", e.target.value)} disabled={isEditMode} required />
-                            {errors.apellido && <p className="error-message">{errors.apellido}</p>}
+                        {errors.apellido && <p className="error-message">{errors.apellido}</p>}
                         <TextInput label="Correo Electrónico:" value={correo} onChange={(e) => handleInputChange("correo", e.target.value)} disabled={isEditMode} required />
-                            {errors.correo && <p className="error-message">{errors.correo}</p>}
+                        {errors.correo && <p className="error-message">{errors.correo}</p>}
                         <TextInput label="Teléfono:" value={telefono} onChange={(e) => handleInputChange("telefono", e.target.value)} disabled={isEditMode} required />
-                            {errors.telefono && <p className="error-message">{errors.telefono}</p>}
+                        {errors.telefono && <p className="error-message">{errors.telefono}</p>}
                     </fieldset>
 
                     <fieldset className="internal-user__fieldset">
@@ -219,10 +260,30 @@ const InternalUser = () => {
                     </div> */}
                 </div>
                 <div className="internal-user__form-actions">
-                    <button type="button" className="internal-user__cancel-button">CANCELAR</button>
+                    <button type="button" className="internal-user__cancel-button" onClick={handleCancelClick}>CANCELAR</button>
                     <button type="submit" className="internal-user__submit-button" onClick={handleRegister} >REGISTRAR</button>
                 </div>
             </form>
+
+            {showCancelModal && (
+                <CancelModal onClose={closeCancelModal} onConfirm={confirmCancel} />
+            )}
+
+            {showSuccessModal && (
+                <SuccessModal onClose={() => setShowSuccessModal(false)} />
+            )}
+
+            {showErrorModal && (
+                <ErrorModal onClose={() => setShowErrorModal(false)} />
+            )}
+
+            {showGeneralErrorModal && generalError && (
+                <GeneralErrorModal
+                    message={generalError}
+                    onClose={() => setShowGeneralErrorModal(false)}
+                />
+            )}
+
         </section>
     );
 }
