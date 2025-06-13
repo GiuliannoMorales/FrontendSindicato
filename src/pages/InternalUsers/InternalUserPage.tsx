@@ -27,7 +27,7 @@ const InternalUser = () => {
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [showGeneralErrorModal, setShowGeneralErrorModal] = useState(false);
     const [generalError, setGeneralError] = useState("");
-
+    const [showUserFoundModal, setShowUserFoundModal] = useState(false);
 
     const [errors, setErrors] = useState<Record<string, string | null>>({});
 
@@ -98,6 +98,7 @@ const InternalUser = () => {
                     setUserPhoto(user.foto);
                     setPassword("")
                     setIsEditMode(true);
+                    setShowUserFoundModal(true);
                 }
             } catch (error) {
                 console.error("Error al buscar CI:", error);
@@ -284,6 +285,12 @@ const InternalUser = () => {
                 />
             )}
 
+            {showUserFoundModal && (
+                <GeneralErrorModal
+                    message="Usuario encontrado. Se añadirán permisos administrativos a su cuenta actual."
+                    onClose={() => setShowUserFoundModal(false)}
+                />
+            )}
         </section>
     );
 }
