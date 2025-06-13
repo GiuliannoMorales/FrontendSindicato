@@ -10,6 +10,7 @@
 
 header {
 	grid-area: header;
+	width: 100%;
 	color: var(--encabezado);
 	display: flex;
 	align-items: center;
@@ -19,6 +20,13 @@ header {
 .headerLogo {
 	padding: 0rem 3.5rem 0rem 2rem;
 	height: 100%;
+}
+
+.headerLogo img {
+	max-height: 100%;
+	min-height: 40px;
+	height: auto;
+	width: auto;
 }
 
 .headerTitulo {
