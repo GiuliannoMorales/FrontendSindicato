@@ -37,8 +37,8 @@ const useAxiosPrivate = () => {
           prevRequest._retry = true;
           try {
             const refreshResponse = await api.get("/auth/refresh");
-            const newAccessToken = refreshResponse.data.accessToken;
-            const newRoles = refreshResponse.data.roles;
+            const newAccessToken = refreshResponse.data.data.accessToken;
+            const newRoles = refreshResponse.data.data.roles;
             console.log("NUEVO ACCESS TOKEN", newAccessToken);
 
             dispatch(
@@ -59,7 +59,7 @@ const useAxiosPrivate = () => {
       }
     );
 
-    console.log("Interceptor montado")
+    console.log("ResponseIntercept", responseIntercept)
     return () => {
       api.interceptors.request.eject(requestIntercept);
       api.interceptors.response.eject(responseIntercept);

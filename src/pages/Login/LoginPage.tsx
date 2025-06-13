@@ -27,13 +27,12 @@ const LoginPage = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const resultAction = await dispatch(login(data)).unwrap();
+      await dispatch(login(data)).unwrap();
       reset();
-      console.log('currentToken guardado', resultAction)
       navigate("/");
     } catch (error: any) {
       console.error("LoginError", error);
-      setErrorMsgBack(error.data.errors[0].message);
+      setErrorMsgBack(error.errors[0].details);
     } finally {
       setIsLoading(false);
     }
@@ -58,6 +57,7 @@ const LoginPage = () => {
               {...register("username", {
                 required: "Ingresa tu nombre de usuario",
               })}
+              onChange={() => setErrorMsgBack('')}
               placeholder="Username"
               type="text"
               className="login__input"
@@ -71,6 +71,7 @@ const LoginPage = () => {
           <div className="login__field">
             <input
               {...register("password", { required: "Ingresa tu contraseña" })}
+              onChange={() => setErrorMsgBack('')}
               type={passwordVisible ? "text" : "password"}
               placeholder="Password"
               className="login__input"
