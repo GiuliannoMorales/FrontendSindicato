@@ -86,24 +86,45 @@ const InternalUser = () => {
         setUserPhoto(base64WithoutPrefix);
     };
 
-    const handleRegister = (e: React.FormEvent) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        const formData: any = {
-            ci,
-            nombre,
-            apellido,
-            correo,
-            telefono,
-            userType,
-            observations,
-            foto: userPhoto,
-        };
 
-        if (password.trim() !== "") {
-            formData.password = password;
+        try {
+            if (isEditMode) {
+                const formData = {
+                    usuario: {
+                        ci,
+                    },
+                    rol: userType.toUpperCase(),
+                };
+
+                console.log("Datos a enviar (usuario existente):", formData);
+                await axiosPrivate.post("/admin/registrar", formData);
+            } else {
+
+                const formData = {
+                    usuario: {
+                        ci,
+                        nombre,
+                        apellido,
+                        correo,
+                        nroCelular: telefono,
+                        password,
+                        foto: userPhoto,
+                    },
+                    rol: userType.toUpperCase(),
+                };
+
+                console.log("Datos a enviar (nuevo usuario):", formData);
+                await axiosPrivate.post("/admin/registrar", formData);
+            }
+
+            alert("Usuario registrado correctamente.");
+
+        } catch (error) {
+            console.error("Error al registrar usuario:", error);
+            alert("Hubo un error al registrar el usuario.");
         }
-
-        console.log("Datos a enviar:", formData);
     };
 
     return (
