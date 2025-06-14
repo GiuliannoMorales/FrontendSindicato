@@ -33,18 +33,20 @@ const App: React.FC = () => {
         <Route path="/" element={<Layout />}>
           {/* protected routes  */}
           <Route element={<RequireAuth />}>
-            <Route index element={<Inicio />}/>
+            <Route index element={<Inicio />} />
           </Route>
 
           {/* protected routes for the admin */}
           <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
-            <Route path="/cuenta/estado" element={<EstadoCuenta />} />
             <Route path="/tarifas/historial" element={<TarifasHistoPage />} />
             <Route path="/tarifas/configuracion" element={<TarifasPage />} />
             <Route path="/registrar/usuario" element={<User />} />
             <Route path="/ver/usuarios" element={<Usuarios />} />
             <Route path="/registrar/vehiculo" element={<RegistrarVehiculo />} />
-            <Route path="/registrar/usuario-interno" element={<InternalUser />} />
+            <Route
+              path="/registrar/usuario-interno"
+              element={<InternalUser />}
+            />
           </Route>
 
           {/* protected routes for the cashier */}
@@ -53,9 +55,9 @@ const App: React.FC = () => {
           ></Route>
 
           {/* protected routes for the client */}
-          <Route
-            element={<RequireAuth allowedRoles={[ROLES.CLIENTE]} />}
-          ></Route>
+          <Route element={<RequireAuth allowedRoles={[ROLES.CLIENTE]} />}>
+            <Route path="/cuenta/estado" element={<EstadoCuenta />} />
+          </Route>
         </Route>
       </Route>
     </Routes>
