@@ -22,8 +22,9 @@ export const validators = {
   },
 
   validateTelefono: (telefono: string): string | null => {
-    // Validación para formato internacional: + seguido de 7-15 dígitos
-    if (!/^\+\d{7,15}$/.test(telefono)) return "Teléfono inválido (formato: +123456789)";
+    if (!/^[67]\d{7}$/.test(telefono)) {
+      return "Debe ingresar un número de celular boliviano válido (8 dígitos que comienzan en 6 o 7)";
+    }
     return null;
   },
 

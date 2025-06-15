@@ -80,14 +80,8 @@ const InternalUser = () => {
                 const data = response.data;
 
                 if (data.status === "success" && data.data?.exists === false) {
-                    setNombre("");
-                    setApellido("");
-                    setCorreo("");
-                    setTelefono("");
-                    setUserType("");
-                    //setObservations("");
-                    setUserPhoto(null);
                     setIsEditMode(false);
+                    setShowUserFoundModal(false);
                 } else if (data.status === "success" && data.data) {
                     const user = data.data;
 
@@ -170,10 +164,16 @@ const InternalUser = () => {
         } catch (error: any) {
             console.error("Error al registrar usuario:", error);
 
-            const backendMessage =
-                error?.response?.data?.message ||
-                error?.response?.data?.error ||
+            const responseData = error?.response?.data;
+
+            let backendMessage =
+                responseData?.message ||
+                responseData?.error ||
                 null;
+
+            if (Array.isArray(responseData?.errors) && responseData.errors.length > 0) {
+                backendMessage = responseData.errors.map((e: any) => e.message).join("\n");
+            }
 
             if (backendMessage) {
                 setGeneralError(backendMessage);
