@@ -9,7 +9,9 @@ export const useFormHandlers = (
   setCorreo: React.Dispatch<React.SetStateAction<string>>,
   setTelefono: React.Dispatch<React.SetStateAction<string>>,
   setPassword: React.Dispatch<React.SetStateAction<string>>,
-  setErrors: React.Dispatch<React.SetStateAction<Record<string, string | null>>>
+  setErrors: React.Dispatch<React.SetStateAction<Record<string, string | null>>>,
+  setPhotoError?: React.Dispatch<React.SetStateAction<string | null>>
+
 ) => {
   const handleInputChange = (field: string, value: string) => {
     switch (field) {
@@ -40,5 +42,23 @@ export const useFormHandlers = (
     }
   };
 
-  return { handleInputChange };
+  const handlePhotoChange = (file: File | null, onSuccess: (base64: string) => void) => {
+    const error = validators.validateUserPhoto(file);
+
+    if (setPhotoError) {
+      setPhotoError(error);
+    }
+
+    if (error || !file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      const base64WithoutPrefix = base64String.split(",")[1] || "";
+      onSuccess(base64WithoutPrefix);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return { handleInputChange, handlePhotoChange };
 };

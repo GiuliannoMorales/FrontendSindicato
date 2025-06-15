@@ -35,4 +35,21 @@ export const validators = {
     if (!/\d/.test(password)) return "Debe tener al menos un número";
     return null;
   },
+
+  validateUserPhoto: (file: File | null): string | null => {
+    if (!file) return "Debe seleccionar una imagen.";
+
+    const allowedTypes = ["image/jpeg", "image/png"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      return "Solo se permiten imágenes en formato JPG o PNG.";
+    }
+
+    if (file.size > maxSize) {
+      return "La imagen no debe superar los 5MB.";
+    }
+
+    return null;
+  }
 };
