@@ -24,7 +24,7 @@ export const UserMenu: React.FC<{
   // const userId = useAppSelector((state) => state.auth.userId);
   const isAdmin = roles.includes("ADMINISTRADOR");
   // const isSelf = usuario.id === userId;
-  // const isTargetAdmin = usuario.roles?.includes("ADMINISTRADOR");
+  const isTargetAdmin = usuario.roles?.includes("ADMINISTRADOR");
 
   const handleBloquear = () => {
     setModalAccion("Bloqueado");
@@ -44,7 +44,7 @@ export const UserMenu: React.FC<{
       //En lugar del alert iria a la vista del usuario
       action: () => alert(`Ver info de ${usuario.nombre}`),
     },
-    ...(isAdmin /*&& !isTargetAdmin && !isSelf*/
+    ...(isAdmin && !isTargetAdmin
       ? [
         ...(usuario.estado !== "Activo"
           ? [{

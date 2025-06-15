@@ -5,75 +5,26 @@ import type { Usuario } from "./UsuariosModelo.ts";
 import { FilterIcon } from "../../assets/icons/FilterIcon.tsx";
 import { UserMenu } from "./components/UserMenu.tsx";
 
-// const mockUsuarios: Usuario[] = [
-//   {
-//     id: 1,
-//     nombre: "JUAN MARTIN",
-//     apellido: "MARTINES RAMIREZ",
-//     rol: "Administrativo",
-//     imagenUrl: "",
-//     estado: "Activo",
-//   },
-//   {
-//     id: 2,
-//     nombre: "MARGARITA",
-//     apellido: "ROMERO LUCERO",
-//     rol: "Docente Tiempo Hora",
-//     imagenUrl: "",
-//     estado: "Bloqueado",
-//   },
-//   {
-//     id: 3,
-//     nombre: "RITHA JUANA",
-//     apellido: "ROJAS ROJAS",
-//     rol: "Administrativo",
-//     imagenUrl: "",
-//     estado: "Bloqueado",
-//   },
-//   {
-//     id: 4,
-//     nombre: "ROSA",
-//     apellido: "ROJA ESPINOZA",
-//     rol: "Docente Tiempo Exclusivo",
-//     imagenUrl: "",
-//     estado: "Activo",
-//   },
-//   {
-//     id: 5,
-//     nombre: "LUCAS PABLO",
-//     apellido: "POZO",
-//     rol: "Administrativo",
-//     imagenUrl: "",
-//     estado: "Bloqueado",
-//   },
-//   {
-//     id: 6,
-//     nombre: "KEVIN",
-//     apellido: "PEREZ RIOJA",
-//     rol: "Administrativo",
-//     imagenUrl: "",
-//     estado: "Inactivo",
-//   },
-// ];
-
 const mapApiUsuario = (apiUsuario: any): Usuario => ({
   id: apiUsuario.id,
   nombre: apiUsuario.nombre,
   apellido: apiUsuario.apellido,
-  rol: apiUsuario.tipoCliente
-    .replace("Docente a dedicación exclusiva", "Docente Tiempo Exclusivo")
-    .replace("Docente a tiempo hora", "Docente Tiempo Hora")
-    .replace("Administrativo", "Administrativo"),
+  tipoCliente: apiUsuario.tipoCliente,
   imagenUrl: apiUsuario.foto
     ? `data:image/png;base64,${apiUsuario.foto}`
     : "/userPlaceholder.svg",
   estado: apiUsuario.estadoParqueo,
+  roles: apiUsuario.roles || [],
+  cantidadMesesDeuda: apiUsuario.cantidadMesesDeuda,
 });
 
 const rolesDisponibles = [
-  { label: "Administrativos", value: "Administrativo" },
-  { label: "Docentes T. Hora", value: "Docente Tiempo Hora" },
-  { label: "Docentes T. Exclusivo", value: "Docente Tiempo Exclusivo" },
+  { label: "Administrativo", value: "Administrativo" },
+  {
+    label: "Docente a dedicación exclusiva",
+    value: "Docente a dedicación exclusiva",
+  },
+  { label: "Docente a tiempo horario", value: "Docente a tiempo horario" },
 ];
 
 const tiposDisponibles = [
@@ -88,13 +39,15 @@ const Usuarios: React.FC = () => {
   const [mostrarFiltro, setMostrarFiltro] = useState(false);
   const [filtroRoles, setFiltroRoles] = useState<string[]>([]);
   const [filtroTipos, setFiltroTipos] = useState<string[]>([]);
-  const [filtroMeses, setFiltroMeses] = useState(1);
+  const [filtroMeses, setFiltroMeses] = useState(0);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchUsuarios = async () => {
+      setLoading(true);
       try {
         const res = await axiosPrivate.get("/usuario/vista", {
           withCredentials: true,
@@ -103,6 +56,8 @@ const Usuarios: React.FC = () => {
         setUsuarios(usuariosAdaptados);
       } catch (err) {
         console.error("Error al obtener usuarios", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUsuarios();
@@ -113,14 +68,19 @@ const Usuarios: React.FC = () => {
       u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       u.apellido.toLowerCase().includes(busqueda.toLowerCase());
 
-    const coincideRol = filtroRoles.length === 0 || filtroRoles.includes(u.rol);
+    const coincideRol = filtroRoles.length === 0 ||
+      (u.tipoCliente && filtroRoles.includes(u.tipoCliente));
 
     const coincideTipo = filtroTipos.length === 0 ||
       (filtroTipos.includes("Activos") && u.estado === "Activo") ||
       (filtroTipos.includes("Inactivos") && u.estado === "Inactivo") ||
       (filtroTipos.includes("Bloqueados") && u.estado === "Bloqueado");
 
-    return coincideBusqueda && coincideRol && coincideTipo;
+    const coincideMeses = filtroMeses === 0 ||
+      (typeof u.cantidadMesesDeuda === "number" &&
+        u.cantidadMesesDeuda >= filtroMeses);
+
+    return coincideBusqueda && coincideRol && coincideTipo && coincideMeses;
   });
 
   const handleFiltroRol = (rol: string) => {
@@ -136,7 +96,7 @@ const Usuarios: React.FC = () => {
   };
 
   const handleFiltroMeses = (delta: number) => {
-    setFiltroMeses((prev) => Math.max(1, prev + delta));
+    setFiltroMeses((prev) => Math.max(0, prev + delta));
   };
 
   const handleFiltrar = () => {
@@ -146,7 +106,7 @@ const Usuarios: React.FC = () => {
   const handleReset = () => {
     setFiltroRoles([]);
     setFiltroTipos([]);
-    setFiltroMeses(2);
+    setFiltroMeses(0);
     setMostrarFiltro(false);
   };
 
@@ -194,11 +154,11 @@ const Usuarios: React.FC = () => {
       <h2>LISTA DE USUARIOS REGISTRADOS</h2>
       <div className="control">
         <label>
-          Buscar por Nombre o C.I.:
+          Buscar por Nombre o Apellido:
           <input
             type="text"
             className="buscador"
-            placeholder="Buscar por Nombre o C.I...."
+            placeholder="Buscar por Nombre o Apellido...."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
@@ -267,7 +227,7 @@ const Usuarios: React.FC = () => {
                   type="number"
                   className="inputMes"
                   value={filtroMeses}
-                  min={1}
+                  min={0}
                   readOnly
                 />
                 <button className="btnMes" onClick={() => handleFiltroMeses(1)}>
@@ -310,30 +270,36 @@ const Usuarios: React.FC = () => {
         </span>
       </div>
       <div className="lista">
-        {usuariosFiltrados.map((usuario) => (
-          <div
-            className={`usrCard ${usuario.estado}`}
-            key={usuario.id}
-          >
-            <UserMenu usuario={usuario} onChangeEstado={handleChangeEstado} />
-            <img
-              className="usrImg"
-              src={usuario.imagenUrl || "/userPlaceholder.svg"}
-              alt={usuario.nombre}
-            />
-            <div className="usrInfo">
-              <div className="usrName">
-                {usuario.nombre} {usuario.apellido}
+        {loading
+          ? <div className="usrEmpty">Cargando usuarios...</div>
+          : usuariosFiltrados.length === 0
+          ? <div className="usrEmpty">No se encontraron usuarios.</div>
+          : (
+            usuariosFiltrados.map((usuario) => (
+              <div
+                className={`usrCard ${usuario.estado}`}
+                key={usuario.id}
+              >
+                <UserMenu
+                  usuario={usuario}
+                  onChangeEstado={handleChangeEstado}
+                />
+                <img
+                  className="usrImg"
+                  src={usuario.imagenUrl || "/userPlaceholder.svg"}
+                  alt={usuario.nombre}
+                />
+                <div className="usrInfo">
+                  <div className="usrName">
+                    {usuario.nombre} {usuario.apellido}
+                  </div>
+                  <div className="usrRol">
+                    {usuario.tipoCliente || "—"}
+                  </div>
+                </div>
               </div>
-              <div className="usrRol">
-                {usuario.rol}
-              </div>
-            </div>
-          </div>
-        ))}
-        {usuariosFiltrados.length === 0 && (
-          <div className="usrEmpty">No se encontraron usuarios.</div>
-        )}
+            ))
+          )}
       </div>
     </div>
   );
