@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Usuario } from "../UsuariosModelo";
 import { useAppSelector } from "../../../app/hooks";
 import {
@@ -19,6 +20,7 @@ export const UserMenu: React.FC<{
     null | "Bloqueado" | "Inactivo"
   >(null);
   const [motivo, setMotivo] = useState("");
+const navigate = useNavigate();
 
   const roles = useAppSelector(selectCurrentRoles);
   // const userId = useAppSelector((state) => state.auth.userId);
@@ -39,11 +41,10 @@ export const UserMenu: React.FC<{
   };
 
   const opciones = [
-    {
-      label: "Ver información",
-      //En lugar del alert iria a la vista del usuario
-      action: () => alert(`Ver info de ${usuario.nombre}`),
-    },
+  {
+    label: "Ver información",
+    action: () => navigate(`/visualizar-usuario/${usuario.id}`),
+  },
     ...(isAdmin && !isTargetAdmin
       ? [
         ...(usuario.estado !== "Activo"
