@@ -1,4 +1,4 @@
-.btn-primary{
+.btn-primary {
   background: #B54351;
   color: white;
   font-weight: 550;
@@ -6,8 +6,22 @@
   padding-inline: 30px;
   padding-block: 10px;
   border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-.btn-secondary{
+
+.btn-primary:hover {
+  background: #9C2A3A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(181, 67, 81, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(181, 67, 81, 0.3);
+}
+
+.btn-secondary {
   background: #072543;
   color: white;
   font-weight: 550;
@@ -15,4 +29,17 @@
   padding-inline: 30px;
   padding-block: 10px;
   border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #051A36;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(7, 37, 67, 0.3);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(7, 37, 67, 0.3);
 }

@@ -20,7 +20,7 @@
 }
 
 :root {
-	--fondo: #ffffff;
+	--fondo: #fafafa;
 
 	--menuFondo: #072543;
 	--menuHover: #395673;
@@ -57,11 +57,11 @@ body {
 	font-size: 0.875rem;
 }
 
-h1 {
-	font-size: 1.5em;
+h1,
+h2 {
+	font-size: 1.5rem;
 }
 
-h2,
 h3 {
 	font-size: 1.25rem;
 }

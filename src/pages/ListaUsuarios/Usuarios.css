@@ -1,0 +1,371 @@
+.container {
+	margin: 2.2rem;
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	color: var(--txtTitulos);
+	font-weight: 400;
+}
+
+.control {
+	margin-bottom: 1rem;
+	text-align: center;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+
+.buscador {
+	margin: 0 0 0 2rem;
+	padding: 0 0.5rem 0 2rem;
+	height: 2rem;
+	border: 1px solid #b4bbc5;
+	border-radius: 6px;
+	background-color: var(--fondo);
+	background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="gray" stroke-width="2" fill="none"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="gray" stroke-width="2" stroke-linecap="round"/></svg>');
+	background-repeat: no-repeat;
+	background-size: 1.2rem 1.2rem;
+	background-position: 0.5rem center;
+}
+
+.btnFiltro {
+	cursor: pointer;
+	padding: 0.5rem 1.2rem;
+	font-size: 1rem;
+	font-weight: 500;
+	margin-top: 0.2rem;
+}
+
+.modalFiltroBackdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.modalFiltro {
+	background: #fff;
+	border-radius: 10px;
+	padding: 1.5rem 2rem;
+	min-width: 340px;
+	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
+	border: 1.5px solid #444;
+	position: relative;
+}
+
+.modalFiltroTitulo {
+	font-size: 1.2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 0.5rem;
+}
+
+.modalChecks {
+	display: flex;
+	gap: 2rem;
+	justify-content: center;
+	margin-top: 1rem;
+}
+
+.filtroCheckbox {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	font-size: 1rem;
+	cursor: pointer;
+	user-select: none;
+}
+
+.filtroCheckbox input {
+	margin: 0 1rem;
+}
+
+.filtroMeses {
+	display: block;
+	align-items: center;
+	margin-left: 2rem;
+}
+
+.btnMes {
+	background: none;
+	color: var(--txtCuerpo);
+	width: 10px;
+	cursor: pointer;
+	padding: 0.5rem;
+	margin: 0.5em;
+	border: none;
+	font-size: 1rem;
+}
+
+.inputMes {
+	width: 1.5rem;
+	justify-content: center;
+	text-align: center;
+	margin: 0.5rem;
+}
+
+.btnFiltrar {
+	background: #b23a48;
+	color: var(--fondo);
+	border: none;
+	border-radius: 6px;
+	padding: 0.5rem 3rem;
+	font-size: 1rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.btnReset {
+	background: #3c5468;
+	color: var(--fondo);
+	border: none;
+	border-radius: 7px;
+	padding: 0.5rem 1.1rem;
+	font-size: 1rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.indicadorEstados {
+	display: flex;
+	justify-content: center;
+	gap: 3rem;
+	margin: 1.2rem 0 1.5rem 0;
+}
+
+.indicadorItem {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1rem;
+}
+
+.estadoEsfera {
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 50%;
+}
+
+.estadoEsfera.activo {
+	background: #3c5468;
+}
+
+.estadoEsfera.inactivo {
+	background: #b4bbc5;
+}
+
+.estadoEsfera.bloqueado {
+	background: var(--encabezado);
+}
+
+.lista {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 1.2rem;
+}
+
+.usrCard {
+	display: flex;
+	height: 50px;
+	align-items: center;
+	border-radius: 6px;
+	padding: 1rem;
+	gap: 1rem;
+	background: #3c5468;
+	position: relative;
+}
+
+.usrCard.Activo {
+	background-color: #3c5468;
+}
+
+.usrCard.Bloqueado {
+	background-color: var(--encabezado);
+}
+
+.usrCard.Inactivo {
+	background-color: #b4bbc5;
+}
+
+.usrImg {
+	height: 100%;
+	aspect-ratio: 1/1;
+	border-radius: 50%;
+	object-fit: cover;
+	flex-shrink: 0;
+}
+
+.usrInfo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+	color: var(--fondo);
+	font-weight: 400;
+}
+
+.usrName {
+	font-size: 1.2rem;
+}
+
+.usrRol {
+	font-size: 0.75rem;
+}
+
+.usrEmpty {
+	text-align: center;
+	margin-top: 2rem;
+}
+
+.usrMenuWrapper {
+	position: absolute;
+	top: 0.2em;
+	right: 0.3em;
+	z-index: 2;
+}
+
+.usrMenuBtn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	font-size: 1.3em;
+	color: var(--fondo);
+	line-height: 1;
+}
+
+.usrMenuDots {
+	font-size: 1.5em;
+	user-select: none;
+}
+
+.usrMenuDropdown {
+	position: absolute;
+	top: 0.2em;
+	right: 0.2em;
+	background: var(--fondo);
+	border-radius: 6px;
+	min-width: 160px;
+	overflow: hidden;
+	border: 1px solid #8a7c7c;
+	text-align: center;
+}
+
+.usrMenuItem {
+	padding: 0.7em 1.2em;
+	cursor: pointer;
+	font-size: 1em;
+	transition: background 0.15s;
+}
+
+.usrMenuItem:hover {
+	background: #8d81818e;
+}
+
+.modalConfirmBackdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 2000;
+}
+
+.modalConfirmMsg {
+	background: var(--fondo);
+	border-radius: 10px;
+	padding: 1.5rem 1rem;
+	width: 300px;
+	border: 1.5px solid #464646;
+	position: relative;
+	text-align: center;
+}
+
+.modalMotivo {
+	margin: 1rem 0;
+}
+
+.inputMotivo {
+	width: 100%;
+	border-radius: 6px;
+	border: 1px solid #b4bbc5;
+	font-size: 1em;
+	resize: vertical;
+}
+
+.modalConfirmBtns {
+	margin-top: 1rem;
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.modalConfirmBtn:disabled {
+	background: #ccc;
+	color: #888;
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+.modalConfirmBtn {
+	color: var(--fondo);
+	border: none;
+	border-radius: 6px;
+	width: 100px;
+	padding: 0.5rem 1.1rem;
+	font-size: 1rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.modalConfirmBtn.btnNo {
+	background: #3c5468;
+}
+
+.modalConfirmBtn.btnSi {
+	background: #b23a48;
+}
+
+.error {
+	color: var(--encabezado);
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+@media (min-width: 2000px) {
+	.lista {
+		grid-template-columns: repeat(5, 1fr);
+	}
+}
+
+@media (max-width: 1440px) {
+	.lista {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 1024px) {
+	.lista {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.lista {
+		grid-template-columns: 1fr;
+	}
+}

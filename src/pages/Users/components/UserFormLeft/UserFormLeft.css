@@ -1,0 +1,123 @@
+.user__fieldset {
+  border: none;
+  margin-bottom: 5px;
+  margin-left: 50px;
+}
+
+.user__legend {
+  font-weight: medium;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.user__input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.user__input-group--password .user__error-message {
+  position: absolute;
+  left: 170px;
+  margin-top: 65px;
+  color: black;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.user__input-group--name .user__error-message,
+.user__input-group--lastname .user__error-message,
+.user__input-group--email .user__error-message,
+.user__input-group--phone .user__error-message,
+.user__input-group--ci .user__error-message {
+  position: absolute;
+  left: 170px;
+  margin-top: 65px;
+  color: red;
+  font-size: 0.875rem;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 12px;
+}
+
+.user__label {
+  margin: 0;
+  flex: 0 0 150px;
+}
+
+.user__required {
+  color: red;
+}
+
+.user__input,
+.user__select {
+  flex: 1;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 32px;
+}
+
+.user__password-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  height: 32px;
+}
+
+.user__password-wrapper input {
+  flex: 1;
+  padding: 5px 40px 5px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 32px;
+}
+
+.user__toggle-eye {
+  position: absolute;
+  right: 40px;
+  top: 45%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #555;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Responsive*/
+
+@media (max-width: 768px) {
+  .user__form {
+    flex-direction: column;
+    gap: 30px;
+    padding: 0 20px;
+  }
+
+  .user__fieldset {
+    margin-left: 0;
+  }
+
+  .user__input-group{
+    padding-bottom: 20px;
+  }
+
+  .user__input-group--password .user__error-message,
+  .user__input-group--phone .user__error-message,
+  .user__input-group--ci .user__error-message {
+    margin-top: 80px;
+  }
+}
