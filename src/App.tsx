@@ -21,7 +21,7 @@ import PersistLogin from "./features/auth/PersistLogin";
 import VisualizarDatos from './pages/VisualizarDatos/VisualizarDatos';
 import VisualizarVehiculo from './pages/VisualizarVehiculo/VisualizarVehiculo';
 import VistaUsuario from "./pages/VistaUsuario/VistaUsuario";
-import ResultCI from "./pages/ResulCI/ResulCI";
+import CobrosEfectivo from "./pages/CobrosEfectivo/cobrosEfectivo";
 
 const ROLES = {
   ADMIN: "ADMINISTRADOR",
@@ -62,7 +62,7 @@ const App: React.FC = () => {
           <Route
             element={<RequireAuth allowedRoles={[ROLES.CAJERO]} />}
           ></Route>
-          <Route path="/cobros/ResulCI" element={<ResulCI />} />
+          <Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
           <Route path="/cobros/Formulario" element={<VistaUsuario />} />
           {/* protected routes for the client */}
           <Route element={<RequireAuth allowedRoles={[ROLES.CLIENTE]} />}>

@@ -1,0 +1,55 @@
+.contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center; 
+}
+
+.titulo h1 {
+  margin-bottom: 50px;
+  font-size: 45px;
+  color: #004080;
+}
+
+.buscar-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.etiqueta {
+  white-space: nowrap;
+  font-weight: 500;
+  width: 140px;
+  text-align: right;
+}
+
+.input-con-icono {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.input-con-icono input {
+  padding-left: 30px; /* espacio para la lupa */
+  height: 30px;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.icono-lupa {
+  position: absolute;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
