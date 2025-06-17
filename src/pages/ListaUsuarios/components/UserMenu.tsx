@@ -69,8 +69,8 @@ export const UserMenu: React.FC<{
   ];
 
   const modalMsg = modalAccion === "Bloqueado"
-    ? "¿Está seguro de bloquear al usuario"
-    : "¿Está seguro de inactivar al usuario";
+    ? "Por favor, indique el motivo de bloqueo del usuario"
+    : "Por favor, indique el motivo de inactivar al usuario";
 
   const modalBtn = modalAccion === "Bloqueado" ? "Bloquear" : "Inactivar";
 
@@ -109,7 +109,7 @@ export const UserMenu: React.FC<{
           <div className="modalConfirmMsg" onClick={(e) => e.stopPropagation()}>
             <div>
               {modalMsg} <br />
-              <b>{usuario.nombre} {usuario.apellido}</b>?
+              <b>{usuario.nombre} {usuario.apellido}</b>
             </div>
             <div className="modalMotivo">
               <textarea
