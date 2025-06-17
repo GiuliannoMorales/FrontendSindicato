@@ -74,6 +74,9 @@ export const UserMenu: React.FC<{
 
   const modalBtn = modalAccion === "Bloqueado" ? "Bloquear" : "Inactivar";
 
+  const motivoValido = motivo.length >= 20 &&
+    /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(motivo);
+
   return (
     <div className="usrMenuWrapper">
       <button className="usrMenuBtn" onClick={() => setOpen((v) => !v)}>
@@ -119,9 +122,9 @@ export const UserMenu: React.FC<{
                 rows={3}
               />
             </div>
-            {motivo.length > 0 && motivo.length < 20 && (
+            {motivo.length > 0 && (!motivoValido) && (
               <div style={{ color: "red" }}>
-                El motivo debe tener al menos 20 caracteres.
+                El motivo debe tener al menos 20 caracteres y contener letras.
               </div>
             )}
             <div className="modalConfirmBtns">
@@ -133,7 +136,7 @@ export const UserMenu: React.FC<{
               </button>
               <button
                 className="modalConfirmBtn btnSi"
-                disabled={motivo.length < 20}
+                disabled={!motivoValido}
                 onClick={() => {
                   onChangeEstado(usuario.id, modalAccion, motivo.trim());
                   setModalAccion(null);
