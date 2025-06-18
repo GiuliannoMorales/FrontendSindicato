@@ -49,6 +49,7 @@ const CobrosEfectivo: React.FC = () => {
     filtrados = clientes.filter((cliente) =>
       `${cliente.nombre} ${cliente.apellido}`.toLowerCase().startsWith(busquedaNombre.toLowerCase())
     );
+  console.log(filtrados);
   } else if (busquedaCi) {
     filtrados = clientes.filter((cliente) =>
       cliente.ci.toLowerCase().startsWith(busquedaCi.toLowerCase())

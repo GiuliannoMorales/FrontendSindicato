@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import "./VistaUsuario.css";
-import api from "../../api/axios";
 import GenerarReciboPDF from "../GenerarReciboPDF/GenerarReciboPDF";
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 interface Cliente {
   id: string;
@@ -24,7 +24,7 @@ const VistaUsuario: React.FC = () => {
   const [mostrarModal, setMostrarModal] = useState<boolean>(false);
   const [mensajeModal, setMensajeModal] = useState<string>("");
   const [mostrandoResultado, setMostrandoResultado] = useState<boolean>(false);
-
+   const axiosPrivate = useAxiosPrivate();
   const idCajero = "CAJERO_123";
 
   if (!cliente) {
@@ -34,7 +34,7 @@ const VistaUsuario: React.FC = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const resFecha = await api.post(
+        const resFecha = await axiosPrivate.post(
           `/pago-parqueo/fecha-correspondiente-pago-parqueo`,
           { idCliente: cliente.id }
         );
@@ -52,7 +52,7 @@ const VistaUsuario: React.FC = () => {
   useEffect(() => {
     const obtenerTarifa = async () => {
       try {
-        const resTarifa = await api.get(`/tarifa/vigente`, {
+        const resTarifa = await axiosPrivate.get(`/tarifa/vigente`, {
           params: {
             tipoCliente: cliente.tipo,
             tipoVehiculo: cliente.tipoParqueo,
@@ -134,8 +134,9 @@ const VistaUsuario: React.FC = () => {
         meses: mesesPago,
         montoPagado: montoTotal,
       };
+      console.log("mi cliente hermoso",payload)
+      await axiosPrivate.post("/pago-parqueo", payload);
 
-      await api.post("/pago-parqueo", payload);
       const numeroTransaccion = `PAGO-${new Date().getFullYear()}-${String(
           Math.floor(Math.random() * 9999)
         ).padStart(4, "0")}`;
