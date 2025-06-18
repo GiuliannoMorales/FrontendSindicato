@@ -22,8 +22,9 @@ export const validators = {
   },
 
   validateTelefono: (telefono: string): string | null => {
-    // Validación para formato internacional: + seguido de 7-15 dígitos
-    if (!/^\+\d{7,15}$/.test(telefono)) return "Teléfono inválido (formato: +123456789)";
+    if (!/^[67]\d{7}$/.test(telefono)) {
+      return "Debe ingresar un número de celular boliviano válido (8 dígitos que comienzan en 6 o 7)";
+    }
     return null;
   },
 
@@ -34,4 +35,21 @@ export const validators = {
     if (!/\d/.test(password)) return "Debe tener al menos un número";
     return null;
   },
+
+  validateUserPhoto: (file: File | null): string | null => {
+    if (!file) return "Debe seleccionar una imagen.";
+
+    const allowedTypes = ["image/jpeg", "image/png"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      return "Solo se permiten imágenes en formato JPG o PNG.";
+    }
+
+    if (file.size > maxSize) {
+      return "La imagen no debe superar los 5MB.";
+    }
+
+    return null;
+  }
 };
