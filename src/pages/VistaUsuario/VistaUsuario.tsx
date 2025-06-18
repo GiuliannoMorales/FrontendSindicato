@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import "./VistaUsuario.css";
 import GenerarReciboPDF from "../GenerarReciboPDF/GenerarReciboPDF";
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 interface Cliente {
   id: string;
@@ -12,7 +12,6 @@ interface Cliente {
   tipo: string;
   tipoParqueo: string;
 }
-
 
 const VistaUsuario: React.FC = () => {
   const location = useLocation();
@@ -24,11 +23,15 @@ const VistaUsuario: React.FC = () => {
   const [mostrarModal, setMostrarModal] = useState<boolean>(false);
   const [mensajeModal, setMensajeModal] = useState<string>("");
   const [mostrandoResultado, setMostrandoResultado] = useState<boolean>(false);
-   const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useAxiosPrivate();
   const idCajero = "CAJERO_123";
 
   if (!cliente) {
-    return <div>No se recibió información del cliente. Por favor, vuelva a buscar el CI.</div>;
+    return (
+      <div>
+        No se recibió información del cliente. Por favor, vuelva a buscar el CI.
+      </div>
+    );
   }
 
   useEffect(() => {
@@ -36,7 +39,7 @@ const VistaUsuario: React.FC = () => {
       try {
         const resFecha = await axiosPrivate.post(
           `/pago-parqueo/fecha-correspondiente-pago-parqueo`,
-          { idCliente: cliente.id }
+          { idCliente: cliente.id },
         );
         setFechaInicioPago(resFecha.data.data || "");
       } catch (error) {
@@ -103,7 +106,11 @@ const VistaUsuario: React.FC = () => {
     const resultado: string[] = [];
 
     for (let i = 0; i < totalSolicitado; i++) {
-      const nuevaFecha = new Date(baseFecha.getFullYear(), baseFecha.getMonth() + i, 1);
+      const nuevaFecha = new Date(
+        baseFecha.getFullYear(),
+        baseFecha.getMonth() + i,
+        1,
+      );
       const anio = nuevaFecha.getFullYear();
       const mes = String(nuevaFecha.getMonth() + 1).padStart(2, "0");
       resultado.push(`${anio}-${mes}-01`);
@@ -112,7 +119,11 @@ const VistaUsuario: React.FC = () => {
     return resultado;
   };
 
-  const mesesPago = useMemo(() => generarMesesPago(), [meses, anios, fechaInicioPago]);
+  const mesesPago = useMemo(() => generarMesesPago(), [
+    meses,
+    anios,
+    fechaInicioPago,
+  ]);
   const montoTotal = mesesPago.length * tarifa;
 
   const confirmarCobro = async () => {
@@ -134,23 +145,27 @@ const VistaUsuario: React.FC = () => {
         meses: mesesPago,
         montoPagado: montoTotal,
       };
-      console.log("mi cliente hermoso",payload)
+      console.log("mi cliente hermoso", payload);
       await axiosPrivate.post("/pago-parqueo", payload);
 
-      const numeroTransaccion = `PAGO-${new Date().getFullYear()}-${String(
-          Math.floor(Math.random() * 9999)
-        ).padStart(4, "0")}`;
-            GenerarReciboPDF({
-          nombreCliente: `${cliente.nombre} ${cliente.apellido}`,
-          monto: montoTotal,
-          mesesPagados: mesesPago,
-          numeroTransaccion,
-    }); 
+      const numeroTransaccion = `PAGO-${new Date().getFullYear()}-${
+        String(
+          Math.floor(Math.random() * 9999),
+        ).padStart(4, "0")
+      }`;
+      GenerarReciboPDF({
+        nombreCliente: `${cliente.nombre} ${cliente.apellido}`,
+        monto: montoTotal,
+        mesesPagados: mesesPago,
+        numeroTransaccion,
+      });
       setMensajeModal("Pago procesado exitosamente");
       setMostrandoResultado(true);
     } catch (error: any) {
       console.error(error);
-      setMensajeModal(`Error: ${error.response?.data?.message || error.message}`);
+      setMensajeModal(
+        `Error: ${error.response?.data?.message || error.message}`,
+      );
       setMostrandoResultado(true);
     }
   };
@@ -163,10 +178,12 @@ const VistaUsuario: React.FC = () => {
         <div className="info-left">
           <ul className="info-list">
             <li>
-              <span className="info-label">Nombre:</span> {cliente.nombre} {cliente.apellido}
+              <span className="info-label">Nombre:</span> {cliente.nombre}{" "}
+              {cliente.apellido}
             </li>
             <li>
-              <span className="info-label">Tipo de Usuario:</span> {cliente.tipo}
+              <span className="info-label">Tipo de Usuario:</span>{" "}
+              {cliente.tipo}
             </li>
           </ul>
         </div>
@@ -177,18 +194,26 @@ const VistaUsuario: React.FC = () => {
         <div className="linea-control">
           <label>Meses:</label>
           <span className="contador">
-            <button onClick={() => cambiarValor("meses", -1)} className="bot">-</button>
+            <button onClick={() => cambiarValor("meses", -1)} className="bot">
+              -
+            </button>
             <input type="number" value={meses} readOnly />
-            <button onClick={() => cambiarValor("meses", 1)} className="bot">+</button>
+            <button onClick={() => cambiarValor("meses", 1)} className="bot">
+              +
+            </button>
           </span>
         </div>
 
         <div className="linea-control">
           <label>Años:</label>
           <span className="contador">
-            <button onClick={() => cambiarValor("anios", -1)} className="bot">-</button>
+            <button onClick={() => cambiarValor("anios", -1)} className="bot">
+              -
+            </button>
             <input type="number" value={anios} readOnly />
-            <button onClick={() => cambiarValor("anios", 1)} className="bot">+</button>
+            <button onClick={() => cambiarValor("anios", 1)} className="bot">
+              +
+            </button>
           </span>
         </div>
       </div>
@@ -202,32 +227,43 @@ const VistaUsuario: React.FC = () => {
               <th>Tarifa</th>
             </tr>
           </thead>
-         <tbody>
-          {mesesPago.map((fechaCompleta, index) => {
-            const [anio, mes] = fechaCompleta.split("-");
-            const fechaValida = new Date(parseInt(anio), parseInt(mes) - 1, 1);
-            const nombreMes = fechaValida.toLocaleString("es-ES", { month: "long" });
+          <tbody>
+            {mesesPago.map((fechaCompleta, index) => {
+              const [anio, mes] = fechaCompleta.split("-");
+              const fechaValida = new Date(
+                parseInt(anio),
+                parseInt(mes) - 1,
+                1,
+              );
+              const nombreMes = fechaValida.toLocaleString("es-ES", {
+                month: "long",
+              });
 
-            return (
-              <tr key={index}>
-                <td>{nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}</td>
-                <td>{tarifa} Bs.</td>
-              </tr>
-            );
-          })}
+              return (
+                <tr key={index}>
+                  <td>
+                    {nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} -
+                    {" "}
+                    {anio}
+                  </td>
+                  <td>{tarifa} Bs.</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
         <div className="info-pago">
-          <p><strong>Monto Total:</strong> {montoTotal} Bs.</p>
-         <p>
-          <strong>Fecha de Inicio del Pago:</strong>{" "}
-          {(() => {
-            if (!mesesPago.length) return "";
-            const [year, month, day] = mesesPago[0].split("-");
-            return `${day}/${month}/${year}`;
-          })()}
-        </p>
+          <p>
+            <strong>Monto Total:</strong> {montoTotal} Bs.
+          </p>
+          <p>
+            <strong>Fecha de Inicio del Pago:</strong> {(() => {
+              if (!mesesPago.length) return "";
+              const [year, month, day] = mesesPago[0].split("-");
+              return `${day}/${month}/${year}`;
+            })()}
+          </p>
           <button className="boton" onClick={() => setMostrarModal(true)}>
             CONFIRMAR COBRO
           </button>
@@ -236,15 +272,15 @@ const VistaUsuario: React.FC = () => {
 
       <Modal
         visible={mostrarModal}
-      onClose={() => {
-        setMostrarModal(false);
-        if (mostrandoResultado) {
-          window.location.reload(); 
-        } else {
-          setMostrandoResultado(false);
-          setMensajeModal("");
-        }
-      }}
+        onClose={() => {
+          setMostrarModal(false);
+          if (mostrandoResultado) {
+            window.location.reload();
+          } else {
+            setMostrandoResultado(false);
+            setMensajeModal("");
+          }
+        }}
         onConfirm={confirmarCobro}
         mensajeFinal={mensajeModal}
         mostrandoResultado={mostrandoResultado}

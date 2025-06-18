@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from "react";
-import "./cobrosEfectivo.css";
+import "./CobrosEfectivo.css";
 import { useNavigate } from "react-router-dom";
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 type Cliente = {
   id: string;
@@ -12,7 +11,8 @@ type Cliente = {
   tipo: string;
 };
 
-const getNombreCompleto = (cliente: Cliente) => `${cliente.nombre} ${cliente.apellido}`;
+const getNombreCompleto = (cliente: Cliente) =>
+  `${cliente.nombre} ${cliente.apellido}`;
 
 const CobrosEfectivo: React.FC = () => {
   const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -20,19 +20,21 @@ const CobrosEfectivo: React.FC = () => {
   const [busquedaCi, setBusquedaCi] = useState("");
   const [resultados, setResultados] = useState<Cliente[]>([]);
   const navigate = useNavigate();
-   const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const obtenerClientes = async () => {
       try {
         const res = await axiosPrivate.get(
-          "/cliente/activos"
+          "/cliente/activos",
         );
-        console.log(res.data)
+        console.log(res.data);
         if (Array.isArray(res.data.data)) {
           setClientes(res.data.data);
         } else {
-          console.error('La respuesta no contiene un array de clientes en "data"');
+          console.error(
+            'La respuesta no contiene un array de clientes en "data"',
+          );
         }
       } catch (err) {
         console.error("Error al obtener clientes:", err);
@@ -42,22 +44,24 @@ const CobrosEfectivo: React.FC = () => {
     obtenerClientes();
   }, []);
 
- useEffect(() => {
-  let filtrados: Cliente[] = [];
+  useEffect(() => {
+    let filtrados: Cliente[] = [];
 
-  if (busquedaNombre) {
-    filtrados = clientes.filter((cliente) =>
-      `${cliente.nombre} ${cliente.apellido}`.toLowerCase().startsWith(busquedaNombre.toLowerCase())
-    );
-  console.log(filtrados);
-  } else if (busquedaCi) {
-    filtrados = clientes.filter((cliente) =>
-      cliente.ci.toLowerCase().startsWith(busquedaCi.toLowerCase())
-    );
-  }
+    if (busquedaNombre) {
+      filtrados = clientes.filter((cliente) =>
+        `${cliente.nombre} ${cliente.apellido}`.toLowerCase().startsWith(
+          busquedaNombre.toLowerCase(),
+        )
+      );
+      console.log(filtrados);
+    } else if (busquedaCi) {
+      filtrados = clientes.filter((cliente) =>
+        cliente.ci.toLowerCase().startsWith(busquedaCi.toLowerCase())
+      );
+    }
 
-  setResultados(filtrados);
-}, [busquedaNombre, busquedaCi, clientes]);
+    setResultados(filtrados);
+  }, [busquedaNombre, busquedaCi, clientes]);
 
   return (
     <div className="contenidoCobro">
@@ -114,35 +118,43 @@ const CobrosEfectivo: React.FC = () => {
       {(busquedaNombre || busquedaCi) && (
         <div className="resultados">
           <h3>Resultados:</h3>
-          {resultados.length > 0 ? (
-            <div className="tarjeta-usuario" style={{ cursor: "pointer" }}>
-              <table className="tabla">
-                <tbody>
-                  {Array.from(new Map(resultados.map(c => [c.ci, c])).values()).map((cliente) => (
-                   <tr key={cliente.id} onClick={() => navigate('/cobros/Formulario', { state: { cliente } })}>
-                      <td className="icono-usuario">
-                        <img
-                          src="/icons/user.png"
-                          alt="Usuario"
-                          className="imagen-usuario"
-                        />
-                      </td>
-                      <td>
-                        <div>
-                          <b>{getNombreCompleto(cliente)}</b>
-                        </div>
-                        <div>
-                          <small>C.I. {cliente.ci} - {cliente.tipo}</small>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p>No se encontraron resultados.</p>
-          )}
+          {resultados.length > 0
+            ? (
+              <div className="tarjeta-usuario" style={{ cursor: "pointer" }}>
+                <table className="tabla">
+                  <tbody>
+                    {Array.from(
+                      new Map(resultados.map((c) => [c.ci, c])).values(),
+                    ).map((cliente) => (
+                      <tr
+                        key={cliente.id}
+                        onClick={() =>
+                          navigate("/cobros/Formulario", {
+                            state: { cliente },
+                          })}
+                      >
+                        <td className="icono-usuario">
+                          <img
+                            src="/icons/user.png"
+                            alt="Usuario"
+                            className="imagen-usuario"
+                          />
+                        </td>
+                        <td>
+                          <div>
+                            <b>{getNombreCompleto(cliente)}</b>
+                          </div>
+                          <div>
+                            <small>C.I. {cliente.ci} - {cliente.tipo}</small>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+            : <p>No se encontraron resultados.</p>}
         </div>
       )}
     </div>
