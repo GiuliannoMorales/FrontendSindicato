@@ -34,7 +34,7 @@
 .user__input-group--phone .user__error-message,
 .user__input-group--ci .user__error-message {
   position: absolute;
-  left: 170px;
+  left: 140px;
   margin-top: 65px;
   color: red;
   font-size: 0.875rem;

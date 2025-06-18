@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./RegistrarVehiculo.css";
 import { guardarVehiculo } from "../../bd/vehiculosBD";
 import { VehicleModal } from "../Users/components/Modal/Modal";
+import { validateField, validateVehicleForm } from "../../pages/RegistrarVehiculo/utils/validations";
 
 const RegistrarVehiculo = () => {
     const [formData, setFormData] = useState({
@@ -17,13 +18,24 @@ const RegistrarVehiculo = () => {
     const [traseraPreview, setTraseraPreview] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+    const [fieldErrors, setFieldErrors] = useState<{
+        tipo?: string;
+        placa?: string;
+        marca?: string;
+        modelo?: string;
+        color?: string;
+        fotoDelantera?: string;
+        fotoTrasera?: string;
+    }>({});
+
     const delanteraRef = useRef<HTMLInputElement>(null);
     const traseraRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     const handleImageChange = (
         e: React.ChangeEvent<HTMLInputElement>,
-        setPreview: React.Dispatch<React.SetStateAction<string | null>>
+        setPreview: React.Dispatch<React.SetStateAction<string | null>>,
+        fieldName: string
     ) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -32,33 +44,41 @@ const RegistrarVehiculo = () => {
                 const base64String = reader.result as string;
                 const base64WithoutPrefix = base64String.split(",")[1] || "";
                 setPreview(base64WithoutPrefix);
+                setFieldErrors(prevErrors => ({
+                    ...prevErrors,
+                    [fieldName]: "",
+                }));
             };
             reader.readAsDataURL(file);
+        } else {
+            setPreview(null);
+            setFieldErrors(prevErrors => ({
+                ...prevErrors,
+                [fieldName]: "Se requiere una imagen.",
+            }));
         }
     };
 
     const handleSave = async () => {
-        if (!/^\d{3,4}[A-Z]{3}$/.test(formData.placa)) {
-            setErrorMessage("Formato inválido en la placa. Debe tener 3 o 4 números seguidos de 3 letras mayúsculas.");
+        const currentFieldErrors = validateVehicleForm(formData, delanteraPreview, traseraPreview);
+        setFieldErrors(currentFieldErrors);
+
+        const hasErrors = Object.values(currentFieldErrors).some(error => error !== "");
+
+        if (hasErrors) {
+            setErrorMessage("Por favor, corrija los errores en el formulario antes de guardar.");
             return;
         }
-        if (
-            !formData.tipo ||
-            !formData.placa ||
-            !formData.marca ||
-            !formData.modelo ||
-            !formData.color ||
-            !delanteraPreview ||
-            !traseraPreview
-        ) {
-            alert("Por favor complete todos los campos y suba ambas imágenes.");
+
+        if (delanteraPreview === null || traseraPreview === null) {
+            setErrorMessage("Las imágenes delantera y trasera son requeridas.");
             return;
         }
 
         const data = {
             ...formData,
-            fotoDelantera: delanteraPreview,
-            fotoTrasera: traseraPreview,
+            fotoDelantera: delanteraPreview as string,
+            fotoTrasera: traseraPreview as string,
         };
 
         try {
@@ -72,7 +92,14 @@ const RegistrarVehiculo = () => {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        const error = validateField(name, value);
+        setFieldErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: error,
+        }));
     };
 
     return (
@@ -89,28 +116,27 @@ const RegistrarVehiculo = () => {
                                 <option value="Auto">Automóvil</option>
                                 <option value="Moto">Motocicleta</option>
                             </select>
+                            {fieldErrors.tipo && <p className="vehicle__error-message">{fieldErrors.tipo}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Placa: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} maxLength={10} required />
+                            {fieldErrors.placa && <p className="vehicle__error-message">{fieldErrors.placa}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Marca: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="marca" value={formData.marca} onChange={handleInputChange} required />
-                            {formData.marca !== "" && !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.marca) && (
-                                <p className="vehicle__error-message">Formato inválido.</p>
-                            )}
+                            {fieldErrors.marca && <p className="vehicle__error-message">{fieldErrors.marca}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Modelo: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="modelo" value={formData.modelo} onChange={handleInputChange} required />
+                            {fieldErrors.modelo && <p className="vehicle__error-message">{fieldErrors.modelo}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
                             <label>Color: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="color" value={formData.color} onChange={handleInputChange} required />
-                            {formData.color !== "" && !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.color) && (
-                                <p className="vehicle__error-message">Formato inválido.</p>
-                            )}
+                            {fieldErrors.color && <p className="vehicle__error-message">{fieldErrors.color}</p>}
                         </div>
                     </fieldset>
                 </div>
@@ -132,10 +158,11 @@ const RegistrarVehiculo = () => {
                             <input
                                 type="file"
                                 ref={delanteraRef}
-                                onChange={(e) => handleImageChange(e, setDelanteraPreview)}
+                                onChange={(e) => handleImageChange(e, setDelanteraPreview, "fotoDelantera")}
                                 style={{ display: "none" }}
                                 accept="image/*"
                             />
+                            {fieldErrors.fotoDelantera && <p className="vehicle__error-message">{fieldErrors.fotoDelantera}</p>}
                         </div>
                     </div>
 
@@ -155,10 +182,11 @@ const RegistrarVehiculo = () => {
                             <input
                                 type="file"
                                 ref={traseraRef}
-                                onChange={(e) => handleImageChange(e, setTraseraPreview)}
+                                onChange={(e) => handleImageChange(e, setTraseraPreview, "fotoTrasera")}
                                 style={{ display: "none" }}
                                 accept="image/*"
                             />
+                            {fieldErrors.fotoTrasera && <p className="vehicle__error-message">{fieldErrors.fotoTrasera}</p>}
                         </div>
                     </div>
                 </div>
