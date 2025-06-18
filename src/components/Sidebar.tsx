@@ -153,14 +153,14 @@ export default function Sidebar({
                   </li>
                   <li
                     className={`sidebar__item ${
-                      location.pathname === "/cobros/realizarCobros"
+                      location.pathname === "/ver/usuarios"
                         ? "sidebar__item-active"
                         : ""
                     }`}
                   >
                     <UserIcon />
                     <NavLink
-                      to={"/cobros/realizarCobros"}
+                      to={"/ver/usuarios"}
                       className={"sidebar__item-link"}
                     >
                       Ver Usuarios
