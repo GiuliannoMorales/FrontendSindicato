@@ -236,11 +236,15 @@ const VistaUsuario: React.FC = () => {
 
       <Modal
         visible={mostrarModal}
-        onClose={() => {
-          setMostrarModal(false);
+      onClose={() => {
+        setMostrarModal(false);
+        if (mostrandoResultado) {
+          window.location.reload(); 
+        } else {
           setMostrandoResultado(false);
           setMensajeModal("");
-        }}
+        }
+      }}
         onConfirm={confirmarCobro}
         mensajeFinal={mensajeModal}
         mostrandoResultado={mostrandoResultado}
