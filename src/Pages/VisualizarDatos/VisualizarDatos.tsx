@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom'; 
+import { useParams, useNavigate } from 'react-router-dom'; // ← Importa useNavigate
+import { Link } from 'react-router-dom';
 import './VisualizarDatos.css';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const VisualizarDatos = () => {
   const { id } = useParams();
   const [usuario, setUsuario] = useState<any>(null);
- const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate(); // ← Instancia de navigate
+
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
-        const response = await axiosPrivate.get(
-          `/usuario/${id}`
-        );
-
+        const response = await axiosPrivate.get(`/usuario/${id}`);
         if (Array.isArray(response.data) && response.data.length > 0) {
           setUsuario(response.data[0]);
         } else {
@@ -79,18 +78,20 @@ const VisualizarDatos = () => {
             className="imagen-perfil"
           />
           <div className="vehicles">
-  <div className="form-row">
-    <label>Vehículo(s):</label>
-    {usuario.vehiculos?.map((v: any, index: number) => (
-      <p key={index}>
-        <Link to={`/vehiculo/${id}/${v.idParqueo}`}>
-          {v.tipo} - {v.placa}
-        </Link>
-      </p>
-    ))}
-  </div>
-</div>
-          <button className="back-button">Atrás</button>
+            <div className="form-row">
+              <label>Vehículo(s):</label>
+              {usuario.vehiculos?.map((v: any, index: number) => (
+                <p key={index}>
+                  <Link to={`/vehiculo/${id}/${v.idParqueo}`}>
+                    {v.tipo} - {v.placa}
+                  </Link>
+                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* Botón Atrás funcional */}
+          <button className="back-button" onClick={() => navigate(-1)}>Atrás</button>
         </div>
       </div>
     </div>
