@@ -13,7 +13,7 @@ const mapApiUsuario = (apiUsuario: any): Usuario => ({
   imagenUrl: apiUsuario.foto
     ? `data:image/png;base64,${apiUsuario.foto}`
     : "/userPlaceholder.svg",
-  estado: apiUsuario.estadoParqueo,
+  estado: apiUsuario.estado,
   roles: apiUsuario.roles || [],
   cantidadMesesDeuda: apiUsuario.cantidadMesesDeuda,
   ci: apiUsuario.ci,
