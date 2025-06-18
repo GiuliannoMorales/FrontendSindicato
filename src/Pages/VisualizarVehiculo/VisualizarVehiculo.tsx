@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import api from "../../api/axios";
 import './VisualizarVehiculo.css';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const VisualizarVehiculo = () => {
   const { id, idParqueo } = useParams();
   const [vehiculo, setVehiculo] = useState<any>(null);
-
+ const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
     const fetchVehiculo = async () => {
       try {
-        const res = await api.get(`/usuario/${id}`);
+        const res = await axiosPrivate.get(`/usuario/${id}`);
         const usuario = Array.isArray(res.data) ? res.data[0] : res.data;
         console.log('Usuario recibido:', usuario);
       console.log('ID Parqueo desde URL:', idParqueo);

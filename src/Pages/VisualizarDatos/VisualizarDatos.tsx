@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'; 
-import api from "../../api/axios";
 import './VisualizarDatos.css';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const VisualizarDatos = () => {
   const { id } = useParams();
   const [usuario, setUsuario] = useState<any>(null);
-
+ const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
-        const response = await api.get(
+        const response = await axiosPrivate.get(
           `/usuario/${id}`
         );
 

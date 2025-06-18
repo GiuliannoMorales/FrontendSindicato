@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./cobrosEfectivo.css";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/axios";
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 type Cliente = {
   id: string;
@@ -20,11 +20,12 @@ const CobrosEfectivo: React.FC = () => {
   const [busquedaCi, setBusquedaCi] = useState("");
   const [resultados, setResultados] = useState<Cliente[]>([]);
   const navigate = useNavigate();
+   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const obtenerClientes = async () => {
       try {
-        const res = await api.get(
+        const res = await axiosPrivate.get(
           "/cliente/activos"
         );
         console.log(res.data)
