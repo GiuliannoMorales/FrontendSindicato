@@ -21,7 +21,7 @@ import PersistLogin from "./features/auth/PersistLogin";
 import VisualizarDatos from './pages/VisualizarDatos/VisualizarDatos';
 import VisualizarVehiculo from './pages/VisualizarVehiculo/VisualizarVehiculo';
 import VistaUsuario from "./pages/VistaUsuario/VistaUsuario";
-import CobrosEfectivo from "./pages/CobrosEfectivo/cobrosEfectivo";
+import CobrosEfectivo from "./pages/CobrosEfectivo/CobrosEfectivo";
 
 const ROLES = {
   ADMIN: "ADMINISTRADOR",

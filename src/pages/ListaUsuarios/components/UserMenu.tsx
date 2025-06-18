@@ -43,7 +43,7 @@ const navigate = useNavigate();
   const opciones = [
   {
     label: "Ver información",
-    action: () => navigate(`/visualizar-usuario/${usuario.id}`),
+    action: () => navigate(`/Datos/${usuario.id}`),
   },
     ...(isAdmin && !isTargetAdmin
       ? [
