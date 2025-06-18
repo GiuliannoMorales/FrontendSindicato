@@ -28,10 +28,11 @@ const InternalUser = () => {
     const [showGeneralErrorModal, setShowGeneralErrorModal] = useState(false);
     const [generalError, setGeneralError] = useState("");
     const [showUserFoundModal, setShowUserFoundModal] = useState(false);
+    const [photoError, setPhotoError] = useState<string | null>(null);
 
     const [errors, setErrors] = useState<Record<string, string | null>>({});
 
-    const { handleInputChange } = useFormHandlers(
+    const { handleInputChange, handlePhotoChange } = useFormHandlers(
         isEditMode,
         setCi,
         setNombre,
@@ -39,7 +40,8 @@ const InternalUser = () => {
         setCorreo,
         setTelefono,
         setPassword,
-        setErrors
+        setErrors,
+        setPhotoError
     );
 
     const clearFields = () => {
@@ -80,14 +82,8 @@ const InternalUser = () => {
                 const data = response.data;
 
                 if (data.status === "success" && data.data?.exists === false) {
-                    setNombre("");
-                    setApellido("");
-                    setCorreo("");
-                    setTelefono("");
-                    setUserType("");
-                    //setObservations("");
-                    setUserPhoto(null);
                     setIsEditMode(false);
+                    setShowUserFoundModal(false);
                 } else if (data.status === "success" && data.data) {
                     const user = data.data;
 
@@ -114,16 +110,8 @@ const InternalUser = () => {
     }, [ci]);
 
     const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64String = reader.result as string;
-            const base64WithoutPrefix = base64String.split(",")[1] || "";
-            handleUserPhotoChange(base64WithoutPrefix);
-        };
-        reader.readAsDataURL(file);
+        const file = e.target.files?.[0] || null;
+        handlePhotoChange(file, handleUserPhotoChange);
     };
 
     const handleUserPhotoClick = () => userPhotoRef.current?.click();
@@ -170,10 +158,16 @@ const InternalUser = () => {
         } catch (error: any) {
             console.error("Error al registrar usuario:", error);
 
-            const backendMessage =
-                error?.response?.data?.message ||
-                error?.response?.data?.error ||
+            const responseData = error?.response?.data;
+
+            let backendMessage =
+                responseData?.message ||
+                responseData?.error ||
                 null;
+
+            if (Array.isArray(responseData?.errors) && responseData.errors.length > 0) {
+                backendMessage = responseData.errors.map((e: any) => e.message).join("\n");
+            }
 
             if (backendMessage) {
                 setGeneralError(backendMessage);
@@ -244,12 +238,13 @@ const InternalUser = () => {
                                 ref={userPhotoRef}
                                 onChange={onUserPhotoChange}
                                 style={{ display: "none" }}
-                                accept="image/*"
+                                accept="image/png, image/jpeg"
                                 disabled={isEditMode}
                                 required
                             />
                         </div>
                     </div>
+                    {photoError && <p className="error-message">{photoError}</p>}
                     {/* <div className="internal-user__field">
                         <label className="internal-user__label">Observaciones: <span className="required">*</span></label>
                         <textarea

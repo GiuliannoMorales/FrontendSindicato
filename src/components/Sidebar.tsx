@@ -10,13 +10,18 @@ import { UserIcon } from "../assets/icons/UserIcon";
 import { PayIcon } from "../assets/icons/PayIcon";
 import { CoinInHandIcon } from "../assets/icons/CoinInHand";
 import { PeopleAdmiIcon } from "../assets/icons/PeopleAdmiIcon";
+import { LogUserIcon } from "../assets/icons/LogUserIcon";
 import { useState } from "react";
 import "./Layout.css";
-import { LogUserIcon } from "../assets/icons/LogUserIcon";
 import api from "../api/axios";
 import { logOut, selectCurrentRoles } from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../app/hooks";
+
+// SVGs directos
+import PayIconSvg from "../assets/icons/Pay.svg";
+import CoinInHandSvg from "../assets/icons/Coin in Hand.svg";
+import TimeMachineSvg from "../assets/icons/Time Machine.svg";
 
 export default function Sidebar({
   open,
@@ -29,6 +34,7 @@ export default function Sidebar({
   const [userGroupOpen, setUserGroupOpen] = useState(false);
   const [cuentaGroupOpen, setCuentaGroupOpen] = useState(false);
   const [logGroupOpen, setLogGroupOpen] = useState(false);
+  const [cobrosGroupOpen, setCobrosGroupOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,6 +54,7 @@ export default function Sidebar({
       navigate("/login");
     }
   };
+
   return (
     <>
       {open && <div className="sidebar-backdrop" onClick={onClose} />}
@@ -100,6 +107,7 @@ export default function Sidebar({
                 </div>
               )}
             </ul>
+
             <ul className="sidebar__group">
               <div
                 className="sidebar__group-header"
@@ -128,13 +136,21 @@ export default function Sidebar({
                       Crear Usuario
                     </NavLink>
                   </li>
-              <li
-                className={`sidebar__item ${location.pathname === "/registrar/usuario-interno" ? "sidebar__item-active" : ""}`} >
-                <PeopleAdmiIcon />
-                <NavLink to={"/registrar/usuario-interno"} className={"sidebar__item-link"} >
-                  Crear Usuario Interno
-                </NavLink>
-              </li>
+                  <li
+                    className={`sidebar__item ${
+                      location.pathname === "/registrar/usuario-interno"
+                        ? "sidebar__item-active"
+                        : ""
+                    }`}
+                  >
+                    <PeopleAdmiIcon />
+                    <NavLink
+                      to={"/registrar/usuario-interno"}
+                      className={"sidebar__item-link"}
+                    >
+                      Crear Usuario Interno
+                    </NavLink>
+                  </li>
                   <li
                     className={`sidebar__item ${
                       location.pathname === "/ver/usuarios"
@@ -155,44 +171,99 @@ export default function Sidebar({
             </ul>
           </>
         )}
-        {isCajero && <></>}
+
+        {(isAdmin || isCajero) && (
+          <ul className="sidebar__group">
+            <div
+              className="sidebar__group-header"
+              onClick={() => setCobrosGroupOpen(!cobrosGroupOpen)}
+            >
+              <div className="sidebar__group-container">
+                <img src={PayIconSvg} alt="Cobros" className="sidebar__icon" />
+                Cobros
+              </div>
+              <div>{cobrosGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
+            </div>
+
+            {cobrosGroupOpen && (
+              <div>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/cobros/realizarCobros"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src={CoinInHandSvg}
+                    alt="Realizar Cobros"
+                    className="sidebar__icon"
+                  />
+                  <NavLink
+                    to="/cobros/realizarCobros"
+                    className="sidebar__item-link"
+                  >
+                    Realizar Cobros
+                  </NavLink>
+                </li>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/cobros/historial"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src={TimeMachineSvg}
+                    alt="Historial"
+                    className="sidebar__icon"
+                  />
+                  <NavLink
+                    to="/cobros/historial"
+                    className="sidebar__item-link"
+                  >
+                    Ver Historial
+                  </NavLink>
+                </li>
+              </div>
+            )}
+          </ul>
+        )}
 
         {isCliente && (
-          <>
-            <ul className="sidebar__group">
-              <div
-                className="sidebar__group-header"
-                onClick={() => setCuentaGroupOpen(!cuentaGroupOpen)}
-              >
-                <div className="sidebar__group-container">
-                  <PayIcon />
-                  Mi Cuenta
-                </div>
-                <div>
-                  {cuentaGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-                </div>
+          <ul className="sidebar__group">
+            <div
+              className="sidebar__group-header"
+              onClick={() => setCuentaGroupOpen(!cuentaGroupOpen)}
+            >
+              <div className="sidebar__group-container">
+                <PayIcon />
+                Mi Cuenta
               </div>
-              {cuentaGroupOpen && (
-                <div>
-                  <li
-                    className={`sidebar__item ${
-                      location.pathname === "/cuenta/estado"
-                        ? "sidebar__item-active"
-                        : ""
-                    }`}
+              <div>
+                {cuentaGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+              </div>
+            </div>
+            {cuentaGroupOpen && (
+              <div>
+                <li
+                  className={`sidebar__item ${
+                    location.pathname === "/cuenta/estado"
+                      ? "sidebar__item-active"
+                      : ""
+                  }`}
+                >
+                  <CoinInHandIcon />
+                  <NavLink
+                    to={"/cuenta/estado"}
+                    className={"sidebar__item-link"}
                   >
-                    <CoinInHandIcon />
-                    <NavLink
-                      to={"/cuenta/estado"}
-                      className={"sidebar__item-link"}
-                    >
-                      Ver Estado
-                    </NavLink>
-                  </li>
-                </div>
-              )}
-            </ul>
-          </>
+                    Ver Estado
+                  </NavLink>
+                </li>
+              </div>
+            )}
+          </ul>
         )}
 
         <ul className="sidebar__logout">
