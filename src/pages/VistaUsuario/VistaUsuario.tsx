@@ -73,7 +73,7 @@ const VistaUsuario: React.FC = () => {
   }, [cliente]);
 
   const cambiarValor = (tipo: "meses" | "anios", delta: number) => {
-    const totalActual = meses + anios * 12;
+    //const totalActual = meses + anios * 12;
 
     let nuevoMeses = meses;
     let nuevoAnios = anios;
@@ -96,7 +96,8 @@ const VistaUsuario: React.FC = () => {
     let baseFecha: Date;
 
     if (/^\d{4}-\d{2}-\d{2}$/.test(fechaInicioPago)) {
-      const [anio, mes, dia] = fechaInicioPago.split("-").map(Number);
+     // const [anio, mes, dia] = fechaInicioPago.split("-").map(Number);
+      const [anio, mes] = fechaInicioPago.split("-").map(Number);
       baseFecha = new Date(anio, mes - 1, 1);
     } else {
       baseFecha = new Date();
