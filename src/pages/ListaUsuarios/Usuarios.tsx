@@ -16,6 +16,7 @@ const mapApiUsuario = (apiUsuario: any): Usuario => ({
   estado: apiUsuario.estadoParqueo,
   roles: apiUsuario.roles || [],
   cantidadMesesDeuda: apiUsuario.cantidadMesesDeuda,
+  ci: apiUsuario.ci,
 });
 
 const rolesDisponibles = [
@@ -66,7 +67,8 @@ const Usuarios: React.FC = () => {
   const usuariosFiltrados = usuarios.filter((u) => {
     const coincideBusqueda =
       u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.apellido.toLowerCase().includes(busqueda.toLowerCase());
+      u.apellido.toLowerCase().includes(busqueda.toLowerCase()) ||
+      (u.ci && u.ci.toLowerCase().includes(busqueda.toLowerCase()));
 
     const coincideRol = filtroRoles.length === 0 ||
       (u.tipoCliente && filtroRoles.includes(u.tipoCliente));
@@ -154,11 +156,11 @@ const Usuarios: React.FC = () => {
       <h2>LISTA DE USUARIOS REGISTRADOS</h2>
       <div className="control">
         <label>
-          Buscar por Nombre o Apellido:
+          Buscar por Nombre, Apellido o CI:
           <input
             type="text"
             className="buscador"
-            placeholder="Buscar por Nombre o Apellido...."
+            placeholder="Buscar por Nombre, Apellido o CI..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />

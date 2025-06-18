@@ -1,10 +1,7 @@
 import { useState } from "react";
 import type { Usuario } from "../UsuariosModelo";
 import { useAppSelector } from "../../../app/hooks";
-import {
-  selectCurrentRoles,
-  // selectCurrentToken,
-} from "../../../features/auth/authSlice";
+import { selectCurrentRoles } from "../../../features/auth/authSlice";
 
 export const UserMenu: React.FC<{
   usuario: Usuario;
@@ -21,10 +18,11 @@ export const UserMenu: React.FC<{
   const [motivo, setMotivo] = useState("");
 
   const roles = useAppSelector(selectCurrentRoles);
-  // const userId = useAppSelector((state) => state.auth.userId);
   const isAdmin = roles.includes("ADMINISTRADOR");
-  // const isSelf = usuario.id === userId;
   const isTargetAdmin = usuario.roles?.includes("ADMINISTRADOR");
+  const isTargetCajero = usuario.roles?.includes("CAJERO");
+
+  const isTargetCliente = !isTargetAdmin && !isTargetCajero;
 
   const handleBloquear = () => {
     setModalAccion("Bloqueado");
@@ -44,7 +42,7 @@ export const UserMenu: React.FC<{
       //En lugar del alert iria a la vista del usuario
       action: () => alert(`Ver info de ${usuario.nombre}`),
     },
-    ...(isAdmin && !isTargetAdmin
+    ...(isAdmin
       ? [
         ...(usuario.estado !== "Activo"
           ? [{
@@ -58,12 +56,14 @@ export const UserMenu: React.FC<{
             action: handleInactivar,
           }]
           : []),
-        ...(usuario.estado !== "Bloqueado"
-          ? [{
-            label: "Bloquear usuario",
-            action: handleBloquear,
-          }]
-          : []),
+        ...(
+          isTargetCliente && usuario.estado !== "Bloqueado"
+            ? [{
+              label: "Bloquear usuario",
+              action: handleBloquear,
+            }]
+            : []
+        ),
       ]
       : []),
   ];
