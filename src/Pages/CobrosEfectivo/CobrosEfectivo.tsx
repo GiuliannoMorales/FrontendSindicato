@@ -60,7 +60,7 @@ const CobrosEfectivo: React.FC = () => {
 }, [busquedaNombre, busquedaCi, clientes]);
 
   return (
-    <div className="contenido">
+    <div className="contenidoCobro">
       <div className="titulo">
         <h1>REALIZAR COBRO</h1>
       </div>
