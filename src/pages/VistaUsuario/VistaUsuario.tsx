@@ -189,94 +189,94 @@ const VistaUsuario: React.FC = () => {
           </ul>
         </div>
       </div>
-        <div className="bloque-pago">
-        <h3 className="res">1. Cantidad de meses o años a pagar</h3>
-              <div className="control-horizontal">
-                <div className="linea-control">
-                  <label>Meses:</label>
-                  <span className="contador">
-                    <button onClick={() => cambiarValor("meses", -1)} className="bot">
-                      -
-                    </button>
-                    <input type="number" value={meses} readOnly />
-                    <button onClick={() => cambiarValor("meses", 1)} className="bot">
-                      +
-                    </button>
-                  </span>
-                </div>
-
-                <div className="linea-control">
-                  <label>Años:</label>
-                  <span className="contador">
-                    <button onClick={() => cambiarValor("anios", -1)} className="bot">
-                      -
-                    </button>
-                    <input type="number" value={anios} readOnly />
-                    <button onClick={() => cambiarValor("anios", 1)} className="bot">
-                      +
-                    </button>
-                  </span>
-                </div>
-              </div>
-
-              <h3 className="res">2. Detalles del Pago</h3>
-              <div className="contenedor-pago">
-                <table>
-                  <thead>
-                    <tr className="titul">
-                      <th>Mes</th>
-                      <th>Tarifa</th>
-                    </tr>
-                  </thead>
-                    <tbody>
-                      {mesesPago.length === 0 ? (
-                        <tr>
-                          <td colSpan={2} style={{ textAlign: "center", padding: "1rem" }}>
-                            No hay pagos registrados.
-                          </td>
-                        </tr>
-                      ) : (
-                        mesesPago.map((fechaCompleta, index) => {
-                          const [anio, mes] = fechaCompleta.split("-");
-                          const fechaValida = new Date(parseInt(anio), parseInt(mes) - 1, 1);
-                          const nombreMes = fechaValida.toLocaleString("es-ES", {
-                            month: "long",
-                          });
-
-                          return (
-                            <tr key={index}>
-                              <td>
-                                {nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}
-                              </td>
-                              <td>{tarifa} Bs.</td>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                </table>
-
-                <div className="info-pago">
-                  <p>
-                    <strong>Monto Total:</strong> {montoTotal} Bs.
-                  </p>
-                  <p>
-                    <strong>Fecha de pago:</strong> {(() => {
-                      if (!mesesPago.length) return "";
-                      const [year, month, day] = mesesPago[0].split("-");
-                      return `${day}/${month}/${year}`;
-                    })()}
-                  </p>
-                <button
-                    className="boton"
-                    onClick={() => setMostrarModal(true)}
-                    disabled={meses === 0 && anios === 0}
-                  >
-                    CONFIRMAR COBRO
+      <div className="bloque-pago">
+      <h3 className="res">1. Cantidad de meses o años a pagar</h3>
+            <div className="control-horizontal">
+              <div className="linea-control">
+                <label>Meses:</label>
+                <span className="contador">
+                  <button onClick={() => cambiarValor("meses", -1)} className="bot">
+                    -
                   </button>
-                </div>
+                  <input type="number" value={meses} readOnly />
+                  <button onClick={() => cambiarValor("meses", 1)} className="bot">
+                    +
+                  </button>
+                </span>
               </div>
-        </div>
+
+              <div className="linea-control">
+                <label>Años:</label>
+                <span className="contador">
+                  <button onClick={() => cambiarValor("anios", -1)} className="bot">
+                    -
+                  </button>
+                  <input type="number" value={anios} readOnly />
+                  <button onClick={() => cambiarValor("anios", 1)} className="bot">
+                    +
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <h3 className="res">2. Detalles del Pago</h3>
+            <div className="contenedor-pago">
+              <table>
+                <thead>
+                  <tr className="titul">
+                    <th>Mes</th>
+                    <th>Tarifa</th>
+                  </tr>
+                </thead>
+                  <tbody>
+                    {mesesPago.length === 0 ? (
+                      <tr>
+                        <td colSpan={2} style={{ textAlign: "center", padding: "1rem" }}>
+                          No hay pagos registrados.
+                        </td>
+                      </tr>
+                    ) : (
+                      mesesPago.map((fechaCompleta, index) => {
+                        const [anio, mes] = fechaCompleta.split("-");
+                        const fechaValida = new Date(parseInt(anio), parseInt(mes) - 1, 1);
+                        const nombreMes = fechaValida.toLocaleString("es-ES", {
+                          month: "long",
+                        });
+
+                        return (
+                          <tr key={index}>
+                            <td>
+                              {nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}
+                            </td>
+                            <td>{tarifa} Bs.</td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+              </table>
+
+              <div className="info-pago">
+                <p>
+                  <strong>Monto Total:</strong> {montoTotal} Bs.
+                </p>
+                <p>
+                  <strong>Fecha de pago:</strong> {(() => {
+                    if (!mesesPago.length) return "";
+                    const [year, month, day] = mesesPago[0].split("-");
+                    return `${day}/${month}/${year}`;
+                  })()}
+                </p>
+              <button
+                  className="boton"
+                  onClick={() => setMostrarModal(true)}
+                  disabled={meses === 0 && anios === 0}
+                >
+                  CONFIRMAR COBRO
+                </button>
+              </div>
+            </div>
+      </div>
      
 
       <Modal
