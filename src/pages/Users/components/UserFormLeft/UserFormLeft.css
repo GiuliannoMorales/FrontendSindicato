@@ -27,7 +27,7 @@
 .typeuser .user__error-message {
   position: absolute;
   left: 140px;
-  margin-top: 65px;
+  margin-top: 50px;
   color: red;
   font-size: 0.875rem;
   white-space: normal;
