@@ -60,27 +60,23 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .control-horizontal {
   display: flex;
-  justify-content: flex-start;
-  gap: 30px; /* Espacio entre el control de meses y años */
+  justify-content: center; /* Antes estaba en flex-start */
+  gap: 30px;
   align-items: center;
   margin-bottom: 20px;
 }
 /* Estilo de tabla de detalles de pago */
 .contenedor-pago {
   display: flex;
-  justify-content: space-between;
-  gap: 40px;
+  justify-content: center; /* <-- Cambiado de flex-end a center */
+  gap: 40px; /* Mayor espacio entre tabla e info */
   align-items: flex-start;
   margin-top: 20px;
 }
 
 table {
-  border-collapse: collapse;
-  max-width: 500px;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  table-layout: fixed;
+  flex-shrink: 0;
+  width: 350px; /* Ajusta según necesidad */
 }
 
 th, td {
@@ -101,9 +97,8 @@ th, td {
   gap: 10px;
 }
 
-.info-pago p strong {
-  display: inline-block;
-  width: 130px;
+.info-pago {
+  margin-top: 10px;
 }
 
 /* Botones */
@@ -151,4 +146,9 @@ th, td {
     width: 100%;      
     margin-left: 0;   
     padding-left: 5px;
+}
+.bloque-pago {
+  width: 70%;
+  margin: 0 auto;
+  margin-left: 10%; /* Mueve un poco hacia la derecha */
 }
