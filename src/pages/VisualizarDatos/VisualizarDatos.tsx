@@ -9,7 +9,7 @@ const VisualizarDatos = () => {
   const { id } = useParams();
   const [usuario, setUsuario] = useState<any>(null);
   const axiosPrivate = useAxiosPrivate();
-  const navigate = useNavigate(); // ← Instancia de navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsuario = async () => {
@@ -38,36 +38,36 @@ const VisualizarDatos = () => {
           <form>
             <div className="section-title">Datos Personales:</div>
             <div className="form-row">
-              <label htmlFor="ci">C.I.:</label>
+              <label className="label-required" htmlFor="ci">C.I.:</label>
               <input id="ci" type="text" value={usuario.ci || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="nombre">Nombre(s):</label>
+              <label className="label-required" htmlFor="nombre">Nombre(s):</label>
               <input id="nombre" type="text" value={usuario.nombre || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="apellido">Apellido(s):</label>
+              <label className="label-required" htmlFor="apellido">Apellido(s):</label>
               <input id="apellido" type="text" value={usuario.apellido || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="correo">Correo Electrónico:</label>
+              <label className="label-required" htmlFor="correo">Correo Electrónico:</label>
               <input id="correo" type="email" value={usuario.correo || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="telefono">Teléfono:</label>
+              <label className="label-required" htmlFor="telefono">Teléfono:</label>
               <input id="telefono" type="text" value={usuario.nroCelular || ''} readOnly />
             </div>
             <div className="section-title">Datos Cuenta:</div>
             <div className="form-row">
-              <label htmlFor="rol">Asignar rol:</label>
+              <label className="label-required" htmlFor="rol">Asignar rol:</label>
               <input id="rol" type="text" value={usuario.rolAsignado || ''} readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="contrasenia">Contraseña:</label>
+              <label className="label-required" htmlFor="contrasenia">Contraseña:</label>
               <input id="contrasenia" type="password" value="********" readOnly />
             </div>
             <div className="form-row">
-              <label htmlFor="estado">Estado:</label>
+              <label className="label-required" htmlFor="estado">Estado:</label>
               <input id="estado" type="text" value={usuario.estadoParqueo || ''} readOnly />
             </div>
           </form>
@@ -80,7 +80,7 @@ const VisualizarDatos = () => {
           />
           <div className="vehicles">
             <div className="form-row">
-              <label>Vehículo(s):</label>
+              <label className="label-required">Vehículo(s):</label>
               {usuario.vehiculos?.map((v: any, index: number) => (
                 <p key={index}>
                   <Link to={`/vehiculo/${id}/${v.idParqueo}`}>

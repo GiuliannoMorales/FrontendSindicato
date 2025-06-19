@@ -119,7 +119,7 @@ input[type="password"] {
 .back-button:hover {
   background-color: #00a3cc;
 }
-label::after {
+.label-required::after {
   content: ' *';
   color: red;
 }
