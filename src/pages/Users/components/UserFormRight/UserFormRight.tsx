@@ -17,10 +17,12 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     userType,
     assignedSpace,
     onAssignedSpaceChange,
+    errors,
+    clearFieldError,
 }) => {
     const navigate = useNavigate();
     const [espacios, setEspacios] = useState([]);
-      const axiosPrivate = useAxiosPrivate()
+    const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
         axiosPrivate.get("/parqueo/espacios-disponibles")
@@ -39,7 +41,11 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     }, [userType, onAssignedSpaceChange]);
 
     const handleAssignedSpaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onAssignedSpaceChange(e.target.value || null);
+        const selected = e.target.value || null;
+        onAssignedSpaceChange(selected);
+        if (selected) {
+            clearFieldError("parqueo");
+        }
     };
 
     const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +57,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
             const base64String = reader.result as string;
             const base64WithoutPrefix = base64String.split(",")[1] || "";
             handleUserPhotoChange(base64WithoutPrefix);
+            clearFieldError("foto");
         };
         reader.readAsDataURL(file);
     };
@@ -59,7 +66,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
         <>
             <div className="user__input-group user__input-group--photo">
                 <label className="user__label">
-                    Foto Usuario: <span className="user__required">*</span>
+                    Foto Usuario:
                 </label>
                 <div className="user__upload-box">
                     {userPhotoPreview ? (
@@ -87,11 +94,12 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                         className="user__file-input"
                     />
                 </div>
+                {errors.foto && <span className="user__error">{errors.foto}</span>}
             </div>
 
             <div className="user__input-group user__input-group--vehicles">
                 <label className="user__label">
-                    Vehículo: <span className="user__required">*</span>
+                    Vehículo:
                 </label>
                 <div className="user__vehicle-photo-list">
                     {vehiculos.length > 0 &&
@@ -142,6 +150,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                         + Añadir vehículo
                     </button>
                 </div>
+                {errors.vehiculos && <span className="user__error">{errors.vehiculos}</span>}
                 <input
                     type="file"
                     ref={vehicleEditRef}
@@ -154,9 +163,9 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
             {(userType === "Administrativo" || userType === "Docente a dedicación exclusiva") && (
                 <div className="user__input-group user__input-group--space">
                     <label className="user__label">
-                        Asignar espacio: <span className="user__required">*</span>
+                        Asignar espacio:
                     </label>
-                    <select required className="user__select" value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
+                    <select required className="select " value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
                         <option value="">Seleccione un espacio</option>
                         {espacios.map((espacio: number) => (
                             <option key={espacio} value={espacio}>
@@ -164,6 +173,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                             </option>
                         ))}
                     </select>
+                    {errors.parqueo && <span className="user__error">{errors.parqueo}</span>}
                 </div>
             )}
         </>

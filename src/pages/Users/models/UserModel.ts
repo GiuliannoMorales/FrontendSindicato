@@ -11,6 +11,8 @@ export interface UserFormRightProps {
     userType: string;
     assignedSpace: string | null;
     onAssignedSpaceChange: (space: string | null) => void;
+    errors: { [key: string]: string };
+    clearFieldError: (field: string) => void;
 }
 
 export interface UserFormLeftProps {
