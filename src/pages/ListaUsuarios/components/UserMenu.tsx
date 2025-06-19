@@ -1,10 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Usuario } from "../UsuariosModelo";
 import { useAppSelector } from "../../../app/hooks";
-import {
-  selectCurrentRoles,
-  // selectCurrentToken,
-} from "../../../features/auth/authSlice";
+import { selectCurrentRoles } from "../../../features/auth/authSlice";
 
 export const UserMenu: React.FC<{
   usuario: Usuario;
@@ -19,12 +17,14 @@ export const UserMenu: React.FC<{
     null | "Bloqueado" | "Inactivo"
   >(null);
   const [motivo, setMotivo] = useState("");
+  const navigate = useNavigate();
 
   const roles = useAppSelector(selectCurrentRoles);
-  // const userId = useAppSelector((state) => state.auth.userId);
   const isAdmin = roles.includes("ADMINISTRADOR");
-  // const isSelf = usuario.id === userId;
   const isTargetAdmin = usuario.roles?.includes("ADMINISTRADOR");
+  const isTargetCajero = usuario.roles?.includes("CAJERO");
+
+  const isTargetCliente = !isTargetAdmin && !isTargetCajero;
 
   const handleBloquear = () => {
     setModalAccion("Bloqueado");
@@ -41,10 +41,9 @@ export const UserMenu: React.FC<{
   const opciones = [
     {
       label: "Ver información",
-      //En lugar del alert iria a la vista del usuario
-      action: () => alert(`Ver info de ${usuario.nombre}`),
+      action: () => navigate(`/Datos/${usuario.id}`),
     },
-    ...(isAdmin && !isTargetAdmin
+    ...(isAdmin
       ? [
         ...(usuario.estado !== "Activo"
           ? [{
@@ -58,21 +57,26 @@ export const UserMenu: React.FC<{
             action: handleInactivar,
           }]
           : []),
-        ...(usuario.estado !== "Bloqueado"
-          ? [{
-            label: "Bloquear usuario",
-            action: handleBloquear,
-          }]
-          : []),
+        ...(
+          isTargetCliente && usuario.estado !== "Bloqueado"
+            ? [{
+              label: "Bloquear usuario",
+              action: handleBloquear,
+            }]
+            : []
+        ),
       ]
       : []),
   ];
 
   const modalMsg = modalAccion === "Bloqueado"
-    ? "¿Está seguro de bloquear al usuario"
-    : "¿Está seguro de inactivar al usuario";
+    ? "Por favor, indique el motivo de bloqueo del usuario"
+    : "Por favor, indique el motivo de inactivar al usuario";
 
   const modalBtn = modalAccion === "Bloqueado" ? "Bloquear" : "Inactivar";
+
+  const motivoValido = motivo.length >= 20 &&
+    /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(motivo);
 
   return (
     <div className="usrMenuWrapper">
@@ -106,7 +110,7 @@ export const UserMenu: React.FC<{
           <div className="modalConfirmMsg" onClick={(e) => e.stopPropagation()}>
             <div>
               {modalMsg} <br />
-              <b>{usuario.nombre} {usuario.apellido}</b>?
+              <b>{usuario.nombre} {usuario.apellido}</b>
             </div>
             <div className="modalMotivo">
               <textarea
@@ -119,9 +123,9 @@ export const UserMenu: React.FC<{
                 rows={3}
               />
             </div>
-            {motivo.length > 0 && motivo.length < 20 && (
+            {motivo.length > 0 && (!motivoValido) && (
               <div style={{ color: "red" }}>
-                El motivo debe tener al menos 20 caracteres.
+                El motivo debe tener al menos 20 caracteres y contener letras.
               </div>
             )}
             <div className="modalConfirmBtns">
@@ -133,7 +137,7 @@ export const UserMenu: React.FC<{
               </button>
               <button
                 className="modalConfirmBtn btnSi"
-                disabled={motivo.length < 20}
+                disabled={!motivoValido}
                 onClick={() => {
                   onChangeEstado(usuario.id, modalAccion, motivo.trim());
                   setModalAccion(null);

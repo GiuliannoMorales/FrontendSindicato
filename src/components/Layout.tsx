@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import MainContent from "./MainContent";
 import "./Layout.css";
+import { Outlet } from "react-router-dom";
 
-export default function Layout(
-  { showSidebar = true }: { showSidebar?: boolean },
-) {
+interface LayoutProps {
+  showSidebar?: boolean;
+}
+
+export default function Layout({ showSidebar = true }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -15,13 +17,15 @@ export default function Layout(
         onMenuClick={() => setSidebarOpen((prev) => !prev)}
         sidebarOpen={sidebarOpen}
       />
+
       {showSidebar && (
-        <Sidebar
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       )}
-      <MainContent />
+
+      <main className="contenido">
+        <div className="lineaAzul"></div>
+        <Outlet />
+      </main>
     </div>
   );
 }

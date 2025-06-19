@@ -1,0 +1,45 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-contenido {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  width: 350px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  border: 2px solid #2196f3;
+}
+
+.modal-botones {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.boton-no, .boton-si {
+  padding: 10px 25px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.boton-no {
+  background-color: #34515e;
+}
+
+.boton-si {
+  background-color: #c62828;
+}

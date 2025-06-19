@@ -1,3 +1,6 @@
+
+
+
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -15,6 +18,10 @@ import LoginPage from "./pages/Login/LoginPage";
 import RequireAuth from "./features/auth/RequireAuth";
 import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import PersistLogin from "./features/auth/PersistLogin";
+import VisualizarDatos from './pages/VisualizarDatos/VisualizarDatos';
+import VisualizarVehiculo from './pages/VisualizarVehiculo/VisualizarVehiculo';
+import VistaUsuario from "./pages/VistaUsuario/VistaUsuario";
+import CobrosEfectivo from "./pages/CobrosEfectivo/CobrosEfectivo";
 
 const ROLES = {
   ADMIN: "ADMINISTRADOR",
@@ -48,12 +55,15 @@ const App: React.FC = () => {
               element={<InternalUser />}
             />
           </Route>
+          <Route path="/vehiculo/:id/:idParqueo" element={<VisualizarVehiculo/>} />
+          <Route path="/Datos/:id" element={<VisualizarDatos />} />
 
           {/* protected routes for the cashier */}
           <Route
             element={<RequireAuth allowedRoles={[ROLES.CAJERO]} />}
           ></Route>
-
+          <Route path="/cobros/realizarCobros" element={<CobrosEfectivo />} />
+          <Route path="/cobros/Formulario" element={<VistaUsuario />} />
           {/* protected routes for the client */}
           <Route element={<RequireAuth allowedRoles={[ROLES.CLIENTE]} />}>
             <Route path="/cuenta/estado" element={<EstadoCuenta />} />
