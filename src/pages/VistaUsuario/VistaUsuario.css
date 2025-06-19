@@ -2,55 +2,81 @@
 .titulo h1,
 h1 {
   text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 34px; /* Aumentado */
+  margin-bottom: 24px;
   color: #004080;
 }
 
 /* Controles de selección */
 p {
   margin: 5px 0;
+  font-size: 18px; /* Aumentado */
 }
 
 button {
-  padding: 4px 10px;
+  padding: 6px 12px;
   margin: 0 5px;
   cursor: pointer;
+  font-size: 18px; /* Aumentado */
 }
 
-.contador {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  background-color: white;
-  border-radius: 0;
-  overflow: hidden;
-  margin-left: 10px;
-}
-
-.contador input[type="number"] {
-  width: 40px;
-  text-align: center;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  appearance: textfield;
-}
 .linea-control {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  font-size: 18px; /* Aumentado */
+}
+
+.control-horizontal {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* --- CONTADOR MEJORADO --- */
+.contador {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+  background-color: white;
+  padding: 0;
+}
+
+.contador input[type="number"] {
+  width: 60px; /* Aumentado */
+  text-align: center;
+  font-size: 18px; /* Aumentado */
+  border: none;
+  outline: none;
+  appearance: textfield;
+  padding: 8px 0;
+  background-color: white;
 }
 
 .contador .bot {
+  width: 40px; /* Aumentado */
   background-color: #d3dce6;
   border: none;
-  padding: 6px 12px;
-  font-size: 16px;
+  font-size: 22px; /* Aumentado */
   font-weight: bold;
   cursor: pointer;
-  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  border-radius: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.contador .bot:hover {
+  background-color: #b4c2d4;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -58,52 +84,41 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-.control-horizontal {
-  display: flex;
-  justify-content: flex-start;
-  gap: 30px; /* Espacio entre el control de meses y años */
-  align-items: center;
-  margin-bottom: 20px;
-}
+
 /* Estilo de tabla de detalles de pago */
 .contenedor-pago {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 40px;
   align-items: flex-start;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .table {
-  border-collapse: collapse;
-  max-width: 500px;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  table-layout: fixed;
+  flex-shrink: 0;
+  width: 380px;
+  font-size: 16px; /* Aumentado */
 }
 
 th, td {
   border: 1px solid #000;
-  padding: 10px;
+  padding: 12px;
   text-align: center;
 }
 
 .titul {
   background-color: rgb(123, 148, 170);
   color: white;
+  font-size: 17px; /* Aumentado */
 }
 
 /* Detalles de pago (lado derecho) */
 .info-pago {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.info-pago p strong {
-  display: inline-block;
-  width: 130px;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 17px; /* Aumentado */
 }
 
 /* Botones */
@@ -111,20 +126,22 @@ th, td {
   background-color: rgb(182, 195, 210);
   color: black;
   border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
+  padding: 12px 24px;
+  margin-top: 12px;
   font-weight: bold;
+  font-size: 18px; /* Aumentado */
 }
 
 .boton {
   background-color: rgb(181, 67, 81);
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 18px;
   font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
   width: fit-content;
+  font-size: 17px; /* Aumentado */
 }
 
 /* Info de usuario (nombre, tipo, etc.) */
@@ -132,6 +149,7 @@ th, td {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
+  font-size: 18px; /* Aumentado */
 }
 
 .info-list {
@@ -139,7 +157,7 @@ th, td {
 }
 
 .info-list li {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .info-label {
@@ -147,8 +165,15 @@ th, td {
 }
 
 .res {
-    text-align: left;
-    width: 100%;      
-    margin-left: 0;   
-    padding-left: 5px;
+  text-align: left;
+  width: 100%;
+  margin-left: 0;
+  padding-left: 5px;
+  font-size: 22px; /* Aumentado */
+}
+
+.bloque-pago {
+  width: 70%;
+  margin: 0 auto;
+  margin-left: 10%;
 }

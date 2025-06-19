@@ -9,7 +9,7 @@ const SelectInput = ({ label, value, onChange, options, required = false }: {
 }) => (
     <div className="internal-user__field">
         <label className="internal-user__label">
-            {label}{required && <span className="required">*</span>}
+            {label}
         </label>
         <select className="internal-user__select" value={value} onChange={onChange} required={required}>
             <option value="">Seleccione</option>

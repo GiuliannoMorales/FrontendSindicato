@@ -35,6 +35,7 @@
     align-items: center;
     gap: 5px;
     margin-bottom: 15px;
+    position: relative;
 }
 
 .registrarVehiculo__form-right .registrarVehiculo__input-group {
@@ -123,8 +124,16 @@
 
 .registrarVehiculo__input-group .vehicle__error-message {
     position: absolute;
-    left: 575px;
+    left: 150px;
     margin-top: 58px;
+    color: red;
+    font-size: 12px;
+}
+
+.registrarVehiculo__form-right .vehicle__error-message {
+    position: absolute;
+    left: 212px;
+    margin-top: 188px;
     color: red;
     font-size: 12px;
 }

@@ -3,7 +3,6 @@ import type { AxiosInstance, AxiosPromise } from "axios";
 import type { NewTarifa, Tarifa } from "../models/TarifasModel"
 import type { ErrorResponse } from "../../../types/backendResponse";
 import axios from "axios";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export interface FiltroTarifas {
   tipoVehiculo?: string;
@@ -19,7 +18,6 @@ export const createTarifa = async (
   api: AxiosInstance,
   tarifaData: NewTarifa
 ): Promise<Tarifa> => {
-  const axios1 = useAxiosPrivate()
   try {
     const response = await api.post<Tarifa>('tarifa', tarifaData);
     return response.data;
