@@ -26,6 +26,8 @@ const rolesDisponibles = [
     value: "Docente a dedicación exclusiva",
   },
   { label: "Docente a tiempo horario", value: "Docente a tiempo horario" },
+  { label: "Administrador", value: "ADMINISTRADOR" },
+  { label: "Cajero", value: "CAJERO" },
 ];
 
 const tiposDisponibles = [
@@ -41,7 +43,13 @@ const Usuarios: React.FC = () => {
   const [filtroRoles, setFiltroRoles] = useState<string[]>([]);
   const [filtroTipos, setFiltroTipos] = useState<string[]>([]);
   const [filtroMeses, setFiltroMeses] = useState(0);
+
+  const [tmpFiltroRoles, setTmpFiltroRoles] = useState<string[]>([]);
+  const [tmpFiltroTipos, setTmpFiltroTipos] = useState<string[]>([]);
+  const [tmpFiltroMeses, setTmpFiltroMeses] = useState(0);
   const [mensajeError, setMensajeError] = useState<string | null>(null);
+  const [mensajeExito, setMensajeExito] = useState<string | null>(null);
+  const [exitoVisible, setExitoVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const axiosPrivate = useAxiosPrivate();
@@ -70,8 +78,25 @@ const Usuarios: React.FC = () => {
       u.apellido.toLowerCase().includes(busqueda.toLowerCase()) ||
       (u.ci && u.ci.toLowerCase().includes(busqueda.toLowerCase()));
 
-    const coincideRol = filtroRoles.length === 0 ||
-      (u.tipoCliente && filtroRoles.includes(u.tipoCliente));
+    const tipoClienteRoles = [
+      "Administrativo",
+      "Docente a dedicación exclusiva",
+      "Docente a tiempo horario",
+    ];
+    const sistemaRoles = ["ADMINISTRADOR", "CAJERO"];
+
+    let coincideRol = true;
+    if (filtroRoles.length > 0) {
+      const coincideTipoCliente = filtroRoles
+        .filter((r) => tipoClienteRoles.includes(r))
+        .some((r) => u.tipoCliente === r);
+
+      const coincideSistemaRol = filtroRoles
+        .filter((r) => sistemaRoles.includes(r))
+        .some((r) => u.roles?.includes(r));
+
+      coincideRol = coincideTipoCliente || coincideSistemaRol;
+    }
 
     const coincideTipo = filtroTipos.length === 0 ||
       (filtroTipos.includes("Activos") && u.estado === "Activo") ||
@@ -85,8 +110,21 @@ const Usuarios: React.FC = () => {
     return coincideBusqueda && coincideRol && coincideTipo && coincideMeses;
   });
 
+  const openFiltroModal = () => {
+    setTmpFiltroRoles(filtroRoles);
+    setTmpFiltroTipos(filtroTipos);
+    setTmpFiltroMeses(filtroMeses);
+    setMostrarFiltro(true);
+  };
+
   const handleFiltroRol = (rol: string) => {
     setFiltroRoles((prev) =>
+      prev.includes(rol) ? prev.filter((r) => r !== rol) : [...prev, rol]
+    );
+  };
+
+  const handleTmpFiltroRol = (rol: string) => {
+    setTmpFiltroRoles((prev) =>
       prev.includes(rol) ? prev.filter((r) => r !== rol) : [...prev, rol]
     );
   };
@@ -97,19 +135,38 @@ const Usuarios: React.FC = () => {
     );
   };
 
+  const handleTmpFiltroTipo = (tipo: string) => {
+    setTmpFiltroTipos((prev) =>
+      prev.includes(tipo) ? prev.filter((t) => t !== tipo) : [...prev, tipo]
+    );
+  };
+
   const handleFiltroMeses = (delta: number) => {
     setFiltroMeses((prev) => Math.max(0, prev + delta));
   };
 
+  const handleTmpFiltroMeses = (delta: number) => {
+    setTmpFiltroMeses((prev) => Math.max(0, prev + delta));
+  };
+
   const handleFiltrar = () => {
+    setFiltroRoles(tmpFiltroRoles);
+    setFiltroTipos(tmpFiltroTipos);
+    setFiltroMeses(tmpFiltroMeses);
     setMostrarFiltro(false);
   };
 
   const handleReset = () => {
-    setFiltroRoles([]);
-    setFiltroTipos([]);
-    setFiltroMeses(0);
-    setMostrarFiltro(false);
+    setTmpFiltroRoles([]);
+    setTmpFiltroTipos([]);
+    setTmpFiltroMeses(0);
+  };
+
+  const mostrarMensajeExito = (msg: string) => {
+    setMensajeExito(msg);
+    setTimeout(() => setExitoVisible(true), 10);
+    setTimeout(() => setExitoVisible(false), 2100);
+    setTimeout(() => setMensajeExito(null), 2500);
   };
 
   const handleChangeEstado = async (
@@ -137,6 +194,14 @@ const Usuarios: React.FC = () => {
           prev.map((u) => u.id === id ? { ...u, estado: nuevoEstado } : u)
         );
         setMensajeError(null);
+        let msg = "";
+        if (nuevoEstado === "Activo") msg = "Usuario activado correctamente.";
+        else if (nuevoEstado === "Bloqueado") {
+          msg = "Usuario bloqueado correctamente.";
+        } else if (nuevoEstado === "Inactivo") {
+          msg = "Usuario inactivado correctamente.";
+        }
+        mostrarMensajeExito(msg);
       } else {
         setMensajeError(
           res?.data.message || "Error al cambiar el estado del usuario.",
@@ -155,17 +220,18 @@ const Usuarios: React.FC = () => {
     <div className="container">
       <h2>LISTA DE USUARIOS REGISTRADOS</h2>
       <div className="control">
-        <label>
+        <label className="labelBuscador">
           Buscar por Nombre, Apellido o CI:
           <input
             type="text"
+            id="idBuscador"
             className="buscador"
             placeholder="Buscar por Nombre, Apellido o CI..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
         </label>
-        <a className="btnFiltro" onClick={() => setMostrarFiltro(true)}>
+        <a className="btnFiltro" onClick={openFiltroModal}>
           <FilterIcon />
         </a>
       </div>
@@ -187,8 +253,8 @@ const Usuarios: React.FC = () => {
                     <label className="filtroCheckbox">
                       <input
                         type="checkbox"
-                        checked={filtroRoles.includes(rol.value)}
-                        onChange={() => handleFiltroRol(rol.value)}
+                        checked={tmpFiltroRoles.includes(rol.value)}
+                        onChange={() => handleTmpFiltroRol(rol.value)}
                       />
                       {rol.label}
                     </label>
@@ -204,8 +270,8 @@ const Usuarios: React.FC = () => {
                     <label className="filtroCheckbox">
                       <input
                         type="checkbox"
-                        checked={filtroTipos.includes(tipo.value)}
-                        onChange={() => handleFiltroTipo(tipo.value)}
+                        checked={tmpFiltroTipos.includes(tipo.value)}
+                        onChange={() => handleTmpFiltroTipo(tipo.value)}
                       />
                       {tipo.label}
                     </label>
@@ -221,18 +287,21 @@ const Usuarios: React.FC = () => {
                 Meses:
                 <button
                   className="btnMes"
-                  onClick={() => handleFiltroMeses(-1)}
+                  onClick={() => handleTmpFiltroMeses(-1)}
                 >
                   -
                 </button>
                 <input
                   type="number"
                   className="inputMes"
-                  value={filtroMeses}
+                  value={tmpFiltroMeses}
                   min={0}
                   readOnly
                 />
-                <button className="btnMes" onClick={() => handleFiltroMeses(1)}>
+                <button
+                  className="btnMes"
+                  onClick={() => handleTmpFiltroMeses(1)}
+                >
                   +
                 </button>
               </div>
@@ -253,6 +322,13 @@ const Usuarios: React.FC = () => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {mensajeExito && (
+        <div
+          className={`exito${exitoVisible && mensajeExito ? " mostrar" : ""}`}
+        >
+          {mensajeExito}
         </div>
       )}
       {mensajeError && (
