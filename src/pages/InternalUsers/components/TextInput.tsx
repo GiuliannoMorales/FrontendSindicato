@@ -9,7 +9,7 @@ const TextInput = ({ label, value, onChange, disabled = false, required = false 
 }) => (
     <div className="internal-user__field">
         <label className="internal-user__label">
-            {label}
+            {label} {required && <span className="required">*</span>}
         </label>
         <input
             type="text"

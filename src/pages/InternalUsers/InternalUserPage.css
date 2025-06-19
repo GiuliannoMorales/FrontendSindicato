@@ -154,6 +154,7 @@
     cursor: pointer;
     height: 40px;
     width: 210px;
+    font-size: 14px;
 }
 
 .internal-user__cancel-button {

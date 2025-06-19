@@ -219,7 +219,7 @@ const InternalUser = () => {
 
                 <div className="internal-user__form-right">
                     <div className="internal-user__photo">
-                        <label className="internal-user__label">Foto Usuario:</label>
+                        <label className="internal-user__label">Foto Usuario: <span className="required">*</span></label>
                         <div className="user__upload-box">
                             {userPhoto ? (
                                 <img

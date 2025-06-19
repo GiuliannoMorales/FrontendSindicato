@@ -66,7 +66,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
         <>
             <div className="user__input-group user__input-group--photo">
                 <label className="user__label">
-                    Foto Usuario:
+                    Foto Usuario: <span className="registrarVehiculo__required">*</span>
                 </label>
                 <div className="user__upload-box">
                     {userPhotoPreview ? (
@@ -99,7 +99,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
 
             <div className="user__input-group user__input-group--vehicles">
                 <label className="user__label">
-                    Vehículo:
+                    Vehículo: <span className="registrarVehiculo__required">*</span>
                 </label>
                 <div className="user__vehicle-photo-list">
                     {vehiculos.length > 0 &&
@@ -163,7 +163,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
             {(userType === "Administrativo" || userType === "Docente a dedicación exclusiva") && (
                 <div className="user__input-group user__input-group--space">
                     <label className="user__label">
-                        Asignar espacio:
+                        Asignar espacio: <span className="registrarVehiculo__required">*</span>
                     </label>
                     <select required className="select " value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
                         <option value="">Seleccione un espacio</option>
