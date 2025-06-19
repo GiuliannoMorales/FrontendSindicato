@@ -265,7 +265,11 @@ const VistaUsuario: React.FC = () => {
               return `${day}/${month}/${year}`;
             })()}
           </p>
-          <button className="boton" onClick={() => setMostrarModal(true)}>
+         <button
+            className="boton"
+            onClick={() => setMostrarModal(true)}
+            disabled={meses === 0 && anios === 0}
+          >
             CONFIRMAR COBRO
           </button>
         </div>
