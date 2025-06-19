@@ -228,30 +228,32 @@ const VistaUsuario: React.FC = () => {
               <th>Tarifa</th>
             </tr>
           </thead>
-          <tbody>
-            {mesesPago.map((fechaCompleta, index) => {
-              const [anio, mes] = fechaCompleta.split("-");
-              const fechaValida = new Date(
-                parseInt(anio),
-                parseInt(mes) - 1,
-                1,
-              );
-              const nombreMes = fechaValida.toLocaleString("es-ES", {
-                month: "long",
-              });
-
-              return (
-                <tr key={index}>
-                  <td>
-                    {nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} -
-                    {" "}
-                    {anio}
+            <tbody>
+              {mesesPago.length === 0 ? (
+                <tr>
+                  <td colSpan={2} style={{ textAlign: "center", padding: "1rem" }}>
+                    No hay pagos registrados.
                   </td>
-                  <td>{tarifa} Bs.</td>
                 </tr>
-              );
-            })}
-          </tbody>
+              ) : (
+                mesesPago.map((fechaCompleta, index) => {
+                  const [anio, mes] = fechaCompleta.split("-");
+                  const fechaValida = new Date(parseInt(anio), parseInt(mes) - 1, 1);
+                  const nombreMes = fechaValida.toLocaleString("es-ES", {
+                    month: "long",
+                  });
+
+                  return (
+                    <tr key={index}>
+                      <td>
+                        {nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1)} - {anio}
+                      </td>
+                      <td>{tarifa} Bs.</td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
         </table>
 
         <div className="info-pago">
@@ -259,7 +261,7 @@ const VistaUsuario: React.FC = () => {
             <strong>Monto Total:</strong> {montoTotal} Bs.
           </p>
           <p>
-            <strong>Fecha de Inicio del Pago:</strong> {(() => {
+            <strong>Fecha de pago:</strong> {(() => {
               if (!mesesPago.length) return "";
               const [year, month, day] = mesesPago[0].split("-");
               return `${day}/${month}/${year}`;
