@@ -15,6 +15,7 @@ import {
   SuccessModal,
 } from "./components/Modal/Modal";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { validateFormData } from "./utils/validations";
 
 const User = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -34,6 +35,10 @@ const User = () => {
   const userPhotoRef = useRef<HTMLInputElement | null>(null);
   const vehicleEditRef = useRef<HTMLInputElement>(null);
   const isInitialMount = useRef(true);
+
+  const clearFieldError = (field: string) => {
+  setFormErrors((prev) => ({ ...prev, [field]: "" }));
+};
 
   const [formData, setFormData] = useState({
     ci: "",
@@ -143,9 +148,21 @@ const User = () => {
   };
 
   const handleFormChange = (field: string, value: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
+    const updatedForm = { ...formData, [field]: value };
+
+    setFormData(updatedForm);
+
+    const updatedErrors = validateFormData({
+      ...updatedForm,
+      tipo: userType,
+      userPhoto,
+      assignedSpace,
+      vehiculos,
+    });
+
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: updatedErrors[field] || "",
     }));
   };
 
@@ -176,24 +193,19 @@ const User = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { ci, nombre, apellido, correo, nroCelular, password } = formData;
-    const tipo = userType;
 
-    if (
-      !ci.trim() ||
-      !nombre.trim() ||
-      !apellido.trim() ||
-      !correo.trim() ||
-      !nroCelular.trim() ||
-      !tipo.trim() ||
-      !password.trim() ||
-      !userPhoto ||
-      (userType !== "Docente a tiempo horario" && !assignedSpace) ||
-      vehiculos.length === 0
-    ) {
-      alert(
-        "Por favor, complete todos los campos requeridos y agregue al menos un vehículo."
-      );
+    const validationErrors = validateFormData({
+      ...formData,
+      tipo: userType,
+      userPhoto,
+      assignedSpace,
+      vehiculos
+    });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setFormErrors(validationErrors);
+      setGeneralError("Por favor, corrija los errores del formulario.");
+      setShowGeneralErrorModal(true);
       return;
     }
     const vehiculosSinId = vehiculos.map(({ id, ...rest }) => rest);
@@ -208,8 +220,8 @@ const User = () => {
         userType === "Docente a tiempo horario"
           ? null
           : assignedSpace
-          ? { nroEspacio: Number(assignedSpace) }
-          : null,
+            ? { nroEspacio: Number(assignedSpace) }
+            : null,
     };
     console.log("Datos que se enviarán al backend:", newUser);
     try {
@@ -247,6 +259,16 @@ const User = () => {
     }
   };
 
+const handleUserTypeChange = (newType: string) => {
+  setUserType(newType);
+
+  setFormErrors((prevErrors) => {
+    if (!newType) return prevErrors;
+    const { tipo, ...others } = prevErrors;
+    return others;
+  });
+};
+
   return (
     <section className="user">
       <h2 className="user__title">REGISTRAR USUARIO</h2>
@@ -260,7 +282,7 @@ const User = () => {
             nroCelular={formData.nroCelular}
             onChange={handleFormChange}
             userType={userType}
-            onUserTypeChange={setUserType}
+            onUserTypeChange={handleUserTypeChange}
             passwordVisible={passwordVisible}
             password={formData.password}
             onPasswordChange={(value) => handleFormChange("password", value)}
@@ -281,6 +303,8 @@ const User = () => {
             userType={userType}
             assignedSpace={assignedSpace}
             onAssignedSpaceChange={handleAssignedSpaceChange}
+            errors={formErrors}
+            clearFieldError={clearFieldError}
           />
         </div>
       </form>

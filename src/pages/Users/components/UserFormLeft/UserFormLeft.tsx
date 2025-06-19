@@ -16,7 +16,7 @@ const UserFormLeft = ({
     password,
     onPasswordChange,
     onTogglePasswordVisibility,
-     errors
+    errors
 }: UserFormLeftProps) => {
     return (
         <>
@@ -31,9 +31,6 @@ const UserFormLeft = ({
                         required
                         className="user__input"
                     />
-                    {!/^\d+$/.test(ci) && ci !== "" && (
-                        <p className="user__error-message">Formato inválido.</p>
-                    )}
                     {errors.ci && <p className="user__error-message">{errors.ci}</p>}
                 </div>
                 <div className="user__input-group user__input-group--name">
@@ -60,7 +57,7 @@ const UserFormLeft = ({
 
             <legend className="user__legend">• Datos Cuenta:</legend>
             <fieldset className="user__fieldset">
-                <div className="user__input-group">
+                <div className="user__input-group typeuser">
                     <label className="user__label">
                         Tipo Usuario: <span className="user__required">*</span>
                     </label>
@@ -75,6 +72,7 @@ const UserFormLeft = ({
                         <option value="Docente a dedicación exclusiva">Docente a dedicación exclusiva</option>
                         <option value="Docente a tiempo horario">Docente a tiempo horario</option>
                     </select>
+                    {errors.tipo && <p className="user__error-message">{errors.tipo}</p>}
                 </div>
                 <div className="user__input-group user__input-group--password">
                     <label className="user__label">
@@ -98,9 +96,7 @@ const UserFormLeft = ({
                             {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
                     </div>
-                    {password !== "" && !/^(?=.*[A-Z]).{6,}$/.test(password) && (
-                        <p className="user__error-message">La contraseña debe tener al menos 6 caracteres y una letra mayúscula.</p>
-                    )}
+                    {errors.password && <p className="user__error-message">{errors.password}</p>}
                 </div>
             </fieldset>
         </>

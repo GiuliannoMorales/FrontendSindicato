@@ -17,10 +17,12 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     userType,
     assignedSpace,
     onAssignedSpaceChange,
+    errors,
+    clearFieldError,
 }) => {
     const navigate = useNavigate();
     const [espacios, setEspacios] = useState([]);
-      const axiosPrivate = useAxiosPrivate()
+    const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
         axiosPrivate.get("/parqueo/espacios-disponibles")
@@ -39,7 +41,11 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
     }, [userType, onAssignedSpaceChange]);
 
     const handleAssignedSpaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onAssignedSpaceChange(e.target.value || null);
+        const selected = e.target.value || null;
+        onAssignedSpaceChange(selected);
+        if (selected) {
+            clearFieldError("parqueo");
+        }
     };
 
     const onUserPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +57,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
             const base64String = reader.result as string;
             const base64WithoutPrefix = base64String.split(",")[1] || "";
             handleUserPhotoChange(base64WithoutPrefix);
+            clearFieldError("foto");
         };
         reader.readAsDataURL(file);
     };
@@ -87,6 +94,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                         className="user__file-input"
                     />
                 </div>
+                {errors.foto && <span className="user__error">{errors.foto}</span>}
             </div>
 
             <div className="user__input-group user__input-group--vehicles">
@@ -142,6 +150,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                         + Añadir vehículo
                     </button>
                 </div>
+                {errors.vehiculos && <span className="user__error">{errors.vehiculos}</span>}
                 <input
                     type="file"
                     ref={vehicleEditRef}
@@ -156,7 +165,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                     <label className="user__label">
                         Asignar espacio: <span className="user__required">*</span>
                     </label>
-                    <select required className="user__select" value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
+                    <select required className="select " value={assignedSpace || ""} onChange={handleAssignedSpaceChange}>
                         <option value="">Seleccione un espacio</option>
                         {espacios.map((espacio: number) => (
                             <option key={espacio} value={espacio}>
@@ -164,6 +173,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                             </option>
                         ))}
                     </select>
+                    {errors.parqueo && <span className="user__error">{errors.parqueo}</span>}
                 </div>
             )}
         </>
