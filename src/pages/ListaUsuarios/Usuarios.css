@@ -18,10 +18,15 @@ h2 {
 	gap: 0;
 }
 
-.buscador {
+.labelBuscador::after {
+	content: none;
+}
+
+#idBuscador.buscador {
 	margin: 0 0 0 2rem;
 	padding: 0 0.5rem 0 2rem;
 	height: 2rem;
+	width: 18rem;
 	border: 1px solid #b4bbc5;
 	border-radius: 6px;
 	background-color: var(--fondo);
@@ -89,6 +94,10 @@ h2 {
 	margin: 0 1rem;
 }
 
+.filtroCheckbox::after {
+	content: none;
+}
+
 .filtroMeses {
 	display: block;
 	align-items: center;
@@ -107,7 +116,7 @@ h2 {
 }
 
 .inputMes {
-	width: 1.5rem;
+	width: 2.5rem;
 	justify-content: center;
 	text-align: center;
 	margin: 0.5rem;
@@ -340,6 +349,30 @@ h2 {
 	background: #b23a48;
 }
 
+.exito {
+	color: #4fb955;
+	border: 1px solid #a2ddd8;
+	border-radius: 6px;
+	text-align: center;
+	margin-bottom: 1rem;
+	padding: 0.7rem 1rem;
+	font-weight: 500;
+	font-size: 1rem;
+	opacity: 0;
+	transform: translateY(-10px);
+	transition: opacity 2s, transform 2s;
+	pointer-events: none;
+}
+
+.exito:empty {
+	display: none;
+}
+
+.exito.mostrar {
+	opacity: 1;
+	transform: translateY(0);
+}
+
 .error {
 	color: var(--encabezado);
 	text-align: center;
@@ -367,5 +400,9 @@ h2 {
 @media (max-width: 768px) {
 	.lista {
 		grid-template-columns: 1fr;
+	}
+
+	#idBuscador.buscador {
+		width: 10rem;
 	}
 }

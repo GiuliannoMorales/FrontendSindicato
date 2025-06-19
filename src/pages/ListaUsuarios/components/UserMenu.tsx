@@ -75,8 +75,11 @@ export const UserMenu: React.FC<{
 
   const modalBtn = modalAccion === "Bloqueado" ? "Bloquear" : "Inactivar";
 
+  const emojiRegex = /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu;
+
   const motivoValido = motivo.length >= 20 &&
-    /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(motivo);
+    /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(motivo) &&
+    !emojiRegex.test(motivo);
 
   return (
     <div className="usrMenuWrapper">
@@ -125,7 +128,8 @@ export const UserMenu: React.FC<{
             </div>
             {motivo.length > 0 && (!motivoValido) && (
               <div style={{ color: "red" }}>
-                El motivo debe tener al menos 20 caracteres y contener letras.
+                El motivo debe tener al menos 20 caracteres, contener letras y
+                no puede incluir emojis.
               </div>
             )}
             <div className="modalConfirmBtns">
