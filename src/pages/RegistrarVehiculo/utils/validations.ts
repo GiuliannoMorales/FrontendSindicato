@@ -27,7 +27,7 @@ export const validateField = (name: string, value: string): string => {
             if (trimmedValue === "") {
                 error = "Este campo es requerido.";
             } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(trimmedValue)) {
-                error = "Formato inválido. Solo letras y espacios.";
+                error = "Formato inválido. Solo letras.";
             }
             break;
         case "modelo":
