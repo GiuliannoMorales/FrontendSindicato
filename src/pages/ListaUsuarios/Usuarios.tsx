@@ -117,21 +117,9 @@ const Usuarios: React.FC = () => {
     setMostrarFiltro(true);
   };
 
-  const handleFiltroRol = (rol: string) => {
-    setFiltroRoles((prev) =>
-      prev.includes(rol) ? prev.filter((r) => r !== rol) : [...prev, rol]
-    );
-  };
-
   const handleTmpFiltroRol = (rol: string) => {
     setTmpFiltroRoles((prev) =>
       prev.includes(rol) ? prev.filter((r) => r !== rol) : [...prev, rol]
-    );
-  };
-
-  const handleFiltroTipo = (tipo: string) => {
-    setFiltroTipos((prev) =>
-      prev.includes(tipo) ? prev.filter((t) => t !== tipo) : [...prev, tipo]
     );
   };
 
@@ -139,10 +127,6 @@ const Usuarios: React.FC = () => {
     setTmpFiltroTipos((prev) =>
       prev.includes(tipo) ? prev.filter((t) => t !== tipo) : [...prev, tipo]
     );
-  };
-
-  const handleFiltroMeses = (delta: number) => {
-    setFiltroMeses((prev) => Math.max(0, prev + delta));
   };
 
   const handleTmpFiltroMeses = (delta: number) => {
