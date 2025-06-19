@@ -119,6 +119,6 @@ input[type="password"] {
   background-color: #00a3cc;
 }
 label::after {
-  content: ' *';
-  color: red;
+  content: none !important;
+  color: inherit !important;
 }
