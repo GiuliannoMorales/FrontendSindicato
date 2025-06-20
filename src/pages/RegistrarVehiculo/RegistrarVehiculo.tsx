@@ -1,22 +1,15 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RegistrarVehiculo.css";
-import { guardarVehiculo } from "../../bd/vehiculosBD";
+import { guardarVehiculo, actualizarVehiculo } from "../../bd/vehiculosBD";
 import { VehicleModal } from "../Users/components/Modal/Modal";
 import { validateField, validateVehicleForm } from "../../pages/RegistrarVehiculo/utils/validations";
+import { useLocation } from "react-router-dom";
 
 const RegistrarVehiculo = () => {
-    const [formData, setFormData] = useState({
-        tipo: "",
-        placa: "",
-        marca: "",
-        modelo: "",
-        color: "",
-    });
-
-    const [delanteraPreview, setDelanteraPreview] = useState<string | null>(null);
-    const [traseraPreview, setTraseraPreview] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const location = useLocation();
+    const vehiculoEditado = location.state?.vehiculo;
 
     const [fieldErrors, setFieldErrors] = useState<{
         tipo?: string;
@@ -31,6 +24,21 @@ const RegistrarVehiculo = () => {
     const delanteraRef = useRef<HTMLInputElement>(null);
     const traseraRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        tipo: vehiculoEditado?.tipo || "",
+        placa: vehiculoEditado?.placa || "",
+        marca: vehiculoEditado?.marca || "",
+        modelo: vehiculoEditado?.modelo || "",
+        color: vehiculoEditado?.color || "",
+    });
+
+    const [delanteraPreview, setDelanteraPreview] = useState<string | null>(
+        vehiculoEditado?.fotoDelantera || null
+    );
+    const [traseraPreview, setTraseraPreview] = useState<string | null>(
+        vehiculoEditado?.fotoTrasera || null
+    );
 
     const handleImageChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -77,17 +85,21 @@ const RegistrarVehiculo = () => {
 
         const data = {
             ...formData,
-            fotoDelantera: delanteraPreview as string,
-            fotoTrasera: traseraPreview as string,
+            fotoDelantera: delanteraPreview,
+            fotoTrasera: traseraPreview,
         };
 
         try {
-            await guardarVehiculo(data);
-            console.log("Vehículo guardado exitosamente en VehiculosDB");
+            if (vehiculoEditado?.id) {
+                await actualizarVehiculo(vehiculoEditado.id, data);
+                console.log("Vehículo actualizado exitosamente.");
+            } else {
+                await guardarVehiculo(data);
+                console.log("Vehículo guardado exitosamente.");
+            }
             navigate("/registrar/usuario");
         } catch (error) {
-            const errorStr = String(error);
-            setErrorMessage(errorStr);
+            setErrorMessage(String(error));
         }
     };
 
