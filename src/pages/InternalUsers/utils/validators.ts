@@ -9,13 +9,13 @@ export const validators = {
 
   validateNombre: (nombre: string): string | null => {
     if (!nombre.trim()) return "El nombre es obligatorio";
-    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(nombre)) return "Formato inválido: solo letras";
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(nombre)) return "Formato inválido: solo letras";
     return null;
   },
 
   validateApellido: (apellido: string): string | null => {
     if (!apellido.trim()) return "El apellido es obligatorio";
-    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(apellido)) return "Formato inválido: solo letras";
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(apellido)) return "Formato inválido: solo letras";
     return null;
   },
 

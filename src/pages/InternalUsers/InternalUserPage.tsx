@@ -143,7 +143,7 @@ const InternalUser = () => {
         setPhotoError(validationErrors.userPhoto || null);
 
         if (Object.keys(validationErrors).length > 0) {
-            setGeneralError("Todos los campos son obligatorios.");
+            setGeneralError("Por favor, corrija los errores del formulario.");
             setShowGeneralErrorModal(true);
             return;
         }
