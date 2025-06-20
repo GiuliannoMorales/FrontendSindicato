@@ -356,7 +356,42 @@ const Usuarios: React.FC = () => {
                     {usuario.nombre} {usuario.apellido}
                   </div>
                   <div className="usrRol">
-                    {usuario.tipoCliente || "—"}
+                    {(() => {
+                      const roles = usuario.roles || [];
+                      const esAdmin = roles.includes("ADMINISTRADOR");
+                      const esCajero = roles.includes("CAJERO");
+                      const esCliente = roles.includes("CLIENTE");
+                      let principal = "";
+                      if (esAdmin) {
+                        principal = "Administrador";
+                      } else if (esCajero) {
+                        principal = "Cajero";
+                      } else if (esCliente) {
+                        principal = usuario.tipoCliente || "Cliente";
+                      } else {
+                        principal = "-";
+                      }
+                      const secundarios: string[] = [];
+                      if (esAdmin && esCajero) secundarios.push("Cajero");
+                      if ((esAdmin || esCajero) && esCliente) {secundarios.push(
+                          usuario.tipoCliente || "Cliente",
+                        );}
+                      const secundariosUnicos = [...new Set(secundarios)];
+                      const cantidadSecundarios = secundariosUnicos.length;
+                      return (
+                        <>
+                          {principal}
+                          {cantidadSecundarios > 0 && (
+                            <span className="usrRolExtra">
+                              &nbsp;+{cantidadSecundarios}
+                              <span className="usrRolTooltip">
+                                {secundariosUnicos.join(", ")}
+                              </span>
+                            </span>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
