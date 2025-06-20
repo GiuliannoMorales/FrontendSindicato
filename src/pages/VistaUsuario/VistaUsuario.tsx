@@ -221,7 +221,7 @@ const VistaUsuario: React.FC = () => {
 
             <h3 className="res">2. Detalles del Pago</h3>
             <div className="contenedor-pago">
-              <table>
+              <table className="table">
                 <thead>
                   <tr className="titul">
                     <th>Mes</th>

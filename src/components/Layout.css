@@ -160,7 +160,7 @@ main {
 
 .sidebar__logout{
 	position: absolute;
-	top: 85%;
+	top: 500px;
 	padding-left: 0;
 	min-width: 80%;
 }

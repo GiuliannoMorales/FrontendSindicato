@@ -121,7 +121,7 @@ const CobrosEfectivo: React.FC = () => {
           {resultados.length > 0
             ? (
               <div className="tarjeta-usuario" style={{ cursor: "pointer" }}>
-                <table className="tabla">
+                <table className="table">
                   <tbody>
                     {Array.from(
                       new Map(resultados.map((c) => [c.ci, c])).values(),
