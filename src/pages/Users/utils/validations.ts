@@ -42,7 +42,7 @@ export function validateFormData(data: FormData): { [key: string]: string } {
     if (!data.nroCelular.trim()) {
         errors.nroCelular = "El número de teléfono es obligatorio.";
     } else if (!/^[67]\d{7}$/.test(data.nroCelular)) {
-        errors.nroCelular = "Número de teléfono inválido (debe tener 8 dígitos y comenzar con 6 o 7).";
+        errors.nroCelular = "Debe ingresar un número de celular boliviano válido (8 dígitos que comienzan en 6 o 7).";
     }
 
     if (!data.password.trim()) {

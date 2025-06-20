@@ -12,27 +12,17 @@
 
 .user__input-group {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
   margin-bottom: 15px;
-  position: relative;
 }
 
-.user__input-group--name .user__error-message,
-.user__input-group--lastname .user__error-message,
-.user__input-group--email .user__error-message,
-.user__input-group--phone .user__error-message,
-.user__input-group--ci .user__error-message,
-.user__input-group--password .user__error-message,
-.typeuser .user__error-message {
-  position: absolute;
-  left: 140px;
-  margin-top: 50px;
+.user__error-message {
   color: red;
-  font-size: 0.875rem;
+  font-size: 12px;
+  margin: -12px 0 5px 0;
+  margin-left: 130px;
   white-space: normal;
   word-break: break-word;
-  font-size: 12px;
 }
 
 .user__label {
@@ -48,11 +38,11 @@
 .user__select {
   flex: 1;
   padding: 5px;
-  margin-bottom: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
   height: 32px;
+  margin: 0;
 }
 
 .user__password-wrapper {
@@ -103,7 +93,7 @@
     margin-left: 0;
   }
 
-  .user__input-group{
+  .user__input-group {
     padding-bottom: 20px;
   }
 

@@ -94,7 +94,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                         className="user__file-input"
                     />
                 </div>
-                {errors.foto && <span className="user__error">{errors.foto}</span>}
+                {errors.foto && <p className="user__error">{errors.foto}</p>}
             </div>
 
             <div className="user__input-group user__input-group--vehicles">
@@ -150,7 +150,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                         + Añadir vehículo
                     </button>
                 </div>
-                {errors.vehiculos && <span className="user__error">{errors.vehiculos}</span>}
+                {errors.vehiculos && <p className="user__error">{errors.vehiculos}</p>}
                 <input
                     type="file"
                     ref={vehicleEditRef}
@@ -173,7 +173,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                             </option>
                         ))}
                     </select>
-                    {errors.parqueo && <span className="user__error">{errors.parqueo}</span>}
+                    {errors.parqueo && <p className="user__error">{errors.parqueo}</p>}
                 </div>
             )}
         </>

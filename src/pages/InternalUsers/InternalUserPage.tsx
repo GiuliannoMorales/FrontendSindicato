@@ -56,6 +56,7 @@ const InternalUser = () => {
         setUserPhoto(null);
         setIsEditMode(false);
         setErrors({});
+        setPhotoError("");
     };
 
     const handleCancelClick = () => {
