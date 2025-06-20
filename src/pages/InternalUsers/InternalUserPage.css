@@ -177,3 +177,13 @@
     margin-left: 165px;
     text-align: justify;
 }
+
+.internal-user__form-right .error-message {
+    color: red;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    margin-left: 265px;
+    text-align: justify;
+}
