@@ -9,14 +9,9 @@ h2 {
 	font-weight: 400;
 }
 
-.controlVehiculo {
-	margin-bottom: 1rem;
-	text-align: center;
-}
-
 select,
 .estado-cuenta__input {
-	margin: 0 2rem;
+	margin: 0 1rem;
 	padding: 0 0.5rem;
 	height: 2rem;
 	border: 1px solid #b4bbc5;
@@ -24,12 +19,6 @@ select,
 	background-color: var(--fondo);
 }
 
-.vehiculo {
-	border: 1px solid #000000;
-	height: 1.7rem;
-}
-
-.vehiculo,
 #filtroEstado {
 	width: 200px;
 }
@@ -115,15 +104,17 @@ button {
 	margin: 0 auto;
 }
 
-.tablaEstado {
+table.tablaEstado {
 	width: 100%;
 	border-collapse: collapse;
 	height: 40px;
-	border: 2px solid #000000;
+	border: 2px solid #5e5e5e;
+	max-width: none;
+	margin: 0;
 }
 
 .tablaEstado th,
-td,
+.tablaEstado td,
 .center {
 	width: 25%;
 	padding: 0.5rem 2rem;
@@ -170,7 +161,7 @@ strong {
 	font-weight: 400;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1208px) {
 	#filtroFechaDe,
 	#filtroFechaA {
 		width: 95%;
