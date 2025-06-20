@@ -120,7 +120,7 @@ input[type="password"] {
   background-color: #00a3cc;
 }
 
-label::after {
+.label-required::after {
   content: none !important;
   color: inherit !important;
 }

@@ -231,6 +231,41 @@ h2 {
 	font-size: 0.75rem;
 }
 
+.usrRolExtra {
+	position: relative;
+	cursor: pointer;
+	font-weight: 700;
+	text-shadow: 0 1px 4px #666666;
+	padding: 0 0.2em;
+	letter-spacing: 0, 02em;
+	font-size: 0.75rem;
+}
+
+.usrRolTooltip {
+	visibility: hidden;
+	opacity: 0;
+	background: #222;
+	color: #fff;
+	text-align: left;
+	border-radius: 6px;
+	padding: 0.3em 0.7em;
+	position: absolute;
+	left: 50%;
+	top: 120%;
+	transform: translateX(-50%);
+	z-index: 10;
+	white-space: nowrap;
+	font-size: 0.75rem;
+	transition: opacity 0.2s;
+	pointer-events: none;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.usrRolExtra:hover .usrRolTooltip {
+	visibility: visible;
+	opacity: 1;
+}
+
 .usrEmpty {
 	text-align: center;
 	margin-top: 2rem;

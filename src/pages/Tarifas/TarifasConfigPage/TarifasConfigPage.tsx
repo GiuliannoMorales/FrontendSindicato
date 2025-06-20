@@ -18,37 +18,6 @@ const clientsTypes = [
   "Docente a tiempo horario",
 ];
 
-// const tarifasData = [
-//   {
-//     tipoCliente: "Administrat.",
-//     tipoVehiculo: "Automóvil",
-//     monto: "3,50",
-//     fechaModificado: "14:50:14 - 04/05/2025",
-//     modificadoPor: "Julieta",
-//   },
-//   {
-//     tipoCliente: "Administrat.",
-//     tipoVehiculo: "Motocicleta",
-//     monto: "2,50",
-//     fechaModificado: "11:21:54 - 02/05/2025",
-//     modificadoPor: "Julieta",
-//   },
-//   {
-//     tipoCliente: "Docente T. H.",
-//     tipoVehiculo: "Motocicleta",
-//     monto: "3,00",
-//     fechaModificado: "08:24:19 - 24/04/2025",
-//     modificadoPor: "Julieta",
-//   },
-//   {
-//     tipoCliente: "Docente D. E.",
-//     tipoVehiculo: "Automóvil",
-//     monto: "3.00",
-//     modificadoPor: "Julieta",
-//     fechaModificado: "15:16:03 - 15/04/2025",
-//   },
-// ];
-
 const TarifasPage = () => {
   const [tarifas, setTarifas] = useState<Array<Tarifa>>([]);
   const {
@@ -62,10 +31,7 @@ const TarifasPage = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const nuevaTarifa = await createTarifa(axiosPrivate, {
-        ...data,
-        idAdministrador: "11111111-1111-1111-1111-111111111111",
-      });
+      const nuevaTarifa = await createTarifa(axiosPrivate, data);
 
       setTarifas((prev) => [
         {
@@ -137,7 +103,7 @@ const TarifasPage = () => {
             </div>
             <div className="tarifas__formRow">
               <label htmlFor="vehicles">
-                Tipo Vehículo: <span style={{ color: "red" }}>*</span>
+                Tipo Espacio: <span style={{ color: "red" }}>*</span>
               </label>
               <select
                 {...register("tipoVehiculo", { required: true })}

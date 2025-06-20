@@ -39,30 +39,30 @@ const VisualizarVehiculo = () => {
         <div className="form-section">
           <form>
             <div className="form-row">
-              <label>Tipo Vehículo:</label>
+              <label className="labelVehiculo">Tipo Vehículo:</label>
               <input type="text" value={vehiculo.tipo || ''} readOnly />
             </div>
             <div className="form-row">
-              <label>Placa:</label>
+              <label className="labelVehiculo">Placa:</label>
               <input type="text" value={vehiculo.placa || ''} readOnly />
             </div>
             <div className="form-row">
-              <label>Marca:</label>
+              <label className="labelVehiculo">Marca:</label>
               <input type="text" value={vehiculo.marca || ''} readOnly />
             </div>
             <div className="form-row">
-              <label>Modelo:</label>
+              <label className="labelVehiculo">Modelo:</label>
               <input type="text" value={vehiculo.modelo || ''} readOnly />
             </div>
           </form>
         </div>
         <div className="image-section">
           <div className="form-row">
-            <label>Foto Vehículo Delantera:</label>
+            <label className="labelVehiculo">Foto Vehículo Delantera:</label>
             <img src={`data:image/png;base64,${vehiculo.fotoDelantera}`} alt="Delantera" />
           </div>
           <div className="form-row">
-            <label>Foto Vehículo Trasera:</label>
+            <label className="labelVehiculo">Foto Vehículo Trasera:</label>
             <img src={`data:image/png;base64,${vehiculo.fotoTrasera}`} alt="Trasera" />
           </div>
         </div>

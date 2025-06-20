@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { selectCurrentToken, setCredentials } from "../features/auth/authSlice";
-import api from "../api/axios";
+import {api} from "../api/axios";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 const usePersistLogin = () => {
@@ -13,7 +13,6 @@ const usePersistLogin = () => {
       try {
         const response = await api.get("/auth/refresh");
         const { accessToken, roles } = response.data.data;
-        console.log('Refreshed token', response.data.data)
         dispatch(setCredentials({ accessToken, roles }));
       } catch (err) {
         console.error("No se pudo renovar el token:", err);

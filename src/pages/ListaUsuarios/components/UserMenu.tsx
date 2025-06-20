@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { Usuario } from "../UsuariosModelo";
 import { useAppSelector } from "../../../app/hooks";
 import { selectCurrentRoles } from "../../../features/auth/authSlice";
+import ReactDOM from "react-dom";
 
 export const UserMenu: React.FC<{
   usuario: Usuario;
@@ -105,7 +106,7 @@ export const UserMenu: React.FC<{
           ))}
         </div>
       )}
-      {modalAccion && (
+      {modalAccion && ReactDOM.createPortal(
         <div
           className="modalConfirmBackdrop"
           onClick={() => setModalAccion(null)}
@@ -151,7 +152,8 @@ export const UserMenu: React.FC<{
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import "./Layout.css";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../app/hooks";
+import { selectCurrentToken } from "../features/auth/authSlice";
 
 interface LayoutProps {
   showSidebar?: boolean;
@@ -10,7 +12,15 @@ interface LayoutProps {
 
 export default function Layout({ showSidebar = true }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const token = useAppSelector(selectCurrentToken);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true });
+    }
+  }, [token, navigate]);
+  
   return (
     <div className="layout">
       <Header

@@ -13,7 +13,6 @@ import { PeopleAdmiIcon } from "../assets/icons/PeopleAdmiIcon";
 import { LogUserIcon } from "../assets/icons/LogUserIcon";
 import { useState } from "react";
 import "./Layout.css";
-import api from "../api/axios";
 import { logOut, selectCurrentRoles } from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../app/hooks";
@@ -22,6 +21,7 @@ import { useAppSelector } from "../app/hooks";
 import PayIconSvg from "../assets/icons/Pay.svg";
 import CoinInHandSvg from "../assets/icons/Coin in Hand.svg";
 import TimeMachineSvg from "../assets/icons/Time Machine.svg";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 export default function Sidebar({
   open,
@@ -38,6 +38,7 @@ export default function Sidebar({
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const axiosPrivate = useAxiosPrivate();
 
   const roles = useAppSelector(selectCurrentRoles);
   const isAdmin = roles.includes("ADMINISTRADOR");
@@ -46,7 +47,7 @@ export default function Sidebar({
 
   const handleLogout = async () => {
     try {
-      await api.get("/auth/logout");
+      await axiosPrivate.post("/auth/signOut");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     } finally {
@@ -280,7 +281,7 @@ export default function Sidebar({
           >
             <div className="sidebar__group-container">
               <LogUserIcon />
-              {roles[0].toLowerCase()}
+              {roles[0]?.toLowerCase()}
             </div>
             <div>{logGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
           </div>

@@ -19,7 +19,7 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
           <tr>
             {fullView && <th>Tarifa</th>}
             <th className="borde-derecho">Usuario</th>
-            <th className="borde-derecho">Vehículo</th>
+            <th className="borde-derecho">Tipo Espacio</th>
             <th className="borde-derecho">Monto (Bs)</th>
             <th>Modificado en...</th>
             {fullView && <th>Modificado por...</th>}
@@ -30,7 +30,7 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
             <tr key={index}>
               {fullView && <td className="borde-derecho">{`Tarifa #${index + 1}`}</td>}
               <td className="borde-derecho">{fila.tipoCliente}</td>
-              <td className="borde-derecho">{fila.tipoVehiculo}</td>
+              <td className="borde-derecho">Esp. {fila.tipoVehiculo}</td>
               <td className="borde-derecho">{fila.monto}</td>
               <td className="borde-derecho">{formatISODateToReadable(fila.fechaInicio)}</td>
               {fullView && <td className="borde-derecho">{fila.nombreCompleto}</td>}
