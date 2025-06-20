@@ -23,13 +23,13 @@ export function validateFormData(data: FormData): { [key: string]: string } {
 
     if (!data.nombre.trim()) {
         errors.nombre = "El nombre es obligatorio.";
-    } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(data.nombre)) {
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(data.nombre)) {
         errors.nombre = "El nombre solo puede contener letras.";
     }
 
     if (!data.apellido.trim()) {
         errors.apellido = "El apellido es obligatorio.";
-    } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(data.apellido)) {
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(data.apellido)) {
         errors.apellido = "El apellido solo puede contener letras.";
     }
 
@@ -42,7 +42,7 @@ export function validateFormData(data: FormData): { [key: string]: string } {
     if (!data.nroCelular.trim()) {
         errors.nroCelular = "El número de teléfono es obligatorio.";
     } else if (!/^[67]\d{7}$/.test(data.nroCelular)) {
-        errors.nroCelular = "Número de teléfono inválido (debe tener 8 dígitos y comenzar con 6 o 7).";
+        errors.nroCelular = "Debe ingresar un número de celular boliviano válido (8 dígitos que comienzan en 6 o 7).";
     }
 
     if (!data.password.trim()) {

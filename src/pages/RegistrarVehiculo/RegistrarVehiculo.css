@@ -55,7 +55,7 @@
 .registrarVehiculo select {
     flex: 1;
     padding: 5px;
-    margin-bottom: 5px;
+    margin: 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -83,6 +83,7 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
+    font-size: 14px;
 }
 
 .registrarVehiculo__photo-preview {
@@ -110,6 +111,7 @@
     cursor: pointer;
     height: 40px;
     width: 210px;
+    font-size: 14px;
 }
 
 .registrarVehiculo__cancel-button {
