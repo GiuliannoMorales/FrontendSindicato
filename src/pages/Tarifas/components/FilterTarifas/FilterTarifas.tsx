@@ -149,7 +149,7 @@ const FilterTarifas = ({ initialData }: FilterTarifasProps) => {
             {...register("tipoVehiculo")}
             className="filtros-tarifas__select"
           >
-            <option value="">Tipo de Vehículo</option>
+            <option value="">Tipo de Espacio</option>
             {vehiculosUnicos.map((vehiculo, index) => (
               <option key={`vehiculo-${index}`} value={vehiculo}>
                 {vehiculo}

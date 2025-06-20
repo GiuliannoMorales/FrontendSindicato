@@ -103,7 +103,7 @@ const TarifasPage = () => {
             </div>
             <div className="tarifas__formRow">
               <label htmlFor="vehicles">
-                Tipo Vehículo: <span style={{ color: "red" }}>*</span>
+                Tipo Espacio: <span style={{ color: "red" }}>*</span>
               </label>
               <select
                 {...register("tipoVehiculo", { required: true })}

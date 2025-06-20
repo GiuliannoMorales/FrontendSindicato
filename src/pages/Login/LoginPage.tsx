@@ -1,13 +1,18 @@
 import { type FieldError, useForm } from "react-hook-form";
 import "./LoginPage.css";
 import { useAppDispatch } from "../../app/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EyeSlashIcon from "../../assets/icons/EyeSlashIcon";
 import EyeIcon from "../../assets/icons/EyeIcon";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../features/auth/authThunks";
 import LoginImage from "../../assets/images/Customer.png";
 import Header from "../../components/Header";
+
+type LoginFormInputs = {
+  username: string;
+  password: string;
+};
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -17,19 +22,22 @@ const LoginPage = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+    watch
+  } = useForm<LoginFormInputs>();
   const [errorMsgBack, setErrorMsgBack] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const onTogglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  const onSubmit = async (data: any) => {
-    if (!data.password) {
-      setErrorMsgBack("Ingresa tu contraseña");
-      return;
-    }
+  useEffect(() => {
+  const subscription = watch(() => {
+    setErrorMsgBack("");
+  });
+  return () => subscription.unsubscribe();
+}, [watch]);
 
+  const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
       await dispatch(login(data)).unwrap();
@@ -62,7 +70,6 @@ const LoginPage = () => {
               {...register("username", {
                 required: "Ingresa tu nombre de usuario",
               })}
-              onChange={() => setErrorMsgBack("")}
               placeholder="Username"
               type="text"
               className="login__input"
@@ -76,7 +83,6 @@ const LoginPage = () => {
           <div className="login__field">
             <input
               {...register("password", { required: "Ingresa tu contraseña" })}
-              onChange={() => setErrorMsgBack("")}
               type={passwordVisible ? "text" : "password"}
               placeholder="Password"
               className="login__input"
