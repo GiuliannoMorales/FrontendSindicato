@@ -20,7 +20,6 @@ import { useAppSelector } from "../app/hooks";
 // SVGs directos
 import PayIconSvg from "../assets/icons/Pay.svg";
 import CoinInHandSvg from "../assets/icons/Coin in Hand.svg";
-import TimeMachineSvg from "../assets/icons/Time Machine.svg";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 export default function Sidebar({
@@ -173,7 +172,7 @@ export default function Sidebar({
           </>
         )}
 
-        {(isAdmin || isCajero) && (
+        {isCajero && (
           <ul className="sidebar__group">
             <div
               className="sidebar__group-header"
@@ -205,25 +204,6 @@ export default function Sidebar({
                     className="sidebar__item-link"
                   >
                     Realizar Cobros
-                  </NavLink>
-                </li>
-                <li
-                  className={`sidebar__item ${
-                    location.pathname === "/cobros/historial"
-                      ? "sidebar__item-active"
-                      : ""
-                  }`}
-                >
-                  <img
-                    src={TimeMachineSvg}
-                    alt="Historial"
-                    className="sidebar__icon"
-                  />
-                  <NavLink
-                    to="/cobros/historial"
-                    className="sidebar__item-link"
-                  >
-                    Ver Historial
                   </NavLink>
                 </li>
               </div>
