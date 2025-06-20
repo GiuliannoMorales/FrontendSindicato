@@ -22,20 +22,13 @@ const LoginPage = () => {
     handleSubmit,
     reset,
     formState: { errors },
-    watch
+    watch,
   } = useForm<LoginFormInputs>();
   const [errorMsgBack, setErrorMsgBack] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const onTogglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
-
-  useEffect(() => {
-  const subscription = watch(() => {
-    setErrorMsgBack("");
-  });
-  return () => subscription.unsubscribe();
-}, [watch]);
 
   const onSubmit = async (data: any) => {
     try {
@@ -50,6 +43,16 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
+  const username = watch("username");
+  const password = watch("password");
+
+  useEffect(() => {
+    if (errorMsgBack) {
+      setErrorMsgBack("");
+    }
+  }, [username, password]);
+
   return (
     <>
       <div
