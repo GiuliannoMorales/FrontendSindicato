@@ -110,7 +110,7 @@ const RegistrarVehiculo = () => {
                 <div className="registrarVehiculo__form-left">
                     <fieldset>
                         <div className="registrarVehiculo__input-group">
-                            <label>Tipo Vehículo:</label>
+                            <label>Tipo Vehículo: <span className="registrarVehiculo__required">*</span></label>
                             <select name="tipo" value={formData.tipo} onChange={handleInputChange} required>
                                 <option value="">Seleccione</option>
                                 <option value="Auto">Automóvil</option>
@@ -119,22 +119,22 @@ const RegistrarVehiculo = () => {
                             {fieldErrors.tipo && <p className="vehicle__error-message">{fieldErrors.tipo}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
-                            <label>Placa:</label>
+                            <label>Placa: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="placa" value={formData.placa} onChange={handleInputChange} maxLength={10} required />
                             {fieldErrors.placa && <p className="vehicle__error-message">{fieldErrors.placa}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
-                            <label>Marca:</label>
+                            <label>Marca: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="marca" value={formData.marca} onChange={handleInputChange} required />
                             {fieldErrors.marca && <p className="vehicle__error-message">{fieldErrors.marca}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
-                            <label>Modelo:</label>
+                            <label>Modelo: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="modelo" value={formData.modelo} onChange={handleInputChange} required />
                             {fieldErrors.modelo && <p className="vehicle__error-message">{fieldErrors.modelo}</p>}
                         </div>
                         <div className="registrarVehiculo__input-group">
-                            <label>Color:</label>
+                            <label>Color: <span className="registrarVehiculo__required">*</span></label>
                             <input type="text" name="color" value={formData.color} onChange={handleInputChange} required />
                             {fieldErrors.color && <p className="vehicle__error-message">{fieldErrors.color}</p>}
                         </div>
@@ -143,7 +143,7 @@ const RegistrarVehiculo = () => {
 
                 <div className="registrarVehiculo__form-right">
                     <div className="registrarVehiculo__input-group">
-                        <label>Foto vehículo delantera:</label>
+                        <label>Foto vehículo delantera: <span className="registrarVehiculo__required">*</span></label>
                         <div className="registrarVehiculo__upload-box">
                             {delanteraPreview ? (
                                 <img
@@ -167,7 +167,7 @@ const RegistrarVehiculo = () => {
                     </div>
 
                     <div className="registrarVehiculo__input-group">
-                        <label>Foto vehículo trasera:</label>
+                        <label>Foto vehículo trasera: <span className="registrarVehiculo__required">*</span></label>
                         <div className="registrarVehiculo__upload-box">
                             {traseraPreview ? (
                                 <img

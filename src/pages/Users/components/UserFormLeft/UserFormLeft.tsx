@@ -23,7 +23,7 @@ const UserFormLeft = ({
             <legend className="user__legend">• Datos Personales:</legend>
             <fieldset className="user__fieldset">
                 <div className="user__input-group user__input-group--ci">
-                    <label className="user__label">CI:</label>
+                    <label className="user__label">CI: <span className="registrarVehiculo__required">*</span></label>
                     <input
                         type="text"
                         value={ci}
@@ -31,35 +31,35 @@ const UserFormLeft = ({
                         required
                         className="user__input"
                     />
-                    {errors.ci && <p className="user__error-message">{errors.ci}</p>}
                 </div>
+                {errors.ci && <p className="user__error-message">{errors.ci}</p>}
                 <div className="user__input-group user__input-group--name">
-                    <label className="user__label">Nombre(s):</label>
+                    <label className="user__label">Nombre(s): <span className="registrarVehiculo__required">*</span></label>
                     <input type="text" required className="user__input" value={nombre} onChange={(e) => onChange("nombre", e.target.value)} />
-                    {errors.nombre && <p className="user__error-message">{errors.nombre}</p>}
                 </div>
+                {errors.nombre && <p className="user__error-message">{errors.nombre}</p>}
                 <div className="user__input-group user__input-group--lastname">
-                    <label className="user__label">Apellido(s):</label>
+                    <label className="user__label">Apellido(s): <span className="registrarVehiculo__required">*</span></label>
                     <input type="text" required className="user__input" value={apellido} onChange={(e) => onChange("apellido", e.target.value)} />
-                    {errors.apellido && <p className="user__error-message">{errors.apellido}</p>}
                 </div>
+                {errors.apellido && <p className="user__error-message">{errors.apellido}</p>}
                 <div className="user__input-group user__input-group--email">
-                    <label className="user__label">Correo Electrónico:</label>
+                    <label className="user__label">Correo Electrónico: <span className="registrarVehiculo__required">*</span></label>
                     <input type="email" required className="user__input" value={correo} onChange={(e) => onChange("correo", e.target.value)} />
-                    {errors.correo && <p className="user__error-message">{errors.correo}</p>}
                 </div>
+                {errors.correo && <p className="user__error-message">{errors.correo}</p>}
                 <div className="user__input-group user__input-group--phone">
-                    <label className="user__label">Teléfono:</label>
+                    <label className="user__label">Teléfono: <span className="registrarVehiculo__required">*</span></label>
                     <input type="tel" required className="user__input" value={nroCelular} onChange={(e) => onChange("nroCelular", e.target.value)} />
-                    {errors.nroCelular && <p className="user__error-message">{errors.nroCelular}</p>}
                 </div>
+                {errors.nroCelular && <p className="user__error-message">{errors.nroCelular}</p>}
             </fieldset>
 
             <legend className="user__legend">• Datos Cuenta:</legend>
             <fieldset className="user__fieldset">
                 <div className="user__input-group typeuser">
                     <label className="user__label">
-                        Tipo Usuario:
+                        Tipo Usuario: <span className="registrarVehiculo__required">*</span>
                     </label>
                     <select
                         required
@@ -72,11 +72,11 @@ const UserFormLeft = ({
                         <option value="Docente a dedicación exclusiva">Docente a dedicación exclusiva</option>
                         <option value="Docente a tiempo horario">Docente a tiempo horario</option>
                     </select>
-                    {errors.tipo && <p className="user__error-message">{errors.tipo}</p>}
                 </div>
+                {errors.tipo && <p className="user__error-message">{errors.tipo}</p>}
                 <div className="user__input-group user__input-group--password">
                     <label className="user__label">
-                        Contraseña:
+                        Contraseña: <span className="registrarVehiculo__required">*</span>
                     </label>
                     <div className="user__password-wrapper">
                         <input
@@ -96,8 +96,8 @@ const UserFormLeft = ({
                             {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
                     </div>
-                    {errors.password && <p className="user__error-message">{errors.password}</p>}
                 </div>
+                {errors.password && <p className="user__error-message">{errors.password}</p>}
             </fieldset>
         </>
     );

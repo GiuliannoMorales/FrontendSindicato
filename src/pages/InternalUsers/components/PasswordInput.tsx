@@ -10,7 +10,7 @@ const PasswordInput = ({ value, onChange, visible, toggleVisible, disabled = fal
     disabled?: boolean;
 }) => (
     <div className="internal-user__field">
-        <label className="internal-user__label">Contraseña:</label>
+        <label className="internal-user__label">Contraseña: <span className="required">*</span></label>
         <div className="internal-user__password">
             <input
                 type={visible ? "text" : "password"}

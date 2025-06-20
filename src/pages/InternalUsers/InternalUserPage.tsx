@@ -6,6 +6,7 @@ import PasswordInput from "./components/PasswordInput";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useFormHandlers } from "./utils/useFormHandlers";
 import { CancelModal, SuccessModal, ErrorModal, GeneralErrorModal } from "../Users/components/Modal/Modal";
+import { validateFormData } from "./utils/validators";
 
 const InternalUser = () => {
     const [ci, setCi] = useState("");
@@ -55,6 +56,7 @@ const InternalUser = () => {
         setUserPhoto(null);
         setIsEditMode(false);
         setErrors({});
+        setPhotoError("");
     };
 
     const handleCancelClick = () => {
@@ -125,9 +127,24 @@ const InternalUser = () => {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+        const formData = {
+            ci,
+            nombre,
+            apellido,
+            correo,
+            telefono,
+            password,
+            userType,
+            userPhoto,
+            isEditMode,
+        };
 
-        if (!ci || !nombre || !apellido || !correo || !telefono || !userType || (!isEditMode && (!password || !userPhoto))) {
-            setGeneralError("Todos los campos son obligatorios.");
+        const validationErrors = validateFormData(formData);
+        setErrors(validationErrors);
+        setPhotoError(validationErrors.userPhoto || null);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setGeneralError("Por favor, corrija los errores del formulario.");
             setShowGeneralErrorModal(true);
             return;
         }
@@ -202,10 +219,16 @@ const InternalUser = () => {
                         <SelectInput
                             label="Tipo Usuario:"
                             value={userType}
-                            onChange={(e) => setUserType(e.target.value)}
+                            onChange={(e) => {const value = e.target.value;
+                                setUserType(value);
+                                if (value.trim()) {
+                                    setErrors((prev) => ({ ...prev, userType: null }));
+                                }
+                            }}
                             options={["Administrador", "Cajero"]}
                             required
                         />
+                        {errors.userType && <p className="error-message">{errors.userType}</p>}
                         <PasswordInput
                             value={password}
                             onChange={(e) => handleInputChange("password", e.target.value)}
@@ -219,7 +242,7 @@ const InternalUser = () => {
 
                 <div className="internal-user__form-right">
                     <div className="internal-user__photo">
-                        <label className="internal-user__label">Foto Usuario:</label>
+                        <label className="internal-user__label">Foto Usuario: <span className="required">*</span></label>
                         <div className="user__upload-box">
                             {userPhoto ? (
                                 <img

@@ -28,6 +28,7 @@
   border: none;
   cursor: pointer;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .user__add-vehicle {
@@ -40,6 +41,7 @@
   width: 150px;
   height: 35px;
   margin-top: 10px;
+  font-size: 14px;
 }
 
 .user__add-vehicle:disabled {
@@ -87,10 +89,14 @@
   padding: 0 5px;
 }
 
+.user__input-group--photo .user__label,
+.user__input-group--photo .user__error{
+  margin-top: 70px;
+}
+
 .user__input-group--space {
   display: flex;
   align-items: center;
-  gap: 10px;
   margin-bottom: 5px;
   width: 550px;
   margin-top: 30px;
@@ -103,7 +109,7 @@
 
 .user__input-group--space .select {
   margin-bottom: 5px;
-  margin-left: 0;
+  margin-left: -10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
@@ -111,14 +117,17 @@
 }
 
 .user__error {
-  position: absolute;
-  left: 350px;
-  margin-top: 10px;
+  position: relative;
+  left: 28px;
+  margin-top: 5px;
   color: red;
-  font-size: 0.875rem;
   white-space: normal;
   word-break: break-word;
   font-size: 12px;
+}
+
+.user__input-group--space .user__error{
+  margin-left: -50px;
 }
 
 /*Responsive*/
