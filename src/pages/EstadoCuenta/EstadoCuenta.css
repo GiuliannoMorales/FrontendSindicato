@@ -86,6 +86,10 @@ p {
 	font-weight: 600;
 }
 
+.labelFiltro::after {
+	content: none;
+}
+
 .defaultFiltro {
 	color: #363636;
 }
