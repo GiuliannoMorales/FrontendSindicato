@@ -67,3 +67,52 @@ export const guardarVehiculo = async (vehiculo: {
     };
   });
 };
+
+export const actualizarVehiculo = async (
+  id: number,
+  vehiculo: {
+    tipo: string;
+    placa: string;
+    marca: string;
+    modelo: string;
+    color: string;
+    fotoDelantera: string;
+    fotoTrasera: string;
+  }
+): Promise<void> => {
+  const db = await openVehiculosDB();
+  const transaction = db.transaction("vehiculos", "readwrite");
+  const store = transaction.objectStore("vehiculos");
+
+  return new Promise((resolve, reject) => {
+    const getRequest = store.get(id);
+
+    getRequest.onsuccess = () => {
+      const existing = getRequest.result;
+      if (!existing) {
+        reject("Vehículo no encontrado para actualizar.");
+        return;
+      }
+
+      const updatedVehiculo = { ...vehiculo, id };
+
+      const updateRequest = store.put(updatedVehiculo);
+
+      updateRequest.onsuccess = () => {
+        console.log("Vehículo actualizado correctamente.");
+        resolve();
+      };
+
+      updateRequest.onerror = (event) => {
+        const error = (event.target as IDBRequest).error;
+        console.error("Error al actualizar el vehículo:", error);
+        reject("Error al actualizar el vehículo.");
+      };
+    };
+
+    getRequest.onerror = () => {
+      reject("Error al buscar el vehículo para actualizar.");
+    };
+  });
+};
+

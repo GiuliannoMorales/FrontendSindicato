@@ -115,7 +115,7 @@ const UserFormRight: React.FC<UserFormRightProps> = ({
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            vehicleEditRef.current?.click()
+                                            navigate("/registrar/vehiculo", { state: { vehiculo } })
                                         }
                                         className="user__vehicle-edit-button"
                                         title="Cambiar imagen"
