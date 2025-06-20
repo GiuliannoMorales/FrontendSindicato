@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../features/auth/authThunks";
 import LoginImage from "../../assets/images/Customer.png";
 import Header from "../../components/Header";
-// import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +25,13 @@ const LoginPage = () => {
   const onTogglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   const onSubmit = async (data: any) => {
+    if (!data.password) {
+      setErrorMsgBack("Ingresa tu contraseña");
+      return;
+    }
+
     try {
+      setIsLoading(true);
       await dispatch(login(data)).unwrap();
       reset();
       navigate("/");
@@ -57,7 +62,7 @@ const LoginPage = () => {
               {...register("username", {
                 required: "Ingresa tu nombre de usuario",
               })}
-              onChange={() => setErrorMsgBack('')}
+              onChange={() => setErrorMsgBack("")}
               placeholder="Username"
               type="text"
               className="login__input"
@@ -71,7 +76,7 @@ const LoginPage = () => {
           <div className="login__field">
             <input
               {...register("password", { required: "Ingresa tu contraseña" })}
-              onChange={() => setErrorMsgBack('')}
+              onChange={() => setErrorMsgBack("")}
               type={passwordVisible ? "text" : "password"}
               placeholder="Password"
               className="login__input"
