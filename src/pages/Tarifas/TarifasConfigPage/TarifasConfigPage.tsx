@@ -35,6 +35,7 @@ const TarifasPage = () => {
 
       setTarifas((prev) => [
         {
+          id: nuevaTarifa.id,
           tipoCliente: nuevaTarifa.tipoCliente,
           tipoVehiculo: nuevaTarifa.tipoVehiculo,
           monto: nuevaTarifa.monto,
