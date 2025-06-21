@@ -1,4 +1,5 @@
 export interface Tarifa{
+    id: string,
     tipoCliente: string,
     tipoVehiculo: string,
     monto: string,

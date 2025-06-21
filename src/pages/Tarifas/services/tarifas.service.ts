@@ -35,7 +35,6 @@ export const createTarifa = async (
 export const getTarifasHistorial = async (api: AxiosInstance,): AxiosPromise<Array<Tarifa>> => {
   try {
     const response = await api.get('historial-tarifas');
-    console.log("Respuesta del servicio:", response);
     return response;
   } catch (error) {
     console.error('Error en getTarifasHistorial:', error);

@@ -28,7 +28,7 @@ const TarifasTable = ({ data, fullView }: TarifasTableProps) => {
         <tbody>
           {data.map((fila, index) => (
             <tr key={index}>
-              {fullView && <td className="borde-derecho">{`Tarifa #${index + 1}`}</td>}
+              {fullView && <td className="borde-derecho">{`Tarifa #${fila.id}`}</td>}
               <td className="borde-derecho">{fila.tipoCliente}</td>
               <td className="borde-derecho">Esp. {fila.tipoVehiculo}</td>
               <td className="borde-derecho">{fila.monto}</td>

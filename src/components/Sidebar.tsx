@@ -21,6 +21,7 @@ import { useAppSelector } from "../app/hooks";
 import PayIconSvg from "../assets/icons/Pay.svg";
 import CoinInHandSvg from "../assets/icons/Coin in Hand.svg";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { HomeIcon } from "../assets/icons/HomeIcon";
 
 export default function Sidebar({
   open,
@@ -59,6 +60,17 @@ export default function Sidebar({
     <>
       {open && <div className="sidebar-backdrop" onClick={onClose} />}
       <aside className={open ? "sidebar open" : "sidebar"}>
+        <ul className="sidebar__group">
+              <div
+                className="sidebar__group-header"
+                onClick={() => navigate('/')}
+              >
+                <div className="sidebar__group-container">
+                  <HomeIcon/>
+                  Inicio
+                </div>
+              </div>
+            </ul>
         {isAdmin && (
           <>
             <ul className="sidebar__group">
@@ -261,7 +273,7 @@ export default function Sidebar({
           >
             <div className="sidebar__group-container">
               <LogUserIcon />
-              {roles[0]?.toLowerCase()}
+              user
             </div>
             <div>{logGroupOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}</div>
           </div>
